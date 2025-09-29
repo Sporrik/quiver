@@ -62,10 +62,9 @@ public class PlayerController : MonoBehaviour
         if (_input.sqrMagnitude == 0) return;
 
         //Adjust movement direction in relation to camera rotation
-        _direction = Quaternion.Euler(0f, _mainCamera.transform.eulerAngles.y, 0f) * new Vector3(_input.x, 0f, _input.y);
+        _direction = Quaternion.Euler(_direction) * new Vector3(_input.x, 0f, _input.y);
         var targetRotation = Quaternion.LookRotation(_direction, Vector3.up);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
-
     }
 
     private void ApplyGravity()
