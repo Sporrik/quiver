@@ -22,6 +22,10 @@ public class PlayerController : MonoBehaviour
     private Animator _playerAnimator;
     private string _currentState;
 
+    [SerializeField] private Transform _groundPosition;
+    [SerializeField] private float _groundRadius;
+    [SerializeField] private LayerMask _groundLayer;
+
     private void Start()
     {
         _playerInput = GetComponent<PlayerInput>();
@@ -42,9 +46,16 @@ public class PlayerController : MonoBehaviour
     {
         ApplyGravity();
         ApplyMovement();
+
+        Debug.Log(IsGrounded());
     }
 
-    private bool IsGrounded() => _characterController.isGrounded;
+    private bool IsGrounded()
+    {
+        Collider[] collider = Physics.OverlapSphere(_groundPosition.position, _groundRadius, _groundLayer);
+
+        return collider.Length != 0;
+    }
 
     private void ApplyRotation()
     {
@@ -112,5 +123,10 @@ public class PlayerController : MonoBehaviour
         {
             return false;
         }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawSphere(_groundPosition.position, _groundRadius);
     }
 }
