@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _groundRadius;
     [SerializeField] private LayerMask _groundLayer;
 
+
     private bool _isSneaking;
     private bool _isSprinting;
 
@@ -108,25 +109,29 @@ public class PlayerController : MonoBehaviour
 
     public void Sneak(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && !_isSprinting)
         {
             _isSneaking = true;
+            _currentSpeed = _baseSpeed * _sneakSpeedMulti;
         }
-        else if (context.canceled)
+        else if (context.canceled && !_isSprinting)
         {
             _isSneaking = false;
+            _currentSpeed = _baseSpeed;
         }
     }
 
     public void Sprint(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && !_isSneaking)
         {
             _isSprinting = true;
+            _currentSpeed = _baseSpeed * _sprintSpeedMulti;
         }
-        else if (context.canceled)
+        else if (context.canceled && !_isSneaking)
         {
             _isSprinting = false;
+            _currentSpeed = _baseSpeed;
         }
     }
 
