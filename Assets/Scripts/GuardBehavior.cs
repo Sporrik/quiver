@@ -10,18 +10,22 @@ public class GuardBehavior : MonoBehaviour
     [SerializeField] private Transform _player;
     [SerializeField] private LayerMask playerLayer;
     [SerializeField] private GameObject _eyes;
+
     [SerializeField] private bool _seesPlayer;
 
     [SerializeField] private List<GameObject> _path;
-    private int _currentPathPoint;
-
-    private Vector3 _lastPlayerPosition;
+    [SerializeField] private string[] _sightBlockLayers = { "Ground", "StaticLevel" };
 
     [SerializeField] private float _memorizationTime = 10.0f;
     [SerializeField] private float _timeAlert;
 
-    private NavMeshAgent _agent;
     [SerializeField] private float _sightRange, _sightAngle, _attackRange;
+
+    private int _currentPathPoint;
+
+    private Vector3 _lastPlayerPosition;
+
+    private NavMeshAgent _agent;
     private bool _isPlayerInSightRange, _isPlayerInAttackRange;
 
     private void Start()
@@ -42,12 +46,15 @@ public class GuardBehavior : MonoBehaviour
         Vector3 forward = transform.forward;
 
         // Calculate left and right ray directions
-        Vector3 leftRayDirection = (Quaternion.Euler(0, -angle, 0) * forward).normalized;
-        Vector3 rightRayDirection = (Quaternion.Euler(0, angle, 0) * forward).normalized;
+        Vector3 leftRayDirection = (Quaternion.Euler(0, -angle, 0) * _eyes.transform.forward).normalized;
+        Vector3 rightRayDirection = (Quaternion.Euler(0, angle, 0) * _eyes.transform.forward).normalized;
+
+        Vector3 drawPosition = _eyes.transform.position;
+        drawPosition.y = transform.position.y;
 
         // Set gizmo colors and draw rays
 
-        if( _isPlayerInSightRange )
+        if( _seesPlayer )
         {
             Gizmos.color = Color.green;
         }
@@ -58,20 +65,19 @@ public class GuardBehavior : MonoBehaviour
 
         for(int degree = (int)angle; degree > -angle; degree--)
         {
-            Vector3 p0 = transform.position + (Quaternion.Euler(0, degree - 1, 0) * forward).normalized * _sightRange;
-            Vector3 p1 = transform.position + (Quaternion.Euler(0, degree, 0) * forward).normalized * _sightRange;
+            Vector3 p0 = drawPosition + (Quaternion.Euler(0, degree - 1, 0) * forward).normalized * _sightRange;
+            Vector3 p1 = drawPosition + (Quaternion.Euler(0, degree, 0) * forward).normalized * _sightRange;
 
             Gizmos.DrawLine(p0, p1);
-
         }
 
-        Gizmos.DrawRay(transform.position, leftRayDirection * _sightRange);
-        Gizmos.DrawRay(transform.position, rightRayDirection * _sightRange);
+        Gizmos.DrawRay(drawPosition, leftRayDirection * _sightRange);
+        Gizmos.DrawRay(drawPosition, rightRayDirection * _sightRange);
     }
 
     private void ChasePlayer() => _agent.SetDestination(_lastPlayerPosition);
 
-    static readonly string[] SIGHT_BLOCK_MASK = { "Ground", "StaticLevel" };
+    
     private void PlayerDetection()
     {
         _isPlayerInSightRange = Physics.CheckSphere(transform.position, _sightRange, playerLayer);
@@ -85,25 +91,31 @@ public class GuardBehavior : MonoBehaviour
             Vector3 directionToPlayer = (_player.transform.position - _eyes.transform.position).normalized;
             float angleToPlayer = Vector3.Angle(_eyes.transform.forward, directionToPlayer);
 
-            if (angleToPlayer <= _sightAngle / 2f)
+            if (angleToPlayer <= _sightAngle / 2)
             {
                 Ray ray = new Ray(_eyes.transform.position, directionToPlayer);
 
-                if (!Physics.Raycast(ray, _sightRange, LayerMask.GetMask(SIGHT_BLOCK_MASK)))
+                if (!Physics.Raycast(ray, _sightRange, LayerMask.GetMask(_sightBlockLayers)))
                 {
                     _timeAlert = _memorizationTime;
 
                     _lastPlayerPosition = _player.position;
                 }
             }
-
         }
 
-        _seesPlayer = _timeAlert > 0.0f;
+        if(_timeAlert > 0.0f)
+        {
+            _seesPlayer = true;
+        }
+        else
+        {
+            _seesPlayer = false;
+        }
 
         if (_seesPlayer )
         {
-            if((_lastPlayerPosition - transform.position).magnitude <= _attackRange * 1.5f)
+            if((_lastPlayerPosition - transform.position).magnitude <= _attackRange)
             {
                 _timeAlert -= Time.deltaTime;
 
