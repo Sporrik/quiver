@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -13,6 +14,11 @@ public class GuardBehavior : MonoBehaviour
 
     [SerializeField] private List<GameObject> _path;
     private int _currentPathPoint;
+
+    private Vector3 _lastPlayerPosition;
+
+    [SerializeField] private float _memorizationTime = 10.0f;
+    [SerializeField] private float _timeAlert;
 
     private NavMeshAgent _agent;
     [SerializeField] private float _sightRange, _sightAngle, _attackRange;
@@ -30,7 +36,20 @@ public class GuardBehavior : MonoBehaviour
         FollowPath();
     }
 
-    private void ChasePlayer() => _agent.SetDestination(_player.position);
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+
+        Vector3 t0 = (transform.position + new Vector3(_sightRange * MathF.Cos(_sightAngle / 2), 0.0f, _sightRange * MathF.Sin(_sightAngle / 2)));
+        Vector3 t1 = (transform.position + new Vector3(_sightRange * MathF.Cos(-_sightAngle / 2), 0.0f, _sightRange * MathF.Sin(-_sightAngle / 2)));
+
+        //Gizmos.DrawLine(transform.position, t0);
+        //Gizmos.DrawLine(transform.position, t1);
+
+        //Gizmos.DrawSphere(transform.position, _sightRange);
+    }
+
+    private void ChasePlayer() => _agent.SetDestination(_lastPlayerPosition);
 
     static readonly string[] SIGHT_BLOCK_MASK = { "Ground", "StaticLevel" };
     private void PlayerDetection()
@@ -52,19 +71,26 @@ public class GuardBehavior : MonoBehaviour
 
                 if (!Physics.Raycast(ray, _sightRange, LayerMask.GetMask(SIGHT_BLOCK_MASK)))
                 {
-                    _seesPlayer = true;
-                    ChasePlayer();
+                    _timeAlert = _memorizationTime;
+
+                    _lastPlayerPosition = _player.position;
                 }
-                else
-                {
-                    _seesPlayer = false;
-                }
-            }
-            else
-            {
-                _seesPlayer = false;
             }
 
+        }
+
+        _seesPlayer = _timeAlert > 0.0f;
+
+        if (_seesPlayer )
+        {
+            if((_lastPlayerPosition - transform.position).magnitude <= _attackRange * 1.5f)
+            {
+                _timeAlert -= Time.deltaTime;
+
+                LookAround();         
+            }
+
+            ChasePlayer();
         }
     }
 
@@ -82,6 +108,11 @@ public class GuardBehavior : MonoBehaviour
         }
 
         _agent.SetDestination(_path[_currentPathPoint].transform.position);
+
+    }
+
+    private void LookAround()
+    {
 
     }
 }
