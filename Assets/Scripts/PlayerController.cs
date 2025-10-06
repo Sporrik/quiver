@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.InputSystem;
@@ -54,8 +55,6 @@ public class PlayerController : MonoBehaviour
     {
         ApplyGravity();
         ApplyMovement();
-
-        Debug.Log(IsGrounded());
     }
 
     private bool IsGrounded()
@@ -138,27 +137,15 @@ public class PlayerController : MonoBehaviour
     //Change Player Animation State
     private void ChangeAnimationState(string newState)
     {
-        if (newState == _currentState)
-        {
-            return;
-        }
+        if (newState == _currentState) return;
+
         _playerAnimator.Play(newState);
         _currentState = newState;
     }
 
     //Check for specific animation
     private bool isAnimationPlaying(Animator animator, string stateName)
-    {
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName(stateName) &&
-        animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+        => animator.GetCurrentAnimatorStateInfo(0).IsName(stateName) && animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f;
 
     private void OnDrawGizmosSelected()
     {
