@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.InputSystem;
@@ -27,6 +28,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _groundRadius;
     [SerializeField] private LayerMask _groundLayer;
 
+
     private bool _isSneaking;
     private bool _isSprinting;
 
@@ -53,8 +55,6 @@ public class PlayerController : MonoBehaviour
     {
         ApplyGravity();
         ApplyMovement();
-
-        Debug.Log(IsGrounded());
     }
 
     private bool IsGrounded()
@@ -108,52 +108,44 @@ public class PlayerController : MonoBehaviour
 
     public void Sneak(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && !_isSprinting)
         {
             _isSneaking = true;
+            _currentSpeed = _baseSpeed * _sneakSpeedMulti;
         }
-        else if (context.canceled)
+        else if (context.canceled && !_isSprinting)
         {
             _isSneaking = false;
+            _currentSpeed = _baseSpeed;
         }
     }
 
     public void Sprint(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && !_isSneaking)
         {
             _isSprinting = true;
+            _currentSpeed = _baseSpeed * _sprintSpeedMulti;
         }
-        else if (context.canceled)
+        else if (context.canceled && !_isSneaking)
         {
             _isSprinting = false;
+            _currentSpeed = _baseSpeed;
         }
     }
 
     //Change Player Animation State
     private void ChangeAnimationState(string newState)
     {
-        if (newState == _currentState)
-        {
-            return;
-        }
+        if (newState == _currentState) return;
+
         _playerAnimator.Play(newState);
         _currentState = newState;
     }
 
     //Check for specific animation
     private bool isAnimationPlaying(Animator animator, string stateName)
-    {
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName(stateName) &&
-        animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+        => animator.GetCurrentAnimatorStateInfo(0).IsName(stateName) && animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f;
 
     private void OnDrawGizmosSelected()
     {
