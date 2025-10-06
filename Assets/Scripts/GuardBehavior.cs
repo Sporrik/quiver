@@ -38,15 +38,35 @@ public class GuardBehavior : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
+        float angle = _sightAngle / 2;
+        Vector3 forward = transform.forward;
 
-        Vector3 t0 = (transform.position + new Vector3(_sightRange * MathF.Cos(_sightAngle / 2), 0.0f, _sightRange * MathF.Sin(_sightAngle / 2)));
-        Vector3 t1 = (transform.position + new Vector3(_sightRange * MathF.Cos(-_sightAngle / 2), 0.0f, _sightRange * MathF.Sin(-_sightAngle / 2)));
+        // Calculate left and right ray directions
+        Vector3 leftRayDirection = (Quaternion.Euler(0, -angle, 0) * forward).normalized;
+        Vector3 rightRayDirection = (Quaternion.Euler(0, angle, 0) * forward).normalized;
 
-        //Gizmos.DrawLine(transform.position, t0);
-        //Gizmos.DrawLine(transform.position, t1);
+        // Set gizmo colors and draw rays
 
-        //Gizmos.DrawSphere(transform.position, _sightRange);
+        if( _isPlayerInSightRange )
+        {
+            Gizmos.color = Color.green;
+        }
+        else
+        {
+            Gizmos.color = Color.red;
+        }
+
+        for(int degree = (int)angle; degree > -angle; degree--)
+        {
+            Vector3 p0 = transform.position + (Quaternion.Euler(0, degree - 1, 0) * forward).normalized * _sightRange;
+            Vector3 p1 = transform.position + (Quaternion.Euler(0, degree, 0) * forward).normalized * _sightRange;
+
+            Gizmos.DrawLine(p0, p1);
+
+        }
+
+        Gizmos.DrawRay(transform.position, leftRayDirection * _sightRange);
+        Gizmos.DrawRay(transform.position, rightRayDirection * _sightRange);
     }
 
     private void ChasePlayer() => _agent.SetDestination(_lastPlayerPosition);
