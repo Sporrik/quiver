@@ -106,6 +106,13 @@ public class PlayerController : MonoBehaviour
         _velocity += _jumpPower;
     }
 
+    public void Interact(InputAction.CallbackContext context)
+    {
+        if (!context.started) return;
+
+        //interaction suff here
+    }
+
     public void Sneak(InputAction.CallbackContext context)
     {
         if (context.performed && !_isSprinting)
