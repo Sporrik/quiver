@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class GoalScript : MonoBehaviour
 {
+
+    [SerializeField] GoalManager _manager;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -17,7 +20,8 @@ public class GoalScript : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         
-        Debug.Log("YEAY I AM HERE");
+        Debug.Log("NEXT");
+        _manager.ShowNextGoal();
         Destroy(gameObject);
     }
 
