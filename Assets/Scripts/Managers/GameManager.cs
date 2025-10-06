@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public enum GameState { };
+public enum GameState { START, PLAYING, END};
 
 public class GameManager : MonoBehaviour
 {
@@ -19,5 +19,7 @@ public class GameManager : MonoBehaviour
 
         instance = this;
         DontDestroyOnLoad(gameObject);
+
+        _gameState = GameState.START;
     }
 }
