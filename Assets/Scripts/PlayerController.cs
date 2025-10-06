@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
@@ -25,6 +26,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform _groundPosition;
     [SerializeField] private float _groundRadius;
     [SerializeField] private LayerMask _groundLayer;
+
+    private bool _isSneaking;
+    private bool _isSprinting;
+
+    [SerializeField] private float _sneakSpeedMulti;
+    [SerializeField] private float _sprintSpeedMulti;
 
     private void Start()
     {
@@ -97,6 +104,30 @@ public class PlayerController : MonoBehaviour
         if (!IsGrounded()) return;
 
         _velocity += _jumpPower;
+    }
+
+    public void Sneak(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            _isSneaking = true;
+        }
+        else if (context.canceled)
+        {
+            _isSneaking = false;
+        }
+    }
+
+    public void Sprint(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            _isSprinting = true;
+        }
+        else if (context.canceled)
+        {
+            _isSprinting = false;
+        }
     }
 
     //Change Player Animation State
