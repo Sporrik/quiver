@@ -75,62 +75,74 @@ public class GuardBehavior : MonoBehaviour
         Gizmos.DrawRay(drawPosition, rightRayDirection * _sightRange);
     }
 
-    private void ChasePlayer() => _agent.SetDestination(_lastPlayerPosition);
-
-    
+    private void ChasePlayer() => _agent.SetDestination(_player.transform.position);
+        
     private void PlayerDetection()
     {
-        _isPlayerInSightRange = Physics.CheckSphere(transform.position, _sightRange, playerLayer);
-        _isPlayerInAttackRange = Physics.CheckSphere(transform.position, _attackRange, playerLayer);
+        _seesPlayer = false;
+
+        if (_eyes == null) return;
+
+        Vector3 directionToPlayer = (_player.transform.position - _eyes.transform.position).normalized;
+        float angleToPlayer = Vector3.Angle(_eyes.transform.forward, directionToPlayer);
+
+        float distanceToPlayer = (_player.transform.position - transform.position).magnitude;
+
+        _isPlayerInSightRange = distanceToPlayer <= _sightRange;
+        _isPlayerInAttackRange = distanceToPlayer <= _attackRange;
+
+        Ray ray = new Ray(_eyes.transform.position, directionToPlayer);
+
+        Debug.Log($"in FOV: {angleToPlayer <= _sightAngle / 2}, distance to player: {distanceToPlayer}, " +
+                  $"is behind wall: {Physics.Raycast(ray, _sightRange, LayerMask.GetMask(_sightBlockLayers))}");
 
         // check if player is in range
-        if (_isPlayerInSightRange && !_isPlayerInAttackRange)
+        if (_isPlayerInSightRange)
         {
-            if (_eyes == null) return;
-
-            Vector3 directionToPlayer = (_player.transform.position - _eyes.transform.position).normalized;
-            float angleToPlayer = Vector3.Angle(_eyes.transform.forward, directionToPlayer);
-
             if (angleToPlayer <= _sightAngle / 2)
             {
-                Ray ray = new Ray(_eyes.transform.position, directionToPlayer);
-
                 if (!Physics.Raycast(ray, _sightRange, LayerMask.GetMask(_sightBlockLayers)))
                 {
-                    _timeAlert = _memorizationTime;
-
-                    _lastPlayerPosition = _player.position;
+                    _seesPlayer = true;
                 }
             }
         }
 
-        if(_timeAlert > 0.0f)
+        if (_seesPlayer)
         {
-            _seesPlayer = true;
-        }
-        else
-        {
-            _seesPlayer = false;
-        }
+            _timeAlert = _memorizationTime;
 
-        if (_seesPlayer )
-        {
-            if((_lastPlayerPosition - transform.position).magnitude <= _attackRange)
-            {
-                _timeAlert -= Time.deltaTime;
-
-                LookAround();         
-            }
+            _lastPlayerPosition = _player.transform.position;
 
             ChasePlayer();
+        }
+        else if (_timeAlert > 0.0f)
+        {
+            const float distanceMargin = 1.0f;
+
+            float distanceToLastPosition = (_lastPlayerPosition - transform.position).magnitude;            
+
+            if (distanceToLastPosition <= _attackRange + distanceMargin)
+            {
+                //Debug.Log($"Guard has reached the last seen player position!");
+
+                _timeAlert -= Time.deltaTime;
+                _agent.SetDestination(transform.position);
+
+                LookAround();
+            }
+            else
+            {
+                _agent.SetDestination(_lastPlayerPosition);
+            }
         }
     }
 
     private void FollowPath()
     {
-        if (_seesPlayer) return;
+        if (_timeAlert > 0.0f) return;
 
-        if (_path[0] == null) return;
+        if (_path.Count == 0) return;
 
         if((_path[_currentPathPoint].transform.position - transform.position).magnitude <= _attackRange)
         {
@@ -145,6 +157,6 @@ public class GuardBehavior : MonoBehaviour
 
     private void LookAround()
     {
-
+        // add a way for the guards to look around
     }
 }

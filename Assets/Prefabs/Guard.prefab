@@ -88,6 +88,11 @@ MonoBehaviour:
   _eyes: {fileID: 4575027808560252544}
   _seesPlayer: 0
   _path: []
+  _sightBlockLayers:
+  - Ground
+  - StaticLevel
+  _memorizationTime: 10
+  _timeAlert: 0
   _sightRange: 20
   _sightAngle: 120
   _attackRange: 1
@@ -156,7 +161,7 @@ GameObject:
   m_Layer: 0
   m_Name: Eyes
   m_TagString: Untagged
-  m_Icon: {fileID: 7866945982896999795, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -169,7 +174,7 @@ Transform:
   m_GameObject: {fileID: 4575027808560252544}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.022, y: 1.382, z: 0.57}
+  m_LocalPosition: {x: 0.022, y: 1.382, z: 0.72}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
