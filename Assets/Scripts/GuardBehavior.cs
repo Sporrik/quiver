@@ -101,7 +101,7 @@ public class GuardBehavior : MonoBehaviour
         {
             if (angleToPlayer <= _sightAngle / 2)
             {
-                if (!Physics.Raycast(ray, _sightRange, LayerMask.GetMask(_sightBlockLayers)))
+                if (!Physics.Raycast(ray, distanceToPlayer, LayerMask.GetMask(_sightBlockLayers)))
                 {
                     _seesPlayer = true;
                 }
