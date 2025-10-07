@@ -10,18 +10,25 @@ public class GuardBehavior : MonoBehaviour
     [SerializeField] private Transform _player;
     [SerializeField] private LayerMask playerLayer;
     [SerializeField] private GameObject _eyes;
+
     [SerializeField] private bool _seesPlayer;
 
     [SerializeField] private List<GameObject> _path;
-    private int _currentPathPoint;
-
-    private Vector3 _lastPlayerPosition;
+    [SerializeField] private string[] _sightBlockLayers = { "Ground", "StaticLevel" };
 
     [SerializeField] private float _memorizationTime = 10.0f;
     [SerializeField] private float _timeAlert;
 
-    private NavMeshAgent _agent;
     [SerializeField] private float _sightRange, _sightAngle, _attackRange;
+
+    private int _currentPathPoint;
+
+    private Vector3 _lastPlayerPosition;
+
+    private Vector3 _LastForward;
+    private bool _turnLeft;
+
+    private NavMeshAgent _agent;
     private bool _isPlayerInSightRange, _isPlayerInAttackRange;
 
     private void Start()
@@ -38,67 +45,110 @@ public class GuardBehavior : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
+        float angle = _sightAngle / 2;
+        Vector3 forward = transform.forward;
 
-        Vector3 t0 = (transform.position + new Vector3(_sightRange * MathF.Cos(_sightAngle / 2), 0.0f, _sightRange * MathF.Sin(_sightAngle / 2)));
-        Vector3 t1 = (transform.position + new Vector3(_sightRange * MathF.Cos(-_sightAngle / 2), 0.0f, _sightRange * MathF.Sin(-_sightAngle / 2)));
+        // Calculate left and right ray directions
+        Vector3 leftRayDirection = (Quaternion.Euler(0, -angle, 0) * _eyes.transform.forward).normalized;
+        Vector3 rightRayDirection = (Quaternion.Euler(0, angle, 0) * _eyes.transform.forward).normalized;
 
-        //Gizmos.DrawLine(transform.position, t0);
-        //Gizmos.DrawLine(transform.position, t1);
+        Vector3 drawPosition = _eyes.transform.position;
+        drawPosition.y = transform.position.y;
 
-        //Gizmos.DrawSphere(transform.position, _sightRange);
-    }
+        // Set gizmo colors and draw rays
 
-    private void ChasePlayer() => _agent.SetDestination(_lastPlayerPosition);
-
-    static readonly string[] SIGHT_BLOCK_MASK = { "Ground", "StaticLevel" };
-    private void PlayerDetection()
-    {
-        _isPlayerInSightRange = Physics.CheckSphere(transform.position, _sightRange, playerLayer);
-        _isPlayerInAttackRange = Physics.CheckSphere(transform.position, _attackRange, playerLayer);
-
-        // check if player is in range
-        if (_isPlayerInSightRange && !_isPlayerInAttackRange)
+        if( _seesPlayer )
         {
-            if (_eyes == null) return;
-
-            Vector3 directionToPlayer = (_player.transform.position - _eyes.transform.position).normalized;
-            float angleToPlayer = Vector3.Angle(_eyes.transform.forward, directionToPlayer);
-
-            if (angleToPlayer <= _sightAngle / 2f)
-            {
-                Ray ray = new Ray(_eyes.transform.position, directionToPlayer);
-
-                if (!Physics.Raycast(ray, _sightRange, LayerMask.GetMask(SIGHT_BLOCK_MASK)))
-                {
-                    _timeAlert = _memorizationTime;
-
-                    _lastPlayerPosition = _player.position;
-                }
-            }
-
+            Gizmos.color = Color.green;
+        }
+        else
+        {
+            Gizmos.color = Color.red;
         }
 
-        _seesPlayer = _timeAlert > 0.0f;
-
-        if (_seesPlayer )
+        for(int degree = (int)angle; degree > -angle; degree--)
         {
-            if((_lastPlayerPosition - transform.position).magnitude <= _attackRange * 1.5f)
-            {
-                _timeAlert -= Time.deltaTime;
+            Vector3 p0 = drawPosition + (Quaternion.Euler(0, degree - 1, 0) * forward).normalized * _sightRange;
+            Vector3 p1 = drawPosition + (Quaternion.Euler(0, degree, 0) * forward).normalized * _sightRange;
 
-                LookAround();         
+            Gizmos.DrawLine(p0, p1);
+        }
+
+        Gizmos.DrawRay(drawPosition, leftRayDirection * _sightRange);
+        Gizmos.DrawRay(drawPosition, rightRayDirection * _sightRange);
+    }
+
+    private void ChasePlayer() => _agent.SetDestination(_player.transform.position);
+        
+    private void PlayerDetection()
+    {
+        _seesPlayer = false;
+
+        if (_eyes == null) return;
+
+        Vector3 directionToPlayer = (_player.transform.position - _eyes.transform.position).normalized;
+        float angleToPlayer = Vector3.Angle(_eyes.transform.forward, directionToPlayer);
+
+        float distanceToPlayer = (_player.transform.position - transform.position).magnitude;
+
+        _isPlayerInSightRange = distanceToPlayer <= _sightRange;
+        _isPlayerInAttackRange = distanceToPlayer <= _attackRange;
+
+        Ray ray = new Ray(_eyes.transform.position, directionToPlayer);
+
+        Debug.Log($"in FOV: {angleToPlayer <= _sightAngle / 2}, distance to player: {distanceToPlayer}, " +
+                  $"is behind wall: {Physics.Raycast(ray, _sightRange, LayerMask.GetMask(_sightBlockLayers))}");
+
+        // check if player is in range
+        if (_isPlayerInSightRange)
+        {
+            if (angleToPlayer <= _sightAngle / 2)
+            {
+                if (!Physics.Raycast(ray, distanceToPlayer, LayerMask.GetMask(_sightBlockLayers)))
+                {
+                    _seesPlayer = true;
+                }
             }
+        }
+
+        if (_seesPlayer)
+        {
+            _timeAlert = _memorizationTime;
+
+            _lastPlayerPosition = _player.transform.position;
 
             ChasePlayer();
+        }
+        else if (_timeAlert > 0.0f)
+        {
+            const float distanceMargin = 1.0f;
+
+            float distanceToLastPosition = (_lastPlayerPosition - transform.position).magnitude;            
+
+            if (distanceToLastPosition <= _attackRange + distanceMargin)
+            {
+                Debug.Log($"Guard has reached the last seen player position!");
+
+                _timeAlert -= Time.deltaTime;
+
+                LookAround();
+            }
+            else
+            {
+                _LastForward = transform.forward;
+                _turnLeft = false;
+            }
+
+            _agent.SetDestination(_lastPlayerPosition);
+
         }
     }
 
     private void FollowPath()
     {
-        if (_seesPlayer) return;
+        if (_timeAlert > 0.0f) return;
 
-        if (_path[0] == null) return;
+        if (_path.Count == 0) return;
 
         if((_path[_currentPathPoint].transform.position - transform.position).magnitude <= _attackRange)
         {
@@ -113,6 +163,22 @@ public class GuardBehavior : MonoBehaviour
 
     private void LookAround()
     {
+        const float maxTurnAngle = 90f;
+        float rotationSpeed = 75f;
 
+        if(_turnLeft)
+        {
+            transform.Rotate(0, Time.deltaTime * rotationSpeed, 0);
+        }
+        else
+        {
+            transform.Rotate(0, -Time.deltaTime * rotationSpeed, 0);
+        }
+
+        if (Vector3.Angle(_LastForward, transform.forward) > maxTurnAngle)
+        {
+            _turnLeft = !_turnLeft;
+        }
+        
     }
 }
