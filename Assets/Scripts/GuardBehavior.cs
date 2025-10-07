@@ -25,6 +25,9 @@ public class GuardBehavior : MonoBehaviour
 
     private Vector3 _lastPlayerPosition;
 
+    private Vector3 _LastForward;
+    private bool _turnLeft;
+
     private NavMeshAgent _agent;
     private bool _isPlayerInSightRange, _isPlayerInAttackRange;
 
@@ -124,17 +127,20 @@ public class GuardBehavior : MonoBehaviour
 
             if (distanceToLastPosition <= _attackRange + distanceMargin)
             {
-                //Debug.Log($"Guard has reached the last seen player position!");
+                Debug.Log($"Guard has reached the last seen player position!");
 
                 _timeAlert -= Time.deltaTime;
-                _agent.SetDestination(transform.position);
 
                 LookAround();
             }
             else
             {
-                _agent.SetDestination(_lastPlayerPosition);
+                _LastForward = transform.forward;
+                _turnLeft = false;
             }
+
+            _agent.SetDestination(_lastPlayerPosition);
+
         }
     }
 
@@ -157,6 +163,22 @@ public class GuardBehavior : MonoBehaviour
 
     private void LookAround()
     {
-        // add a way for the guards to look around
+        const float maxTurnAngle = 90f;
+        float rotationSpeed = 75f;
+
+        if(_turnLeft)
+        {
+            transform.Rotate(0, Time.deltaTime * rotationSpeed, 0);
+        }
+        else
+        {
+            transform.Rotate(0, -Time.deltaTime * rotationSpeed, 0);
+        }
+
+        if (Vector3.Angle(_LastForward, transform.forward) > maxTurnAngle)
+        {
+            _turnLeft = !_turnLeft;
+        }
+        
     }
 }
