@@ -122,7 +122,6 @@ public class GuardBehavior : MonoBehaviour
         {
             _timeAlert = _memorizationTime;
 
-            _lastPlayerPosition = _player.transform.position;
 
             _followTime = _followTimeAftherSeen;
 
@@ -132,6 +131,7 @@ public class GuardBehavior : MonoBehaviour
         {
             ChasePlayer();
 
+            _lastPlayerPosition = _player.transform.position;
             _followTime -= Time.deltaTime;
         }
         else if (_timeAlert > 0.0f)
