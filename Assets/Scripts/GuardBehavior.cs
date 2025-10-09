@@ -21,6 +21,9 @@ public class GuardBehavior : MonoBehaviour
 
     [SerializeField] private float _sightRange, _sightAngle, _attackRange;
 
+    [SerializeField] private float _followTimeAftherSeen = 5f;
+    [SerializeField] private float _followTime = 0;
+
     private int _currentPathPoint;
 
     private Vector3 _lastPlayerPosition;
@@ -61,12 +64,16 @@ public class GuardBehavior : MonoBehaviour
         {
             Gizmos.color = Color.green;
         }
+        else if(_followTime > 0)
+        {
+            Gizmos.color = Color.blue;
+        }
         else
         {
             Gizmos.color = Color.red;
         }
 
-        for(int degree = (int)angle; degree > -angle; degree--)
+        for (int degree = (int)angle; degree > -angle; degree--)
         {
             Vector3 p0 = drawPosition + (Quaternion.Euler(0, degree - 1, 0) * forward).normalized * _sightRange;
             Vector3 p1 = drawPosition + (Quaternion.Euler(0, degree, 0) * forward).normalized * _sightRange;
@@ -117,13 +124,21 @@ public class GuardBehavior : MonoBehaviour
 
             _lastPlayerPosition = _player.transform.position;
 
+            _followTime = _followTimeAftherSeen;
+
             ChasePlayer();
+        }
+        else if(_followTime > 0.0f)
+        {
+            ChasePlayer();
+
+            _followTime -= Time.deltaTime;
         }
         else if (_timeAlert > 0.0f)
         {
             const float distanceMargin = 1.0f;
 
-            float distanceToLastPosition = (_lastPlayerPosition - transform.position).magnitude;            
+            float distanceToLastPosition = (_lastPlayerPosition - transform.position).magnitude;
 
             if (distanceToLastPosition <= _attackRange + distanceMargin)
             {
