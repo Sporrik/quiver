@@ -20,6 +20,7 @@ public class GuardBehavior : MonoBehaviour
     [SerializeField] private float _timeAlert;
 
     [SerializeField] private float _sightRange, _sightAngle, _attackRange;
+    [SerializeField] private float _noticeRangeWhenAlert = 10;
 
     private int _currentPathPoint;
 
@@ -48,6 +49,8 @@ public class GuardBehavior : MonoBehaviour
         float angle = _sightAngle / 2;
         Vector3 forward = transform.forward;
 
+        float distanceToPlayer = (_player.transform.position - transform.position).magnitude;
+
         // Calculate left and right ray directions
         Vector3 leftRayDirection = (Quaternion.Euler(0, -angle, 0) * _eyes.transform.forward).normalized;
         Vector3 rightRayDirection = (Quaternion.Euler(0, angle, 0) * _eyes.transform.forward).normalized;
@@ -66,7 +69,7 @@ public class GuardBehavior : MonoBehaviour
             Gizmos.color = Color.red;
         }
 
-        for(int degree = (int)angle; degree > -angle; degree--)
+        for(int degree = (int)angle; degree > -angle; --degree)
         {
             Vector3 p0 = drawPosition + (Quaternion.Euler(0, degree - 1, 0) * forward).normalized * _sightRange;
             Vector3 p1 = drawPosition + (Quaternion.Euler(0, degree, 0) * forward).normalized * _sightRange;
@@ -76,6 +79,16 @@ public class GuardBehavior : MonoBehaviour
 
         Gizmos.DrawRay(drawPosition, leftRayDirection * _sightRange);
         Gizmos.DrawRay(drawPosition, rightRayDirection * _sightRange);
+
+        Gizmos.color = Color.blue;
+
+        for (int degree = 360; degree > 0; --degree)
+        {
+            Vector3 p0 = drawPosition + (Quaternion.Euler(0, degree - 1, 0) * forward).normalized * _noticeRangeWhenAlert;
+            Vector3 p1 = drawPosition + (Quaternion.Euler(0, degree, 0) * forward).normalized * _noticeRangeWhenAlert;
+
+            Gizmos.DrawLine(p0, p1);
+        }
     }
 
     private void ChasePlayer() => _agent.SetDestination(_player.transform.position);
@@ -113,11 +126,11 @@ public class GuardBehavior : MonoBehaviour
 
         if (_seesPlayer)
         {
-            _timeAlert = _memorizationTime;
-
             _lastPlayerPosition = _player.transform.position;
 
             ChasePlayer();
+
+            _timeAlert = _memorizationTime;
         }
         else if (_timeAlert > 0.0f)
         {
@@ -136,11 +149,18 @@ public class GuardBehavior : MonoBehaviour
             else
             {
                 _LastForward = transform.forward;
-                _turnLeft = false;
+
+                _seesPlayer = false;
             }
 
-            _agent.SetDestination(_lastPlayerPosition);
-
+            if (distanceToPlayer < _noticeRangeWhenAlert)
+            {
+                _lastPlayerPosition = _player.transform.position;
+            }
+            else
+            {
+                _agent.SetDestination(_lastPlayerPosition);
+            }
         }
     }
 
