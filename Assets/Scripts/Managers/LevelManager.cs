@@ -10,6 +10,7 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private string[] _levelNames;
 
     private static int _currentLevel = 0;
+    private static bool _loadFirstLevel = false;
 
     private bool _gameOver;
     private float _timeUntilRestart;
@@ -21,6 +22,11 @@ public class LevelManager : MonoBehaviour
 
     private void Awake()
     {
+        if(!_loadFirstLevel)
+        {
+            _loadFirstLevel = true;
+            LoadLevel();
+        }
         _gameOver = false;
         _gameOverPanel.SetActive(false);
     }
