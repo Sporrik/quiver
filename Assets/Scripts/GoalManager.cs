@@ -22,7 +22,6 @@ public class GoalManager : MonoBehaviour
         
     }
 
-
     public void ShowNextGoal()
     {
         _goalScore++;
