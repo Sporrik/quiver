@@ -5,6 +5,8 @@ public class LockPosition : MonoBehaviour
     public GameObject targetObject; // The object to compare position with
     public GameObject CP_Front;
     public GameObject CP_Back;
+
+    public bool IsLocked = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -43,6 +45,7 @@ public class LockPosition : MonoBehaviour
                 CP_Back.SetActive(true);
 
                 Debug.Log("Position locked.");
+                IsLocked = true;
             }
         }
     }
