@@ -1,121 +1,25 @@
-using System.Collections.Generic;
-using System.Linq;
-using TMPro.EditorUtilities;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
-    [SerializeField] GameObject _gameOverPanel;
-    [SerializeField] private string[] _levelNames;
+    private int _currentLevel;
 
-    private static int _currentLevel = 0;
-    private static bool _loadFirstLevel = false;
-
-    private bool _gameOver;
-    private float _timeUntilRestart;
-
-    private GameObject _player;
-
-    [SerializeField] private float _goatEnterDistance;
-    private GameObject _goal;
-
-    private void Awake()
-    {
-        if(!_loadFirstLevel)
-        {
-            _loadFirstLevel = true;
-            LoadLevel();
-        }
-        _gameOver = false;
-        _gameOverPanel.SetActive(false);
-    }
-
-    private void Start()
-    {
-        // temporary goal fix
-    }
-
-    private void Update()
-    {
-        _goal = GameObject.FindGameObjectWithTag("Goal");
-        _player = GameObject.FindGameObjectWithTag("Player");
-
-        ManageLoseConditions();
-        ManageWinCondition();
-        ManageLevelReset();
-    }
-
-    private void ManageLoseConditions()
-    {
-        if (_gameOver) return;
-        
-        if (_player == null) return;
-
-        List<GameObject> guards = new List<GameObject>();
-        GameObject.FindGameObjectsWithTag("Guard", guards);
-        if (guards.Count == 0) return;
-
-        foreach (GameObject guard in guards)
-        {
-            if (guard.GetComponent<GuardBehavior>().CanGetCaught(_player.transform.position))
-            {
-                TriggerGameOver();
-                Debug.Log("The player got caught!");
-            }
-        }
-    }
-
-    private void ManageWinCondition()
-    {
-        if(_goal == null) return;
-
-        float playerToGoalDistance = (_goal.transform.position - _player.transform.position).magnitude;
-
-        if(playerToGoalDistance < _goatEnterDistance)
-        {
-            EnterNextLevel();
-
-            Debug.Log("Going to the next level");
-        }
-    }
-
-    private void ManageLevelReset()
-    {
-        if(_gameOver && _timeUntilRestart <= 0f)
-        {
-            _gameOver = false;
-            LoadLevel();
-        }
-        else if (_gameOver)
-        {
-            _timeUntilRestart -= Time.deltaTime;
-        }
-    }
-
-    private void TriggerGameOver()
-    {
-        _gameOver = true;
-        _timeUntilRestart = 5f;
-        _gameOverPanel.SetActive(true);
-    }
-
-    private void EnterNextLevel()
+    private void NewLevel()
     {
         _currentLevel++;
 
-        if( _currentLevel >= _levelNames.Count() ) _currentLevel = 0;
-
-        LoadLevel();
-    }
-
-    private void LoadLevel()
-    {
-        SceneManager.LoadScene(_levelNames[_currentLevel]);
-    }
-
-    public bool IsGameOver()
-    {
-        return _gameOver;
+        switch (_currentLevel)
+        {
+            case 1:
+                SceneManager.LoadScene("Map_1");
+                break;
+            case 2:
+                SceneManager.LoadScene("Map_2");
+                break;
+            case 3:
+                SceneManager.LoadScene("Map_3");
+                break;
+        }
     }
 }
