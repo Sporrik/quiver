@@ -72,6 +72,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5bfd44bd41fe1940a59012c63604111, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _attackPoint: {fileID: 4508316082437646523}
+  _attackRange: 2
+  _enemyLayer:
+    serializedVersion: 2
+    m_Bits: 8192
 --- !u!114 &2630555844973547078
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -133,10 +138,6 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 852140f2-7766-474d-8707-702459ba45f3
     m_ActionName: 'Player/Interact[/Keyboard/e]'
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 27c5f898-bc57-4ee1-8800-db469aca5fe3
-    m_ActionName: 'Player/Crouch[/Keyboard/c]'
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2832852280429792993}
