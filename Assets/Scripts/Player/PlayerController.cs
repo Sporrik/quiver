@@ -8,7 +8,6 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class PlayerController : MonoBehaviour
 {
-    private PlayerInput _playerInput;
     private Vector2 _input;
     private CharacterController _characterController;
     [SerializeField] private float _baseSpeed;
@@ -31,15 +30,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _groundRadius;
     [SerializeField] private LayerMask _groundLayer;
 
-    private bool _isSneaking;
-    private bool _isSprinting;
-
-    [SerializeField] private float _sneakSpeedMulti;
     [SerializeField] private float _sprintSpeedMulti;
 
     private void Start()
     {
-        _playerInput = GetComponent<PlayerInput>();
         _characterController = GetComponent<CharacterController>();
         _characterController.enabled = true;
         _mainCamera = Camera.main;
@@ -108,35 +102,14 @@ public class PlayerController : MonoBehaviour
         _velocity += _jumpPower;
     }
 
-    public void Interact(InputAction.CallbackContext context)
-    {
-        if (!context.started) return;
-
-        //interaction suff here
-    }
-
-    public void Sneak(InputAction.CallbackContext context)
-    {
-        if (context.performed && !_isSprinting)
-        {
-            _isSneaking = true;
-            _currentSpeed = _baseSpeed * _sneakSpeedMulti;
-        }
-        else if (context.canceled && !_isSprinting)
-        {
-            _isSneaking = false;
-            _currentSpeed = _baseSpeed;
-        }
-    }
-
     public void Sprint(InputAction.CallbackContext context)
     {
-        if (context.performed && !_isSneaking)
+        if (context.performed)
         {
             _isSprinting = true;
             _currentSpeed = _baseSpeed * _sprintSpeedMulti;
         }
-        else if (context.canceled && !_isSneaking)
+        else if (context.canceled)
         {
             _isSprinting = false;
             _currentSpeed = _baseSpeed;
@@ -155,9 +128,4 @@ public class PlayerController : MonoBehaviour
     //Check for specific animation
     private bool isAnimationPlaying(Animator animator, string stateName)
         => animator.GetCurrentAnimatorStateInfo(0).IsName(stateName) && animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f;
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.DrawSphere(_groundPosition.position, _groundRadius);
-    }
 }
