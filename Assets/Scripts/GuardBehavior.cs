@@ -126,15 +126,7 @@ public class GuardBehavior : MonoBehaviour
             }
         }
 
-        if (_seesPlayer)
-        {
-            _lastPlayerPosition = _player.transform.position;
-
-            ChasePlayer();
-
-            _timeAlert = _memorizationTime;
-        }
-        else if (_timeAlert > 0.0f)
+        if (!_seesPlayer && _timeAlert > 0.0f)
         {
             const float distanceMargin = 1.0f;
 
@@ -168,8 +160,7 @@ public class GuardBehavior : MonoBehaviour
                 _agent.SetDestination(_lastPlayerPosition);
             }
         }
-
-        if (_seesPlayer)
+        else if (_seesPlayer)
         {
             _lastPlayerPosition = _player.transform.position;
 
