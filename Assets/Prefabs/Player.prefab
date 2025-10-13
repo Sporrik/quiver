@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4508316082437646523}
   - component: {fileID: 2832852280429792993}
+  - component: {fileID: 1010097908257854610}
   - component: {fileID: 2630555844973547078}
   - component: {fileID: 6672333097141837501}
   m_Layer: 7
@@ -59,6 +60,18 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   _sprintSpeedMulti: 2
+--- !u!114 &1010097908257854610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3499273087107311390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5bfd44bd41fe1940a59012c63604111, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2630555844973547078
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -106,8 +119,8 @@ MonoBehaviour:
     m_ActionName: 'Player/Attack[/Mouse/leftButton,/Keyboard/enter]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2832852280429792993}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+      - m_Target: {fileID: 1010097908257854610}
+        m_TargetAssemblyTypeName: PlayerInteraction, Assembly-CSharp
         m_MethodName: Interact
         m_Mode: 0
         m_Arguments:
@@ -121,19 +134,7 @@ MonoBehaviour:
     m_ActionId: 852140f2-7766-474d-8707-702459ba45f3
     m_ActionName: 'Player/Interact[/Keyboard/e]'
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2832852280429792993}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: Sneak
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: 27c5f898-bc57-4ee1-8800-db469aca5fe3
     m_ActionName: 'Player/Crouch[/Keyboard/c]'
   - m_PersistentCalls:

@@ -8,7 +8,6 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class PlayerController : MonoBehaviour
 {
-    private PlayerInput _playerInput;
     private Vector2 _input;
     private CharacterController _characterController;
     [SerializeField] private float _baseSpeed;
@@ -31,12 +30,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _groundRadius;
     [SerializeField] private LayerMask _groundLayer;
 
-    private bool _isSprinting;
     [SerializeField] private float _sprintSpeedMulti;
 
     private void Start()
     {
-        _playerInput = GetComponent<PlayerInput>();
         _characterController = GetComponent<CharacterController>();
         _characterController.enabled = true;
         _mainCamera = Camera.main;
@@ -103,13 +100,6 @@ public class PlayerController : MonoBehaviour
         if (!IsGrounded()) return;
 
         _velocity += _jumpPower;
-    }
-
-    public void Interact(InputAction.CallbackContext context)
-    {
-        if (!context.started) return;
-
-        //interaction suff here
     }
 
     public void Sprint(InputAction.CallbackContext context)
