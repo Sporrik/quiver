@@ -106,12 +106,10 @@ public class PlayerController : MonoBehaviour
     {
         if (context.performed)
         {
-            _isSprinting = true;
             _currentSpeed = _baseSpeed * _sprintSpeedMulti;
         }
         else if (context.canceled)
         {
-            _isSprinting = false;
             _currentSpeed = _baseSpeed;
         }
     }
