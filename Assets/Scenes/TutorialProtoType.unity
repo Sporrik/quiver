@@ -1077,6 +1077,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1378066011577300482, guid: a1fbaef72ff8fef4e887b1586928578e, type: 3}
+      propertyPath: _player
+      value: 
+      objectReference: {fileID: 1388954480}
+    - target: {fileID: 1378066011577300482, guid: a1fbaef72ff8fef4e887b1586928578e, type: 3}
       propertyPath: _path.Array.size
       value: 7
       objectReference: {fileID: 0}
@@ -2287,6 +2291,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gameOverScreen: {fileID: 2084676089}
+--- !u!4 &1388954480 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4508316082437646523, guid: 56651abbb63f8cc41b8c6a77384e0c1c, type: 3}
+  m_PrefabInstance: {fileID: 1088862393}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1429466018
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2587,6 +2596,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1378066011577300482, guid: a1fbaef72ff8fef4e887b1586928578e, type: 3}
+      propertyPath: _player
+      value: 
+      objectReference: {fileID: 1388954480}
     - target: {fileID: 1378066011577300482, guid: a1fbaef72ff8fef4e887b1586928578e, type: 3}
       propertyPath: _path.Array.size
       value: 4
