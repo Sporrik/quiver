@@ -11,7 +11,7 @@ public class GuardBehavior : MonoBehaviour
     [SerializeField] private LayerMask playerLayer;
     [SerializeField] private GameObject _eyes;
 
-    [SerializeField] private bool _seesPlayer;
+    [SerializeField] public bool _seesPlayer;
 
     [SerializeField] private List<GameObject> _path;
     [SerializeField] private string[] _sightBlockLayers = { "Ground", "StaticLevel" };
@@ -21,6 +21,9 @@ public class GuardBehavior : MonoBehaviour
 
     [SerializeField] private float _sightRange, _sightAngle, _attackRange;
     [SerializeField] private float _noticeRangeWhenAlert = 10;
+
+    [SerializeField] private float _baseSpeed = 3.5f;
+    [SerializeField] private float _runSpeed = 5f;
 
     private int _currentPathPoint;
 
@@ -33,10 +36,14 @@ public class GuardBehavior : MonoBehaviour
     private LevelManager _levelManager;
     private bool _isPlayerInSightRange, _isPlayerInAttackRange;
 
+    private float _distanceToPlayer;
+
     private void Start()
     {
         _player = GameObject.FindWithTag("Player").transform;
         _agent = GetComponent<NavMeshAgent>();
+        _agent.speed = _baseSpeed;
+
     }
 
     private void Update()
@@ -64,6 +71,10 @@ public class GuardBehavior : MonoBehaviour
         if( _seesPlayer )
         {
             Gizmos.color = Color.green;
+        }
+        else if (!_seesPlayer && _timeAlert > 0.0f)
+        {
+            Gizmos.color = Color.blue;
         }
         else
         {
@@ -104,10 +115,10 @@ public class GuardBehavior : MonoBehaviour
         Vector3 directionToPlayer = (_player.transform.position - _eyes.transform.position).normalized;
         float angleToPlayer = Vector3.Angle(_eyes.transform.forward, directionToPlayer);
 
-        float distanceToPlayer = (_player.transform.position - transform.position).magnitude;
+        _distanceToPlayer = (_player.transform.position - transform.position).magnitude;
 
-        _isPlayerInSightRange = distanceToPlayer <= _sightRange;
-        _isPlayerInAttackRange = distanceToPlayer <= _attackRange;
+        _isPlayerInSightRange = _distanceToPlayer <= _sightRange;
+        _isPlayerInAttackRange = _distanceToPlayer <= _attackRange;
 
         Ray ray = new Ray(_eyes.transform.position, directionToPlayer);
 
@@ -119,22 +130,15 @@ public class GuardBehavior : MonoBehaviour
         {
             if (angleToPlayer <= _sightAngle / 2)
             {
-                if (!Physics.Raycast(ray, distanceToPlayer, LayerMask.GetMask(_sightBlockLayers)))
+                if (!Physics.Raycast(ray, _distanceToPlayer, LayerMask.GetMask(_sightBlockLayers)))
                 {
                     _seesPlayer = true;
+                    _agent.speed = _runSpeed;
                 }
             }
         }
 
-        if (_seesPlayer)
-        {
-            _lastPlayerPosition = _player.transform.position;
-
-            ChasePlayer();
-
-            _timeAlert = _memorizationTime;
-        }
-        else if (_timeAlert > 0.0f)
+        if (!_seesPlayer && _timeAlert > 0.0f)
         {
             const float distanceMargin = 1.0f;
 
@@ -147,6 +151,7 @@ public class GuardBehavior : MonoBehaviour
                 _timeAlert -= Time.deltaTime;
 
                 LookAround();
+                _agent.speed = _baseSpeed;
             }
             else
             {
@@ -155,10 +160,10 @@ public class GuardBehavior : MonoBehaviour
                 _seesPlayer = false;
             }
 
-            if (distanceToPlayer < _noticeRangeWhenAlert)
+            if (_distanceToPlayer < _noticeRangeWhenAlert)
             {
                 //_lastPlayerPosition = _player.transform.position;
-                if (!Physics.Raycast(ray, distanceToPlayer, LayerMask.GetMask(_sightBlockLayers)))
+                if (!Physics.Raycast(ray, _distanceToPlayer, LayerMask.GetMask(_sightBlockLayers)))
                 {
                     _seesPlayer = true;
                 }
@@ -168,8 +173,7 @@ public class GuardBehavior : MonoBehaviour
                 _agent.SetDestination(_lastPlayerPosition);
             }
         }
-
-        if (_seesPlayer)
+        else if (_seesPlayer)
         {
             _lastPlayerPosition = _player.transform.position;
 
@@ -218,5 +222,14 @@ public class GuardBehavior : MonoBehaviour
     public bool CanGetCaught(Vector3 position)
     {
         return _isPlayerInAttackRange && _seesPlayer;
+    }
+    public void AlertGuardsToPosition(float distanceToAlert)
+    {
+        if(_distanceToPlayer < distanceToAlert)
+        {
+            Debug.Log($" {gameObject.name} has seen player with {_distanceToPlayer} distance ");
+            _lastPlayerPosition = _player.transform.position;
+            _timeAlert = _memorizationTime;
+        }
     }
 }

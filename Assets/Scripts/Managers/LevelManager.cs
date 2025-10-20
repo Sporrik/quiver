@@ -18,7 +18,7 @@ public class LevelManager : MonoBehaviour
 
     private GameObject _player;
 
-    [SerializeField] private float _goatEnterDistance;
+    [SerializeField] private float _goalEnterDistance;
     private GameObject _goal;
 
     private void Awake()
@@ -35,13 +35,12 @@ public class LevelManager : MonoBehaviour
     private void Start()
     {
         // temporary goal fix
+        _player = GameObject.FindGameObjectWithTag("Player");
     }
 
     private void Update()
     {
         _goal = GameObject.FindGameObjectWithTag("Goal");
-        _player = GameObject.FindGameObjectWithTag("Player");
-
         ManageLoseConditions();
         ManageWinCondition();
         ManageLevelReset();
@@ -71,9 +70,12 @@ public class LevelManager : MonoBehaviour
     {
         if(_goal == null) return;
 
-        float playerToGoalDistance = (_goal.transform.position - _player.transform.position).magnitude;
+        if (_player == null) return;
 
-        if(playerToGoalDistance < _goatEnterDistance)
+        float playerToGoalDistance = (_goal.transform.position - _player.transform.position).magnitude;
+        //Debug.Log(_goal.gameObject.name);
+
+        if(playerToGoalDistance < _goalEnterDistance)
         {
             EnterNextLevel();
 
