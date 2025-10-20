@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
 using NUnit.Framework;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.InputSystem;
@@ -12,6 +14,14 @@ public class PlayerController : MonoBehaviour
     private CharacterController _characterController;
     [SerializeField] private float _baseSpeed;
     private float _currentSpeed;
+
+    [SerializeField] private TextMeshProUGUI _staminaText;
+    [SerializeField] private float _stamina = 100;
+    [SerializeField] private float _staminaIncreaseSpeed;
+    [SerializeField] private float _stamineDecreaseSpeed;
+    [SerializeField] private float TimeToRegainStamina = 3;
+    private float StaminTimer = 0;
+    private bool IsSprinting = false;
 
     [SerializeField] private float _rotationSpeed;
     private Vector3 _direction;
@@ -45,6 +55,22 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         ApplyRotation();
+        _staminaText.text = $"Stamina: {Mathf.RoundToInt(_stamina)}";
+        StaminTimer += Time.deltaTime;
+        if (StaminTimer > TimeToRegainStamina && !IsSprinting)  // increase stamina if u wait a little time
+        {
+            _stamina += _staminaIncreaseSpeed;
+            _stamina = Mathf.Min(100, _stamina); // 100 = max stamina
+        }
+        if (IsSprinting) // descrease stamina if sprinting
+        {
+            _stamina -= _staminaIncreaseSpeed;
+            if(_stamina <= 0)
+            {
+                _stamina = 0;
+                ResetSpeed();
+            }  
+        }
     }
 
     private void FixedUpdate()
@@ -104,14 +130,23 @@ public class PlayerController : MonoBehaviour
 
     public void Sprint(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && _stamina > 0)
         {
+            _stamina -= _stamineDecreaseSpeed;
             _currentSpeed = _baseSpeed * _sprintSpeedMulti;
+            IsSprinting = true;
         }
-        else if (context.canceled)
+        else if (context.canceled || _stamina <= 0)
         {
-            _currentSpeed = _baseSpeed;
+           ResetSpeed();
         }
+        
+    }
+    private void ResetSpeed()
+    {
+        IsSprinting = false;
+        StaminTimer = 0;
+        _currentSpeed = _baseSpeed;
     }
 
     //Change Player Animation State

@@ -50,7 +50,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a70e3635b9ed9854d87c8429eb759e24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _baseSpeed: 5
+  _baseSpeed: 4
+  _staminaText: {fileID: 0}
+  _stamina: 100
+  _staminaIncreaseSpeed: 0.1
+  _stamineDecreaseSpeed: 0.1
   _rotationSpeed: 600
   _gravityMultiplier: 1
   _jumpPower: 2
@@ -59,7 +63,7 @@ MonoBehaviour:
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _sprintSpeedMulti: 2
+  _sprintSpeedMulti: 1.5
 --- !u!114 &1010097908257854610
 MonoBehaviour:
   m_ObjectHideFlags: 0
