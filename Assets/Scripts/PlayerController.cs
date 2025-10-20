@@ -1,10 +1,7 @@
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
-using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.InputSystem;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class PlayerController : MonoBehaviour
 {
