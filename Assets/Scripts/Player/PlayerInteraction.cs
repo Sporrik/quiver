@@ -1,4 +1,3 @@
-using Unity.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -20,6 +19,13 @@ public class PlayerInteraction : MonoBehaviour
         if (!context.started) return;
 
         Collider[] hitEnemies = Physics.OverlapSphere(_attackPoint.position, _attackRange, _enemyLayer);
-        if (hitEnemies != null) hitEnemies[0].gameObject.SetActive(false);
+        foreach (Collider hit in hitEnemies)
+        {
+            if (hit.GetComponent<GuardBehavior>()._seesPlayer)
+            {
+                Destroy(hit.gameObject);
+                break;
+            }
+        }
     }
 }

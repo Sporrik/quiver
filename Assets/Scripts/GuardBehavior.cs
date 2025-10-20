@@ -11,7 +11,7 @@ public class GuardBehavior : MonoBehaviour
     [SerializeField] private LayerMask playerLayer;
     [SerializeField] private GameObject _eyes;
 
-    [SerializeField] private bool _seesPlayer;
+    [SerializeField] public bool _seesPlayer;
 
     [SerializeField] private List<GameObject> _path;
     [SerializeField] private string[] _sightBlockLayers = { "Ground", "StaticLevel" };
