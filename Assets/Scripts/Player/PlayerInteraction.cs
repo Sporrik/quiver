@@ -21,9 +21,11 @@ public class PlayerInteraction : MonoBehaviour
         Collider[] hitEnemies = Physics.OverlapSphere(_attackPoint.position, _attackRange, _enemyLayer);
         foreach (Collider hit in hitEnemies)
         {
-            if (hit.GetComponent<GuardBehavior>()._seesPlayer)
+            GameObject hitGO = hit.transform.parent.parent.gameObject;
+
+            if (!hitGO.GetComponent<GuardBehavior>()._seesPlayer)
             {
-                Destroy(hit.gameObject);
+                Destroy(hitGO);
                 break;
             }
         }
