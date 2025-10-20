@@ -271,7 +271,7 @@ GameObject:
   - component: {fileID: 908280088847064071}
   - component: {fileID: 1309241919582244936}
   - component: {fileID: 1143910656434594678}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Guard A
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -327,8 +327,9 @@ MonoBehaviour:
   _sightRange: 20
   _sightAngle: 120
   _attackRange: 1
-  _followTimeAftherSeen: 2
-  _followTime: 0
+  _noticeRangeWhenAlert: 10
+  _baseSpeed: 0
+  _sprintSpeed: 0
 --- !u!195 &1143910656434594678
 NavMeshAgent:
   m_ObjectHideFlags: 0
