@@ -41,6 +41,7 @@ public class GuardBehavior : MonoBehaviour
         _player = GameObject.FindWithTag("Player").transform;
         _agent = GetComponent<NavMeshAgent>();
         _agent.speed = _baseSpeed;
+
     }
 
     private void Update()
@@ -215,5 +216,8 @@ public class GuardBehavior : MonoBehaviour
     public bool CanGetCaught(Vector3 position)
     {
         return _isPlayerInAttackRange && _seesPlayer;
+    }
+    public void SneezAlert()
+    {
     }
 }
