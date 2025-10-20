@@ -1439,6 +1439,10 @@ PrefabInstance:
       value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 2832852280429792993, guid: 56651abbb63f8cc41b8c6a77384e0c1c, type: 3}
+      propertyPath: TimeToRegainStamina
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2832852280429792993, guid: 56651abbb63f8cc41b8c6a77384e0c1c, type: 3}
       propertyPath: _staminaIncreaseSpeed
       value: 0.1
       objectReference: {fileID: 0}
@@ -2423,6 +2427,14 @@ PrefabInstance:
     - target: {fileID: 3569828412108627602, guid: 9bedda03c24337841b23c14377eb82cc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6184660358001102280, guid: 9bedda03c24337841b23c14377eb82cc, type: 3}
+      propertyPath: '_levelNames.Array.data[0]'
+      value: TutorialProtoType
+      objectReference: {fileID: 0}
+    - target: {fileID: 6184660358001102280, guid: 9bedda03c24337841b23c14377eb82cc, type: 3}
+      propertyPath: '_levelNames.Array.data[1]'
+      value: LevelAxel
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
