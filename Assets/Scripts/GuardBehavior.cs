@@ -22,6 +22,9 @@ public class GuardBehavior : MonoBehaviour
     [SerializeField] private float _sightRange, _sightAngle, _attackRange;
     [SerializeField] private float _noticeRangeWhenAlert = 10;
 
+    [SerializeField] private float _baseSpeed = 3.5f;
+    [SerializeField] private float _runSpeed = 5f;
+
     private int _currentPathPoint;
 
     private Vector3 _lastPlayerPosition;
@@ -37,6 +40,7 @@ public class GuardBehavior : MonoBehaviour
     {
         _player = GameObject.FindWithTag("Player").transform;
         _agent = GetComponent<NavMeshAgent>();
+        _agent.speed = _baseSpeed;
     }
 
     private void Update()
@@ -122,6 +126,7 @@ public class GuardBehavior : MonoBehaviour
                 if (!Physics.Raycast(ray, distanceToPlayer, LayerMask.GetMask(_sightBlockLayers)))
                 {
                     _seesPlayer = true;
+                    _agent.speed = _runSpeed;
                 }
             }
         }
@@ -139,6 +144,7 @@ public class GuardBehavior : MonoBehaviour
                 _timeAlert -= Time.deltaTime;
 
                 LookAround();
+                _agent.speed = _baseSpeed;
             }
             else
             {
