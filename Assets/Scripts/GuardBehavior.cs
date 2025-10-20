@@ -219,9 +219,5 @@ public class GuardBehavior : MonoBehaviour
     }
     public void SneezAlert()
     {
-        if()
-        {
-            
-        }
     }
 }
