@@ -4,6 +4,9 @@ public class DiaperAnimation : MonoBehaviour
 {
     private Animator _animator;
 
+    Vector2 _initialMousePosition;
+    Vector2 _currentMousePosition;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Start()
     {
@@ -16,11 +19,7 @@ public class DiaperAnimation : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Space))
         {
             _animator.SetBool("isWorn", !_animator.GetBool("isWorn"));
-
-            Debug.Log("poop!");
         }
-
-        Debug.Log("pee!");
     }
 
     public void NewEvent()
