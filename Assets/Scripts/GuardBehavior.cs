@@ -49,10 +49,10 @@ public class GuardBehavior : MonoBehaviour
         PlayerDetection();
         FollowPath();
 
-        if (CanGetCaught(transform.position))
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        }
+        //if (CanGetCaught(transform.position))
+        //{
+        //    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        //}
 
     }
 
