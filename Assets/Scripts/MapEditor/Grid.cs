@@ -5,6 +5,7 @@ public class Grid : MonoBehaviour
 {
     [SerializeField] private float size = 1.0f;
     [SerializeField] private float sizeGrid = 10.0f;
+    [SerializeField] private float yChangeTest;
 
     public Vector3 GetNearestPointOnGrid(Vector3 position)
     {

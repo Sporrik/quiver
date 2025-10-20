@@ -1058,6 +1058,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "DeleteTile",
+                    "type": "Button",
+                    "id": "dafcc71f-ff0f-42bd-b37f-76c8d02ac612",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -1074,11 +1083,33 @@
                 },
                 {
                     "name": "",
+                    "id": "051e3208-98ad-4c93-8efc-d829b082b2a4",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeTileRight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "90ede3ef-66c7-4289-8f38-00d7f00774ea",
                     "path": "<Keyboard>/leftArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
+                    "action": "ChangeTileLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bc68a5d0-ef9b-41b5-9178-47d0fca7468a",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
                     "action": "ChangeTileLeft",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -1135,6 +1166,17 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "MoveCameraW3",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4a88512c-a43a-47ca-a7f6-473da2bec2cb",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DeleteTile",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -9,10 +9,14 @@ using UnityEngine.ProBuilder.Shapes;
 
 public class CubePlacer : MonoBehaviour
 {
-    [SerializeField] private GameObject wallObject;
     [SerializeField] private GameObject prefabsObject;
+    [SerializeField] private GameObject deletionObject;
     [SerializeField] private Material blueprintMaterial;
     [SerializeField] private Material prefabMaterial;
+
+    [SerializeField] private GameObject loadScriptObject;
+
+    private LoadData _loadDataScript;
 
     private Grid _grid;
     private Camera _mainCamera;
@@ -21,21 +25,26 @@ public class CubePlacer : MonoBehaviour
     private InputAction _rotateAction;
     private InputAction _leftSwitchAction;
     private InputAction _rightSwitchAction;
+    private InputAction _deleteAction;
 
     private List<GameObject> _prefabsList = new List<GameObject>();
     private int _currentIndex = 0;
 
     private int _rotationAngle = 0;
 
+    private bool _deletionState = false;
 
     private void Awake()
     {
         _grid = FindFirstObjectByType<Grid>();
         _mainCamera = Camera.main;
 
+        _loadDataScript = loadScriptObject.GetComponent<LoadData>();
+
         _rotateAction = InputSystem.actions.FindAction("RotateTile");
         _leftSwitchAction = InputSystem.actions.FindAction("ChangeTileLeft");
         _rightSwitchAction = InputSystem.actions.FindAction("ChangeTileRight");
+        _deleteAction = InputSystem.actions.FindAction("DeleteTile");
     }
 
     private void Start()
@@ -64,7 +73,7 @@ public class CubePlacer : MonoBehaviour
         if (_rotateAction.triggered)
         {
             _rotationAngle += 90;
-            if (_rotationAngle >= 360) _rotationAngle = 0;
+            if (_rotationAngle >= 360) _rotationAngle -= 360;
 
             const int rotateBlueprint = 90;
             _blueprintObject.transform.Rotate(new Vector3(0, 1, 0), rotateBlueprint);
@@ -72,15 +81,37 @@ public class CubePlacer : MonoBehaviour
 
         if (_leftSwitchAction.triggered)
         {
-            _currentIndex--;
+            if (_deletionState)
+            {
+                _deletionState = !_deletionState;
+            }
+            else
+            {
+                _currentIndex--;
+            }
+
             if (_currentIndex < 0) _currentIndex = _prefabsList.Count - 1;
             NewBlueprint();
         }
 
         if (_rightSwitchAction.triggered)
         {
-            _currentIndex++;
+            if (_deletionState)
+            {
+                _deletionState = !_deletionState;
+            }
+            else
+            {
+                _currentIndex++;
+            }
+
             if (_currentIndex > _prefabsList.Count - 1) _currentIndex = 0;
+            NewBlueprint();
+        }
+
+        if (_deleteAction.triggered)
+        {
+            _deletionState = !_deletionState;
             NewBlueprint();
         }
     }
@@ -93,15 +124,24 @@ public class CubePlacer : MonoBehaviour
             _blueprintObject = null;
         }
 
-        if (_prefabsList[_currentIndex] != null)
+        if (_prefabsList[_currentIndex] != null && deletionObject != null)
         {
-            _blueprintObject = Instantiate(_prefabsList[_currentIndex]);
-            _blueprintObject.transform.localScale += new Vector3(0, 1, 0);
-
-            for (var idx = 0; idx < _blueprintObject.transform.childCount; idx++)
+            if (!_deletionState)
             {
-                MeshRenderer meshRender = _blueprintObject.transform.GetChild(idx).GetComponent<MeshRenderer>();
-                meshRender.material = blueprintMaterial;
+                _blueprintObject = Instantiate(_prefabsList[_currentIndex]);
+            }
+            else if (_deletionState)
+            {
+                _blueprintObject = Instantiate(deletionObject);
+            }
+
+            if (_blueprintObject != null)
+            {
+                for (var idx = 0; idx < _blueprintObject.transform.childCount; idx++)
+                {
+                    MeshRenderer meshRender = _blueprintObject.transform.GetChild(idx).GetComponent<MeshRenderer>();
+                    meshRender.material = blueprintMaterial;
+                }
             }
 
         }
@@ -112,7 +152,6 @@ public class CubePlacer : MonoBehaviour
         //if there is an instance on the position from nearPoint return, otherwise continue
         var finalPosition = _grid.GetNearestPointOnGrid(nearPoint);
         _blueprintObject.transform.position = finalPosition;
-        //_blueprintObject.transform.parent = transform;
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -148,6 +187,21 @@ public class CubePlacer : MonoBehaviour
             prefabObject.transform.position = finalPosition;
             prefabObject.transform.parent = transform;
 
+        }
+    }
+
+    private void GetListOutFile()
+    {
+        //TODO: get text value from json loadData, compare for matching tag, then instantiate the prefab with the given position and rotation
+
+        TileDataListWrapper tileListWrapper = _loadDataScript.GetLoadedList();
+
+        for (var idx = 0; idx < _prefabsList.Count; idx++)
+        {
+            if (_prefabsList[idx].CompareTag(tileListWrapper.tiles[idx].tagName))
+            {
+
+            }
         }
     }
 }
