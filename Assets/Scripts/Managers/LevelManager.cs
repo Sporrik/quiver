@@ -34,12 +34,12 @@ public class LevelManager : MonoBehaviour
     private void Start()
     {
         // temporary goal fix
-        _goal = GameObject.FindGameObjectWithTag("Goal");
         _player = GameObject.FindGameObjectWithTag("Player");
     }
 
     private void Update()
     {
+        _goal = GameObject.FindGameObjectWithTag("Goal");
         ManageLoseConditions();
         ManageWinCondition();
         ManageLevelReset();
@@ -72,6 +72,7 @@ public class LevelManager : MonoBehaviour
         if (_player == null) return;
 
         float playerToGoalDistance = (_goal.transform.position - _player.transform.position).magnitude;
+        //Debug.Log(_goal.gameObject.name);
 
         if(playerToGoalDistance < _goalEnterDistance)
         {

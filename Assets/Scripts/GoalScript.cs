@@ -22,7 +22,12 @@ public class GoalScript : MonoBehaviour
         
         Debug.Log("NEXT");
         _manager.ShowNextGoal();
-        Destroy(gameObject);
+
+
+        if (!other.CompareTag("Goal"))
+            Destroy(gameObject);
+
+        
     }
 
 }

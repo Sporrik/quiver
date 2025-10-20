@@ -4,7 +4,6 @@ using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.SceneManagement;
 
 public class GuardBehavior : MonoBehaviour
 {
@@ -23,9 +22,6 @@ public class GuardBehavior : MonoBehaviour
     [SerializeField] private float _sightRange, _sightAngle, _attackRange;
     [SerializeField] private float _noticeRangeWhenAlert = 10;
 
-    [SerializeField] private float _baseSpeed;
-    [SerializeField] private float _sprintSpeed;
-
     private int _currentPathPoint;
 
     private Vector3 _lastPlayerPosition;
@@ -41,19 +37,12 @@ public class GuardBehavior : MonoBehaviour
     {
         _player = GameObject.FindWithTag("Player").transform;
         _agent = GetComponent<NavMeshAgent>();
-        _agent.speed = _baseSpeed;
     }
 
     private void Update()
     {
         PlayerDetection();
         FollowPath();
-
-        if (CanGetCaught(transform.position))
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        }
-
     }
 
     private void OnDrawGizmos()
@@ -133,15 +122,12 @@ public class GuardBehavior : MonoBehaviour
                 if (!Physics.Raycast(ray, distanceToPlayer, LayerMask.GetMask(_sightBlockLayers)))
                 {
                     _seesPlayer = true;
-                    _agent.speed = _sprintSpeed;
                 }
             }
         }
 
         if (!_seesPlayer && _timeAlert > 0.0f)
         {
-
-
             const float distanceMargin = 1.0f;
 
             float distanceToLastPosition = (_lastPlayerPosition - transform.position).magnitude;            
@@ -153,8 +139,6 @@ public class GuardBehavior : MonoBehaviour
                 _timeAlert -= Time.deltaTime;
 
                 LookAround();
-                _agent.speed = _baseSpeed;
-
             }
             else
             {
