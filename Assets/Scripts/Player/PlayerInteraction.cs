@@ -11,7 +11,7 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (!context.started) return;
 
-        //interaction suff here
+        //interaction stuff here
     }
 
      public void Takedown(InputAction.CallbackContext context)

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BarManager : MonoBehaviour
 {
@@ -17,13 +18,18 @@ public class BarManager : MonoBehaviour
     [SerializeField] private float _angryMeter;
     [SerializeField] private float TimeToGetRandomEvent = 5;
 
-    [SerializeField] private List<GameObject> Guards;
+    [SerializeField] private GameObject[] Guards;
+
+    [SerializeField] private float _sneezRange;
+    [SerializeField] private float _cryRange;
 
     private float Timer;
     void Start()
     {
-        Guards.Add(GameObject.FindGameObjectWithTag("Guard"));
+        
+        Guards = GameObject.FindGameObjectsWithTag("Guard");
         Debug.Log(Guards);
+
         //Physics.OverlapSphere()
     }
 
@@ -48,17 +54,23 @@ public class BarManager : MonoBehaviour
         }
 
 
-        
+        if (Input.GetKeyUp(KeyCode.Z))
+        {
+            Debug.Log("STOP CRYING");
+            _angryMeter = 0;
+        }
 
         if(_angryMeter >= 100)
         {
+            Debug.Log("CRY");
             _angryMeter = Math.Min(_angryMeter, 100);
-            Cry();
+            AlertGuard(_cryRange);
         }
         if (_sneezMeter >= 100)
         {
             _sneezMeter = 0;
-            Sneez();
+            Debug.Log("SNEEZ");
+            AlertGuard(_sneezRange);
         }
         if (_poopMeter >= 100)
         {
@@ -80,7 +92,7 @@ public class BarManager : MonoBehaviour
                 _angryMeter++;
                 break;
             case 1:
-                _poopMeter++;
+                //_poopMeter++;
                 break;
             case 2:
                 _sneezMeter++;
@@ -91,17 +103,17 @@ public class BarManager : MonoBehaviour
         }
     }
 
-    private void Sneez()
+    private void AlertGuard(float range)
     {
-
-    }
-
-    private void Cry()
-    {
-        
+        Debug.Log("Alert");
+        foreach (var guard in Guards)
+        {
+            GuardBehavior b = guard.GetComponent<GuardBehavior>();
+            b.AlertGuardsToPosition(range);
+        }
     }
     private void Poop()
     {
-
+        SceneManager.LoadScene("Diaper", LoadSceneMode.Single);
     }
 }
