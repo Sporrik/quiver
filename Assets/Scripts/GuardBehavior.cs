@@ -230,6 +230,7 @@ public class GuardBehavior : MonoBehaviour
             Debug.Log($" {gameObject.name} has seen player with {_distanceToPlayer} distance ");
             _lastPlayerPosition = _player.transform.position;
             _timeAlert = _memorizationTime;
+            _agent.speed = _runSpeed;
         }
     }
 }

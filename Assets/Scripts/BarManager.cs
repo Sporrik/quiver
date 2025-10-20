@@ -62,12 +62,14 @@ public class BarManager : MonoBehaviour
 
         if(_angryMeter >= 100)
         {
+            Debug.Log("CRY");
             _angryMeter = Math.Min(_angryMeter, 100);
             AlertGuard(_cryRange);
         }
         if (_sneezMeter >= 100)
         {
             _sneezMeter = 0;
+            Debug.Log("SNEEZ");
             AlertGuard(_sneezRange);
         }
         if (_poopMeter >= 100)
