@@ -16,9 +16,19 @@ public class DiaperAnimation : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space))
+        if(Input.GetKeyDown(KeyCode.UpArrow))
         {
-            _animator.SetBool("isWorn", !_animator.GetBool("isWorn"));
+            _animator.SetBool("frontIsWorn", !_animator.GetBool("frontIsWorn"));
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            _animator.SetBool("leftIsWorn", !_animator.GetBool("leftIsWorn"));
+        }
+
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            _animator.SetBool("rightIsWorn", !_animator.GetBool("rightIsWorn"));
         }
     }
 
