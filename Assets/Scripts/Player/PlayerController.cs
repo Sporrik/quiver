@@ -10,18 +10,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _baseSpeed;
     private float _currentSpeed;
 
-<<<<<<< Updated upstream
-    [SerializeField] private TextMeshProUGUI _staminaText;
-    [SerializeField] private float _stamina = 100;
-    [SerializeField] private float _staminaIncreaseSpeed;
-    [SerializeField] private float _stamineDecreaseSpeed;
-    [SerializeField] private float TimeToRegainStamina = 3;
-    private float StaminTimer = 0;
-    private bool _isSprinting = false;
-=======
     [SerializeField] private float _maxStamina, _staminaRegenRate;
     private float _stamina, _staminaRegen;
->>>>>>> Stashed changes
 
     [SerializeField] private float _rotationSpeed;
     private Vector3 _direction;
@@ -56,25 +46,6 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         ApplyRotation();
-<<<<<<< Updated upstream
-        _staminaText.text = $"Stamina: {Mathf.RoundToInt(_stamina)}";
-        StaminTimer += Time.deltaTime;
-        if (StaminTimer > TimeToRegainStamina && !_isSprinting)  // increase stamina if u wait a little time
-        {
-            _stamina += _staminaIncreaseSpeed;
-            _stamina = Mathf.Min(100, _stamina); // 100 = max stamina
-        }
-        if (_isSprinting) // descrease stamina if sprinting
-        {
-            _stamina -= _staminaIncreaseSpeed;
-            if(_stamina <= 0)
-            {
-                _stamina = 0;
-                ResetSpeed();
-            }  
-        }
-=======
->>>>>>> Stashed changes
     }
 
     private void FixedUpdate()
@@ -158,13 +129,7 @@ public class PlayerController : MonoBehaviour
     {
         if (context.performed && CanSprint)
         {
-<<<<<<< Updated upstream
-            _stamina -= _stamineDecreaseSpeed;
-            _currentSpeed = _baseSpeed * _sprintSpeedMulti;
-            _isSprinting = true;
-=======
             StartSprint();
->>>>>>> Stashed changes
         }
         else if (context.canceled || !CanSprint)
         {
@@ -172,17 +137,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-<<<<<<< Updated upstream
-    public bool IsSprinting()
-    {
-        return _isSprinting;
-    }
+    public bool IsSprinting() => _isSprinting;
 
-private void ResetSpeed()
-    {
-        _isSprinting = false;
-        StaminTimer = 0;
-=======
     private bool CanSprint => _stamina > 0;
 
     private void StartSprint()
@@ -196,7 +152,6 @@ private void ResetSpeed()
     private void EndSprint()
     {
         _isSprinting = false;
->>>>>>> Stashed changes
         _currentSpeed = _baseSpeed;
     }
 
