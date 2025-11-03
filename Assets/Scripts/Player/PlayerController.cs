@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _stamineDecreaseSpeed;
     [SerializeField] private float TimeToRegainStamina = 3;
     private float StaminTimer = 0;
-    private bool IsSprinting = false;
+    private bool _isSprinting = false;
 
     [SerializeField] private float _rotationSpeed;
     private Vector3 _direction;
@@ -57,12 +57,12 @@ public class PlayerController : MonoBehaviour
         ApplyRotation();
         _staminaText.text = $"Stamina: {Mathf.RoundToInt(_stamina)}";
         StaminTimer += Time.deltaTime;
-        if (StaminTimer > TimeToRegainStamina && !IsSprinting)  // increase stamina if u wait a little time
+        if (StaminTimer > TimeToRegainStamina && !_isSprinting)  // increase stamina if u wait a little time
         {
             _stamina += _staminaIncreaseSpeed;
             _stamina = Mathf.Min(100, _stamina); // 100 = max stamina
         }
-        if (IsSprinting) // descrease stamina if sprinting
+        if (_isSprinting) // descrease stamina if sprinting
         {
             _stamina -= _staminaIncreaseSpeed;
             if(_stamina <= 0)
@@ -134,7 +134,7 @@ public class PlayerController : MonoBehaviour
         {
             _stamina -= _stamineDecreaseSpeed;
             _currentSpeed = _baseSpeed * _sprintSpeedMulti;
-            IsSprinting = true;
+            _isSprinting = true;
         }
         else if (context.canceled || _stamina <= 0)
         {
@@ -142,9 +142,15 @@ public class PlayerController : MonoBehaviour
         }
         
     }
-    private void ResetSpeed()
+
+    public bool IsSprinting()
     {
-        IsSprinting = false;
+        return _isSprinting;
+    }
+
+private void ResetSpeed()
+    {
+        _isSprinting = false;
         StaminTimer = 0;
         _currentSpeed = _baseSpeed;
     }

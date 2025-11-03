@@ -20,6 +20,8 @@ public class GuardBehavior : MonoBehaviour
     [SerializeField] private float _timeAlert;
 
     [SerializeField] private float _sightRange, _sightAngle, _attackRange;
+    [SerializeField] private float _sightMultiplierWhenSprinting = 1.0f;
+    
     [SerializeField] private float _noticeRangeWhenAlert = 10;
 
     [SerializeField] private float _baseSpeed = 3.5f;
@@ -54,6 +56,8 @@ public class GuardBehavior : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        float currentSightRange = GetCurrentSightRange();
+
         float angle = _sightAngle / 2;
         Vector3 forward = transform.forward;
 
@@ -83,14 +87,14 @@ public class GuardBehavior : MonoBehaviour
 
         for(int degree = (int)angle; degree > -angle; --degree)
         {
-            Vector3 p0 = drawPosition + (Quaternion.Euler(0, degree - 1, 0) * forward).normalized * _sightRange;
-            Vector3 p1 = drawPosition + (Quaternion.Euler(0, degree, 0) * forward).normalized * _sightRange;
+            Vector3 p0 = drawPosition + (Quaternion.Euler(0, degree - 1, 0) * forward).normalized * currentSightRange;
+            Vector3 p1 = drawPosition + (Quaternion.Euler(0, degree, 0) * forward).normalized * currentSightRange;
 
             Gizmos.DrawLine(p0, p1);
         }
 
-        Gizmos.DrawRay(drawPosition, leftRayDirection * _sightRange);
-        Gizmos.DrawRay(drawPosition, rightRayDirection * _sightRange);
+        Gizmos.DrawRay(drawPosition, leftRayDirection * currentSightRange);
+        Gizmos.DrawRay(drawPosition, rightRayDirection * currentSightRange);
 
         Gizmos.color = Color.blue;
 
@@ -117,13 +121,12 @@ public class GuardBehavior : MonoBehaviour
 
         _distanceToPlayer = (_player.transform.position - transform.position).magnitude;
 
-        _isPlayerInSightRange = _distanceToPlayer <= _sightRange;
+        float currentSightRange = GetCurrentSightRange();
+
+        _isPlayerInSightRange = _distanceToPlayer <= currentSightRange;
         _isPlayerInAttackRange = _distanceToPlayer <= _attackRange;
 
         Ray ray = new Ray(_eyes.transform.position, directionToPlayer);
-
-        //Debug.Log($"in FOV: {angleToPlayer <= _sightAngle / 2}, distance to player: {distanceToPlayer}, " +
-        //          $"is behind wall: {Physics.Raycast(ray, _sightRange, LayerMask.GetMask(_sightBlockLayers))}");
 
         // check if player is in range
         if (_isPlayerInSightRange)
@@ -222,6 +225,17 @@ public class GuardBehavior : MonoBehaviour
     public bool CanGetCaught(Vector3 position)
     {
         return _isPlayerInAttackRange && _seesPlayer;
+    }
+
+    private float GetCurrentSightRange()
+    {
+        PlayerController player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+
+        if (player == null) return _sightRange;
+
+        if(player.IsSprinting()) return _sightRange * _sightMultiplierWhenSprinting;
+        
+        return _sightRange;
     }
     public void AlertGuardsToPosition(float distanceToAlert)
     {
