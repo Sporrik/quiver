@@ -13,9 +13,9 @@ public class BarManager : MonoBehaviour
 
     [SerializeField] private GameObject _player;
 
-    [SerializeField] private float _poopMeter;
-    [SerializeField] private float _sneezMeter;
-    [SerializeField] private float _angryMeter;
+    [SerializeField] public float _poopMeter;
+    [SerializeField] public float _sneezMeter;
+    [SerializeField] public float _angryMeter;
     [SerializeField] private float TimeToGetRandomEvent = 5;
 
     [SerializeField] private GameObject[] Guards;
@@ -92,7 +92,7 @@ public class BarManager : MonoBehaviour
                 _angryMeter++;
                 break;
             case 1:
-                //_poopMeter++;
+                _poopMeter++;
                 break;
             case 2:
                 _sneezMeter++;
@@ -114,6 +114,6 @@ public class BarManager : MonoBehaviour
     }
     private void Poop()
     {
-        SceneManager.LoadScene("Diaper", LoadSceneMode.Single);
+        //SceneManager.LoadScene("Diaper", LoadSceneMode.Single);
     }
 }
