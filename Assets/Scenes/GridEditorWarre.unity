@@ -260,6 +260,7 @@ GameObject:
   - component: {fileID: 200286246}
   - component: {fileID: 200286245}
   - component: {fileID: 200286244}
+  - component: {fileID: 200286247}
   m_Layer: 5
   m_Name: Save Button
   m_TagString: Untagged
@@ -331,8 +332,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2020673063}
-        m_TargetAssemblyTypeName: LoadScene, Assembly-CSharp
+      - m_Target: {fileID: 200286247}
+        m_TargetAssemblyTypeName: SaveData, Assembly-CSharp
         m_MethodName: SaveToFile
         m_Mode: 1
         m_Arguments:
@@ -381,6 +382,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 200286242}
   m_CullTransparentMesh: 1
+--- !u!114 &200286247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 200286242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73fc48e2be12caa489b35d79c2a86a68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tileListObject: {fileID: 1247155485}
 --- !u!1 &210839009
 GameObject:
   m_ObjectHideFlags: 0
@@ -1674,6 +1688,7 @@ MonoBehaviour:
   deletionObject: {fileID: 127045565}
   blueprintMaterial: {fileID: 2100000, guid: 429fe9b4ed3d02a42ad04060c76717b7, type: 2}
   prefabMaterial: {fileID: 2100000, guid: b4356279da107b0418414a07b239babe, type: 2}
+  loadScriptObject: {fileID: 2020673058}
 --- !u!4 &1247155487
 Transform:
   m_ObjectHideFlags: 0
@@ -2271,7 +2286,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2020673063}
-        m_TargetAssemblyTypeName: LoadScene, Assembly-CSharp
+        m_TargetAssemblyTypeName: LoadData, Assembly-CSharp
         m_MethodName: LoadFromFile
         m_Mode: 1
         m_Arguments:
@@ -2329,13 +2344,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 2020673058}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e4f9b59b3dccd849979956a6eea8b23, type: 3}
+  m_Script: {fileID: 11500000, guid: 9a0be2135c541fe44a024b0fafc02786, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  saveName: savedScene
-  testValue: 
-  directoryName: Saves
-  TileListObject: {fileID: 0}
 --- !u!4 &2029682479 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8459602794869372326, guid: d72e980893c1e754d8f19edc96b2106f, type: 3}
