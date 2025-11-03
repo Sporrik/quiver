@@ -61,6 +61,8 @@ public class CubePlacer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        GetListOutFile();
+
         RaycastHit hitInfo;
         Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
 
@@ -185,23 +187,50 @@ public class CubePlacer : MonoBehaviour
             }
 
             prefabObject.transform.position = finalPosition;
-            prefabObject.transform.parent = transform;
+            prefabObject.transform.SetParent(transform); ;
 
         }
     }
 
-    private void GetListOutFile()
+    public void GetListOutFile()
     {
-        //TODO: get text value from json loadData, compare for matching tag, then instantiate the prefab with the given position and rotation
-
-        TileDataListWrapper tileListWrapper = _loadDataScript.GetLoadedList();
-
-        for (var idx = 0; idx < _prefabsList.Count; idx++)
+        if (_loadDataScript.GetFileSelected())
         {
-            if (_prefabsList[idx].CompareTag(tileListWrapper.tiles[idx].tagName))
+            //discard previous map
+            for (var idx = 0; idx < transform.childCount; idx++)
             {
-
+                var child = transform.GetChild(idx);
+                //remove all children
+                GameObject.Destroy(child.gameObject);
             }
+
+
+            //get new items
+            TileDataListWrapper tileListWrapper = _loadDataScript.GetLoadedList();
+            foreach (var tile in tileListWrapper.tiles)
+            {
+                foreach (var prefab in _prefabsList)
+                {
+                    if (prefab.CompareTag(tile.tagName))
+                    {
+                        //check if no blocks are on same position
+                        for (var idx = 0; idx < transform.childCount; idx++)
+                        {
+                            var child = transform.GetChild(idx);
+
+                            if (child.position == tile.position)
+                                return;
+                        }
+                        //if not continue
+                        var prefabObject = Instantiate(prefab);
+                        prefabObject.transform.position = tile.position;
+                        prefabObject.transform.rotation = tile.rotation;
+                        prefabObject.transform.SetParent(transform);
+                    }
+                }
+            }
+            _loadDataScript.ResetFileSelected();
         }
     }
 }
+

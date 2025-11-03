@@ -1,3 +1,5 @@
+using SimpleFileBrowser;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -19,6 +21,15 @@ public class SaveData : MonoBehaviour
     [SerializeField] private GameObject tileListObject;
 
     private List<TileDataStruct> _tilesList = new List<TileDataStruct>();
+
+    private void Start()
+    {
+        FileBrowser.SetFilters(true, new FileBrowser.Filter("save files", ".json"));
+        FileBrowser.SetDefaultFilter(".json");
+        FileBrowser.SetExcludedExtensions(".lnk", ".tmp", ".zip", ".rar", ".exe");
+
+    }
+
     private void GetTiles()
     {
         for (var idx = 0; idx < tileListObject.transform.childCount; idx++)
@@ -33,7 +44,15 @@ public class SaveData : MonoBehaviour
         }
     }
 
-    public void SaveToFile()
+    public IEnumerator ShowSaveDialogCoroutine()
+    {
+        string filePath = "mapSaves/";
+        yield return FileBrowser.WaitForSaveDialog(FileBrowser.PickMode.Files, false, filePath, null, "Save map", "Save");
+
+        if (FileBrowser.Success)
+            OnFilesSelected(FileBrowser.Result);
+    }
+    private void OnFilesSelected(string[] filePaths)
     {
         GetTiles();
 
@@ -43,6 +62,11 @@ public class SaveData : MonoBehaviour
         wrapper.tiles = _tilesList;
 
         string data = JsonUtility.ToJson(wrapper, true);
-        System.IO.File.WriteAllText("mapSaves/mapData.json", data);
+        System.IO.File.WriteAllText(filePaths[0], data);
+    }
+
+    public void SaveToFile()
+    {
+        StartCoroutine(ShowSaveDialogCoroutine());
     }
 }
