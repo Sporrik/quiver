@@ -1,12 +1,7 @@
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading;
-using NUnit.Framework;
-using TMPro;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.InputSystem;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class PlayerController : MonoBehaviour
 {
@@ -15,6 +10,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _baseSpeed;
     private float _currentSpeed;
 
+<<<<<<< Updated upstream
     [SerializeField] private TextMeshProUGUI _staminaText;
     [SerializeField] private float _stamina = 100;
     [SerializeField] private float _staminaIncreaseSpeed;
@@ -22,6 +18,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float TimeToRegainStamina = 3;
     private float StaminTimer = 0;
     private bool _isSprinting = false;
+=======
+    [SerializeField] private float _maxStamina, _staminaRegenRate;
+    private float _stamina, _staminaRegen;
+>>>>>>> Stashed changes
 
     [SerializeField] private float _rotationSpeed;
     private Vector3 _direction;
@@ -41,20 +41,22 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask _groundLayer;
 
     [SerializeField] private float _sprintSpeedMulti;
+    private bool _isSprinting;
 
     private void Start()
     {
         _characterController = GetComponent<CharacterController>();
-        _characterController.enabled = true;
+        _playerAnimator = gameObject.GetComponent<Animator>();
         _mainCamera = Camera.main;
 
         _currentSpeed = _baseSpeed;
-        _playerAnimator = gameObject.GetComponent<Animator>();
+        _stamina = _maxStamina;
     }
 
     private void Update()
     {
         ApplyRotation();
+<<<<<<< Updated upstream
         _staminaText.text = $"Stamina: {Mathf.RoundToInt(_stamina)}";
         StaminTimer += Time.deltaTime;
         if (StaminTimer > TimeToRegainStamina && !_isSprinting)  // increase stamina if u wait a little time
@@ -71,12 +73,15 @@ public class PlayerController : MonoBehaviour
                 ResetSpeed();
             }  
         }
+=======
+>>>>>>> Stashed changes
     }
 
     private void FixedUpdate()
     {
         ApplyGravity();
         ApplyMovement();
+        UpdateStamina();
     }
 
     private bool IsGrounded()
@@ -114,6 +119,27 @@ public class PlayerController : MonoBehaviour
         _characterController.Move(_direction * _currentSpeed * Time.deltaTime);
     }
 
+    private void UpdateStamina()
+    {
+        if (_isSprinting)
+        {
+            _stamina--;
+        }
+        else
+        {
+            _staminaRegen += Time.deltaTime;
+            if (_staminaRegen >= _staminaRegenRate)
+            {
+                _staminaRegen = 0;
+                if (_stamina < _maxStamina)
+                {
+                    _stamina++;
+                    //_staminaBar.UpdateStaminaBar(_stamina, _maxStamina);
+                }
+            }
+        }  
+    }
+
     public void Move(InputAction.CallbackContext context)
     {
         _input = context.ReadValue<Vector2>();
@@ -130,19 +156,23 @@ public class PlayerController : MonoBehaviour
 
     public void Sprint(InputAction.CallbackContext context)
     {
-        if (context.performed && _stamina > 0)
+        if (context.performed && CanSprint)
         {
+<<<<<<< Updated upstream
             _stamina -= _stamineDecreaseSpeed;
             _currentSpeed = _baseSpeed * _sprintSpeedMulti;
             _isSprinting = true;
+=======
+            StartSprint();
+>>>>>>> Stashed changes
         }
-        else if (context.canceled || _stamina <= 0)
+        else if (context.canceled || !CanSprint)
         {
-           ResetSpeed();
+            EndSprint();
         }
-        
     }
 
+<<<<<<< Updated upstream
     public bool IsSprinting()
     {
         return _isSprinting;
@@ -152,6 +182,21 @@ private void ResetSpeed()
     {
         _isSprinting = false;
         StaminTimer = 0;
+=======
+    private bool CanSprint => _stamina > 0;
+
+    private void StartSprint()
+    {
+        _isSprinting = true;
+        _currentSpeed = _baseSpeed * _sprintSpeedMulti;
+
+        EndSprint();
+    }
+
+    private void EndSprint()
+    {
+        _isSprinting = false;
+>>>>>>> Stashed changes
         _currentSpeed = _baseSpeed;
     }
 
