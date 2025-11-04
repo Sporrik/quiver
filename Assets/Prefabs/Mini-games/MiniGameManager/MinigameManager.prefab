@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2451126230539310250}
   - component: {fileID: 4654289523179454315}
+  - component: {fileID: 4348412088577507542}
   m_Layer: 0
   m_Name: MinigameManager
   m_TagString: Untagged
@@ -46,10 +47,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 792f8a7239479df4386eae5b6f88e307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _diaperMinigameScene: BabyDiaper
-  _diaperCam: {fileID: 907104013907442142}
-  _panel: {fileID: 3452363302712667367}
   _minigameSpawnPoint: {fileID: 3444331956998005700}
+  _sceneNames:
+  - BabyDiaper
+  _renderTextures:
+  - {fileID: 8400000, guid: 1a2de882aff1389419da4e6188c8f1ef, type: 2}
+--- !u!114 &4348412088577507542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1663846720956183483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd637998f03b5ca4a9d978c70a23e6f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _camera: {fileID: 907104013907442142}
+  _border: {fileID: 5957561224010078662}
+  _panel: {fileID: 3452363302712667367}
 --- !u!1 &3452363302712667367
 GameObject:
   m_ObjectHideFlags: 0
@@ -110,7 +127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.09803922}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -272,7 +289,7 @@ GameObject:
   - component: {fileID: 6064473486207345830}
   - component: {fileID: 5957561224010078662}
   m_Layer: 5
-  m_Name: target
+  m_Name: border
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -295,7 +312,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 2048, y: 1152}
+  m_SizeDelta: {x: 2560, y: 1440}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6064473486207345830
 CanvasRenderer:
@@ -318,14 +335,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.24591732, g: 1, b: 0, a: 0.12941177}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 8400000, guid: 1a2de882aff1389419da4e6188c8f1ef, type: 2}
+  m_Texture: {fileID: 0}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -344,7 +361,7 @@ GameObject:
   - component: {fileID: 4345074169551464964}
   - component: {fileID: 907104013907442142}
   m_Layer: 5
-  m_Name: babyMinigame
+  m_Name: MinigameDisplay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
