@@ -1,25 +1,20 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class MinigameManager : MonoBehaviour
 {
-    [SerializeField] private string _diaperMinigameScene;
-    [SerializeField] private RawImage _diaperCam;
-
-    [SerializeField] private GameObject _panel;
-
     [SerializeField] private Transform _minigameSpawnPoint;
 
-    private Scene _currentMinigame;
+    [SerializeField] private List<string> _sceneNames;
+    [SerializeField] private List<Texture> _renderTextures;
 
-    private Vector2 _lastMousePos;
-    private Vector3 _panelStartPos;
-
-    private bool _isDraggingPanel = false;
+    private int _currentMinigameIndex;
+    private Scene _currentMinigameScene;
 
     private bool _miniGameIsLoaded = false;
+    private bool _miniGameIsPaused = false;
 
     private void Start()
     {
@@ -28,66 +23,7 @@ public class MinigameManager : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyUp(KeyCode.Space) && !_miniGameIsLoaded)
-        {
-            StartCoroutine(LoadScene(_diaperMinigameScene, _minigameSpawnPoint.position));
-            _miniGameIsLoaded = true;
-        }
-        else if(Input.GetKeyUp(KeyCode.Space))
-        {
-            StartCoroutine(UnloadScene());
-            _miniGameIsLoaded = false;
-        }
-        
-        DragPanel();
-    }
 
-    private void DragPanel()
-    {
-        float xDrag = GetDrag().x;
-
-        if (Input.GetMouseButton(0))
-        {
-            if (!IsInsideImage(_diaperCam, _lastMousePos))
-            {
-                _isDraggingPanel = true;
-
-                _panelStartPos = _panel.transform.position;
-                _lastMousePos = Input.mousePosition;
-            }
-            else
-            {
-                _isDraggingPanel = false;
-            }
-
-            _lastMousePos = Input.mousePosition;
-        }
-
-        if (Input.GetMouseButtonUp(0))
-        {
-            _isDraggingPanel = false;
-        }
-
-        if( _isDraggingPanel && Input.GetMouseButton(0) )
-        {
-            Vector2 currentMouse = Input.mousePosition;
-
-            Vector3 targetPos = new Vector3(_panelStartPos.x + xDrag, _panelStartPos.y, _panelStartPos.z);
-
-            _panel.transform.position = targetPos;
-        }
-    }
-
-    private Vector2 GetDrag()
-    {
-        Vector2 currentMousePos = Input.mousePosition;
-
-        Vector2 delta = Vector2.zero;
-
-        delta = currentMousePos - _lastMousePos;
-
-        _lastMousePos = currentMousePos;
-        return delta;
     }
 
     private IEnumerator LoadScene(string sceneName, Vector3 sceneOffset)
@@ -98,9 +34,9 @@ public class MinigameManager : MonoBehaviour
 
         yield return new WaitUntil(() => asyncLoad.isDone);
 
-        _currentMinigame = SceneManager.GetSceneByName(sceneName);
+        _currentMinigameScene = SceneManager.GetSceneByName(sceneName);
 
-        foreach (GameObject rootObject in _currentMinigame.GetRootGameObjects())
+        foreach (GameObject rootObject in _currentMinigameScene.GetRootGameObjects())
         {
             rootObject.transform.position += sceneOffset;
         }
@@ -108,11 +44,11 @@ public class MinigameManager : MonoBehaviour
 
     private IEnumerator UnloadScene()
     {
-        if (_currentMinigame.IsValid())
+        if (_currentMinigameScene.IsValid())
         {
-            AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync(_currentMinigame);
+            AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync(_currentMinigameScene);
             yield return new WaitUntil(() => asyncUnload.isDone);
-            Debug.Log($"Scene '{_currentMinigame.name}' unloaded!");
+            Debug.Log($"Scene '{_sceneNames[_currentMinigameIndex]}' unloaded!");
         }
         else
         {
@@ -120,8 +56,50 @@ public class MinigameManager : MonoBehaviour
         }
     }
 
-    private bool IsInsideImage(RawImage image, Vector2 pos)
+    public Texture GetRenderTexture()
     {
-        return RectTransformUtility.RectangleContainsScreenPoint(image.rectTransform, pos);
+        return _renderTextures[_currentMinigameIndex];
+    }
+
+    public void LoadMinigame(string sceneName)
+    {
+        for(int index = 0;  index < _sceneNames.Count; ++index)
+        {
+            if( _sceneNames[index] == sceneName )
+            {
+                if (_miniGameIsLoaded) QuitMinigame();
+
+                _currentMinigameIndex = index;
+
+                _miniGameIsLoaded = true;
+            }
+        }
+
+        StartCoroutine
+        (
+            LoadScene(_sceneNames[_currentMinigameIndex], _minigameSpawnPoint.position)
+        );
+    }
+
+    public void QuitMinigame()
+    {
+        _miniGameIsLoaded = false;
+
+        StartCoroutine(UnloadScene());
+    }
+
+    public void PauseMiniGame(bool pause)
+    {
+        _miniGameIsLoaded = pause;
+    }
+
+    public bool MinigameIsRunning()
+    {
+        return _miniGameIsLoaded;
+    }
+
+    public bool IsMinigamePaused()
+    {
+        return _miniGameIsPaused;
     }
 }
