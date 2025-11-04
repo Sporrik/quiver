@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class Grid : MonoBehaviour
+public class GridScript : MonoBehaviour
 {
     [SerializeField] private float size = 1.0f;
     [SerializeField] private float sizeGrid = 10.0f;

@@ -18,7 +18,7 @@ public class CubePlacer : MonoBehaviour
 
     private LoadData _loadDataScript;
 
-    private Grid _grid;
+    private GridScript _grid;
     private Camera _mainCamera;
     private GameObject _blueprintObject;
 
@@ -36,7 +36,8 @@ public class CubePlacer : MonoBehaviour
 
     private void Awake()
     {
-        _grid = FindFirstObjectByType<Grid>();
+    
+        _grid = FindFirstObjectByType<GridScript>();
         _mainCamera = Camera.main;
 
         _loadDataScript = loadScriptObject.GetComponent<LoadData>();

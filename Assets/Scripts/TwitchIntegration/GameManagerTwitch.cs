@@ -5,7 +5,7 @@ using System;
 using TMPro;
 
 
-public class GameManager : TwitchMonoBehaviour
+public class GameManagerTwitch : TwitchMonoBehaviour
 {
 
     [SerializeField] private GameObject testObject;
