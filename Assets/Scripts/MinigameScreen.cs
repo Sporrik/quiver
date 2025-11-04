@@ -4,6 +4,7 @@ using UnityEngine.UI;
 public class MinigameScreen : MonoBehaviour
 {
     [SerializeField] private RawImage _camera;
+    [SerializeField] private RawImage _border;
 
     [SerializeField] private GameObject _panel;
 
@@ -45,7 +46,7 @@ public class MinigameScreen : MonoBehaviour
 
         if (Input.GetMouseButton(0))
         {
-            if (!IsInsideImage(_camera, _lastMousePos))
+            if (!IsInsideImage(_camera, _lastMousePos) && IsInsideImage(_border, _lastMousePos))
             {
                 _isDraggingPanel = true;
 
