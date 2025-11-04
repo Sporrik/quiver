@@ -1,13 +1,17 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    private PlayerInput _playerInput;
     private Vector2 _input;
     private CharacterController _characterController;
     [SerializeField] private float _baseSpeed;
     private float _currentSpeed;
+
+    [SerializeField] private float _maxStamina, _staminaRegenRate;
+    private float _stamina, _staminaRegen;
 
     [SerializeField] private float _rotationSpeed;
     private Vector3 _direction;
@@ -26,15 +30,17 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _groundRadius;
     [SerializeField] private LayerMask _groundLayer;
 
+    [SerializeField] private float _sprintSpeedMulti;
+    private bool _isSprinting;
+
     private void Start()
     {
-        _playerInput = GetComponent<PlayerInput>();
         _characterController = GetComponent<CharacterController>();
-        _characterController.enabled = true;
+        _playerAnimator = gameObject.GetComponent<Animator>();
         _mainCamera = Camera.main;
 
         _currentSpeed = _baseSpeed;
-        _playerAnimator = gameObject.GetComponent<Animator>();
+        _stamina = _maxStamina;
     }
 
     private void Update()
@@ -46,8 +52,7 @@ public class PlayerController : MonoBehaviour
     {
         ApplyGravity();
         ApplyMovement();
-
-        Debug.Log(IsGrounded());
+        UpdateStamina();
     }
 
     private bool IsGrounded()
@@ -85,6 +90,27 @@ public class PlayerController : MonoBehaviour
         _characterController.Move(_direction * _currentSpeed * Time.deltaTime);
     }
 
+    private void UpdateStamina()
+    {
+        if (_isSprinting)
+        {
+            _stamina--;
+        }
+        else
+        {
+            _staminaRegen += Time.deltaTime;
+            if (_staminaRegen >= _staminaRegenRate)
+            {
+                _staminaRegen = 0;
+                if (_stamina < _maxStamina)
+                {
+                    _stamina++;
+                    //_staminaBar.UpdateStaminaBar(_stamina, _maxStamina);
+                }
+            }
+        }  
+    }
+
     public void Move(InputAction.CallbackContext context)
     {
         _input = context.ReadValue<Vector2>();
@@ -99,33 +125,46 @@ public class PlayerController : MonoBehaviour
         _velocity += _jumpPower;
     }
 
+    public void Sprint(InputAction.CallbackContext context)
+    {
+        if (context.performed && CanSprint)
+        {
+            StartSprint();
+        }
+        else if (context.canceled || !CanSprint)
+        {
+            EndSprint();
+        }
+    }
+
+    public bool IsSprinting() => _isSprinting;
+
+    private bool CanSprint => _stamina > 0;
+
+    private void StartSprint()
+    {
+        _isSprinting = true;
+        _currentSpeed = _baseSpeed * _sprintSpeedMulti;
+
+        EndSprint();
+    }
+
+    private void EndSprint()
+    {
+        _isSprinting = false;
+        _currentSpeed = _baseSpeed;
+    }
+
     //Change Player Animation State
     private void ChangeAnimationState(string newState)
     {
-        if (newState == _currentState)
-        {
-            return;
-        }
+        if (newState == _currentState) return;
+
         _playerAnimator.Play(newState);
         _currentState = newState;
     }
 
     //Check for specific animation
     private bool isAnimationPlaying(Animator animator, string stateName)
-    {
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName(stateName) &&
-        animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.DrawSphere(_groundPosition.position, _groundRadius);
-    }
+        => animator.GetCurrentAnimatorStateInfo(0).IsName(stateName) && animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f;
 }
