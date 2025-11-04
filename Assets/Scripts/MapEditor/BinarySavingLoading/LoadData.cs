@@ -13,16 +13,12 @@ public class LoadData : MonoBehaviour
     private TileDataListWrapper _tilesInJson = null;
     private bool _FileSelected = false;
 
-    private void Start()
+    public IEnumerator ShowLoadDialogCoroutine()
     {
-        FileBrowser.SetFilters(true, new FileBrowser.Filter("save files",".json"));
+        FileBrowser.SetFilters(true, new FileBrowser.Filter("load", ".json"));
         FileBrowser.SetDefaultFilter(".json");
         FileBrowser.SetExcludedExtensions(".lnk", ".tmp", ".zip", ".rar", ".exe");
 
-    }
-
-    public IEnumerator ShowLoadDialogCoroutine()
-    {
         string filePath = "mapSaves/";
         yield return FileBrowser.WaitForLoadDialog(FileBrowser.PickMode.Files, false, filePath, null, "Select map", "Load");
 
