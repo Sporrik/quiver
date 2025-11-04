@@ -131,7 +131,7 @@ public class MinigameScreen : MonoBehaviour
         return false;
     }
 
-    private void SlideIn(string sceneName)
+    public void SlideIn(string sceneName)
     {
         if (GotClipped() && !_manager.MinigameIsRunning())
         {
@@ -149,7 +149,7 @@ public class MinigameScreen : MonoBehaviour
         }
     }
 
-    private void SlideOut()
+    public void SlideOut()
     {
         if (_clipPosition.x - _panelWidth / 2 >= _panel.transform.position.x && _manager.MinigameIsRunning())
         {
