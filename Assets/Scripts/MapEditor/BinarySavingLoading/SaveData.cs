@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
+using UnityEditor.Formats.Fbx.Exporter;
+using Autodesk.Fbx;
+using UnityEditor;
+
 [System.Serializable]
 public class TileDataListWrapper
 {
@@ -11,7 +15,6 @@ public class TileDataListWrapper
 
 }
 
-//TODO:  add text box where you ask for the file name, all files will be saved to mapSaves(or other name for file-map)  
 //TODO:  chose to save to json or fbx or both
 
 public class SaveData : MonoBehaviour
@@ -22,13 +25,6 @@ public class SaveData : MonoBehaviour
 
     private List<TileDataStruct> _tilesList = new List<TileDataStruct>();
 
-    private void Start()
-    {
-        FileBrowser.SetFilters(true, new FileBrowser.Filter("save files", ".json"));
-        FileBrowser.SetDefaultFilter(".json");
-        FileBrowser.SetExcludedExtensions(".lnk", ".tmp", ".zip", ".rar", ".exe");
-
-    }
 
     private void GetTiles()
     {
@@ -44,29 +40,74 @@ public class SaveData : MonoBehaviour
         }
     }
 
-    public IEnumerator ShowSaveDialogCoroutine()
+    public IEnumerator ShowSaveDialogCoroutine(bool isFBX = false)
     {
-        string filePath = "mapSaves/";
+        string filePath;
+        if (isFBX)
+        {
+            filePath = "mapSaves/FBXSaves/";
+            FileBrowser.SetFilters(true, new FileBrowser.Filter("save", ".fbx"));
+            FileBrowser.SetDefaultFilter(".fbx");
+            FileBrowser.SetExcludedExtensions(".lnk", ".tmp", ".zip", ".rar", ".exe", ".json");
+        }
+        else
+        {
+            filePath = "mapSaves/";
+            FileBrowser.SetFilters(true, new FileBrowser.Filter("save", ".json"));
+            FileBrowser.SetDefaultFilter(".json");
+            FileBrowser.SetExcludedExtensions(".lnk", ".tmp", ".zip", ".rar", ".exe", ".fbx");
+        }
+
         yield return FileBrowser.WaitForSaveDialog(FileBrowser.PickMode.Files, false, filePath, null, "Save map", "Save");
 
         if (FileBrowser.Success)
-            OnFilesSelected(FileBrowser.Result);
+            OnFilesSelected(FileBrowser.Result, isFBX);
     }
-    private void OnFilesSelected(string[] filePaths)
+    private void OnFilesSelected(string[] filePaths, bool isFBX = false)
     {
         GetTiles();
 
         if (!Directory.Exists("mapSaves")) Directory.CreateDirectory("mapSaves");
+        if (isFBX)
+            if (!Directory.Exists("mapSaves/FBXSaves")) Directory.CreateDirectory("mapSaves/FBXSaves");
+
 
         var wrapper = new TileDataListWrapper();
         wrapper.tiles = _tilesList;
 
-        string data = JsonUtility.ToJson(wrapper, true);
-        System.IO.File.WriteAllText(filePaths[0], data);
+        //save to json file
+        if (!isFBX)
+        {
+            string data = JsonUtility.ToJson(wrapper, true);
+            System.IO.File.WriteAllText(filePaths[0], data);
+        }
+        else
+        {
+            //object array for fbx exporter
+            Object[] map = new Object[tileListObject.transform.childCount];
+            for (var idx = 0; idx < tileListObject.transform.childCount; idx++)
+            {
+                map[idx] = tileListObject.transform.GetChild(idx).gameObject;
+            }
+
+            ExportModelOptions exportSettings = new ExportModelOptions();
+            exportSettings.ExportFormat = ExportFormat.Binary;
+            exportSettings.KeepInstances = true;
+            exportSettings.ModelAnimIncludeOption = Include.Model;
+
+            ModelExporter.ExportObjects(filePaths[0], map, exportSettings);
+        }
     }
+
 
     public void SaveToFile()
     {
         StartCoroutine(ShowSaveDialogCoroutine());
+    }
+
+    public void SaveToFBX()
+    {
+        StartCoroutine(ShowSaveDialogCoroutine(true));
+
     }
 }
