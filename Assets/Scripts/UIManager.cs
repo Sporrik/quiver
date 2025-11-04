@@ -37,8 +37,8 @@ public class UIManager : MonoBehaviour
         //_floatMeters[0] = (_barManager._angryMeter / 100);
         //_floatMeters[1] = (_barManager._poopMeter / 100);
         //_floatMeters[2] = (_barManager._sneezMeter / 100);
-        _floatMeters[3] = (_ / 100);  // IMPLEMENT PUBLIC STAMINAMETER
-        _playerController.stamina
+       // _floatMeters[3] = (_ / 100);  // IMPLEMENT PUBLIC STAMINAMETER
+       // _playerController.stamina
 
 
 
