@@ -90,7 +90,7 @@ public class MinigameManager : MonoBehaviour
 
     public void PauseMiniGame(bool pause)
     {
-        _miniGameIsLoaded = pause;
+        _miniGameIsPaused = pause;
     }
 
     public bool MinigameIsRunning()
