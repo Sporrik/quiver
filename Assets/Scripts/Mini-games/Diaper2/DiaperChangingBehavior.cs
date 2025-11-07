@@ -33,7 +33,7 @@ public class DiaperChangingBehavior : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit))
         {
-            print(hit.collider.name);
+            //print(hit.collider.name);
 
             target = hit.collider;
         }
