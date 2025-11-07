@@ -1,0 +1,170 @@
+using UnityEngine;
+using UnityEngine.UI;
+
+public class MinigameScreen : MonoBehaviour
+{
+    [SerializeField] private RawImage _camera;
+    [SerializeField] private RawImage _border;
+
+    [SerializeField] private GameObject _panel;
+    [SerializeField] private Vector2 _clipPosition;
+
+    private MinigameManager _manager;
+
+    private Vector2 _lastMousePos;
+    private Vector3 _panelStartPos;
+
+    private bool _isDraggingPanel = false;
+    private bool _slideIn = false;
+    private bool _slideOut = false; 
+
+    private float _panelWidth;
+    [SerializeField] private float _slideSpeed = 2500f;
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        _manager = GetComponent<MinigameManager>();
+
+        _panelWidth = _panel.GetComponent<RectTransform>().rect.width;
+
+        _panelStartPos = _panel.transform.position;
+
+        _panel.transform.position = new Vector3(_clipPosition.x - _panelWidth / 2, _panelStartPos.y, _panelStartPos.z);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        // temporary testing code
+        if (Input.GetKeyUp(KeyCode.Space) && !_manager.MinigameIsRunning())
+        {
+            _slideIn = true;
+        }
+        else if (Input.GetKeyUp(KeyCode.Space))
+        {
+            _slideOut = true;
+        }
+
+        if (_slideIn) SlideIn("BabyDiaper");
+        if (_slideOut) SlideOut();
+        // end temporary testing code
+
+        DragPanel();
+
+        if (GotClipped())
+        {
+            Debug.Log("Clipped screen to center!");
+            _manager.PauseMiniGame(false);
+        }
+        else
+        {
+            _manager.PauseMiniGame(true);
+        }
+
+        _camera.texture = _manager.GetRenderTexture();
+    }
+
+    private void DragPanel()
+    {
+        float xDrag = GetDrag().x;
+
+        if (Input.GetMouseButton(0))
+        {
+            if (!IsInsideImage(_camera, _lastMousePos) && IsInsideImage(_border, _lastMousePos))
+            {
+                _isDraggingPanel = true;
+
+                _panelStartPos = _panel.transform.position;
+                _lastMousePos = Input.mousePosition;
+            }
+            else
+            {
+                _isDraggingPanel = false;
+            }
+
+            _lastMousePos = Input.mousePosition;
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            _isDraggingPanel = false;
+        }
+
+        if (_isDraggingPanel && Input.GetMouseButton(0))
+        {
+            Vector2 currentMouse = Input.mousePosition;
+
+            Vector3 targetPos = new Vector3(_panelStartPos.x + xDrag, _panelStartPos.y, _panelStartPos.z);
+
+            _panel.transform.position = targetPos;
+        }
+    }
+
+    private Vector2 GetDrag()
+    {
+        Vector2 currentMousePos = Input.mousePosition;
+
+        Vector2 delta = Vector2.zero;
+
+        delta = currentMousePos - _lastMousePos;
+
+        _lastMousePos = currentMousePos;
+        return delta;
+    }
+
+    private bool IsInsideImage(RawImage image, Vector2 pos)
+    {
+        return RectTransformUtility.RectangleContainsScreenPoint(image.rectTransform, pos);
+    }
+
+    public bool GotClipped()
+    {
+        _panelStartPos = _panel.transform.position;
+
+        if (_clipPosition.x + _panelWidth / 2 <= _panel.transform.position.x)
+        {
+            _panel.transform.position = new Vector3(_clipPosition.x + _panelWidth / 2, _panelStartPos.y, _panelStartPos.z);
+            return true;
+        }
+
+        return false;
+    }
+
+    public void SlideIn(string sceneName)
+    {
+        if (GotClipped() && !_manager.MinigameIsRunning())
+        {
+            _manager.LoadMinigame(sceneName);
+            _slideIn = false;
+        }
+        else if(!GotClipped())
+        {
+            _panel.transform.position = Vector3.MoveTowards
+            (
+                _panel.transform.position, 
+                new Vector3(_clipPosition.x + _panelWidth / 2, _panelStartPos.y, _panelStartPos.z),
+                _slideSpeed * Time.deltaTime
+            );
+        }
+    }
+
+    public void SlideOut()
+    {
+        if (_clipPosition.x - _panelWidth / 2 >= _panel.transform.position.x && _manager.MinigameIsRunning())
+        {
+            _panel.transform.position = new Vector3(_clipPosition.x - _panelWidth / 2, _panelStartPos.y, _panelStartPos.z);
+            _manager.QuitMinigame();
+            _slideOut = false;
+        }
+        else if(_clipPosition.x - _panelWidth / 2 < _panel.transform.position.x)
+        {
+            _panel.transform.position = Vector3.MoveTowards
+            (
+                _panel.transform.position,
+                new Vector3(_clipPosition.x - _panelWidth / 2, _panelStartPos.y, _panelStartPos.z),
+                _slideSpeed * Time.deltaTime
+            );
+        }
+    }
+}

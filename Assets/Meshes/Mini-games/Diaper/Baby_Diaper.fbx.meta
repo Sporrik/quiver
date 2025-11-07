@@ -55,12 +55,40 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events: []
-      transformMask: []
-      maskType: 3
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/Back
+        weight: 1
+      - path: Armature/Back/Back.001
+        weight: 1
+      - path: Armature/Back/Back.001/UpperStrapRight
+        weight: 1
+      - path: Armature/Back/Back.002
+        weight: 1
+      - path: Armature/Back/Back.002/UpperStrapLeft
+        weight: 1
+      - path: Armature/Back/Front
+        weight: 1
+      - path: Cube.001
+        weight: 1
+      - path: Cube.002
+        weight: 1
+      - path: Cube.003
+        weight: 1
+      - path: Cube.004
+        weight: 1
+      - path: Cube.005
+        weight: 1
+      - path: Empty
+        weight: 1
+      maskType: 0
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 93
     - serializedVersion: 16
-      name: WearDiaper
+      name: WearDiaperFront
       takeName: Armature|FullDiaperOn
       internalID: -1176679496759482996
       firstFrame: 0
@@ -84,8 +112,36 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events: []
-      transformMask: []
-      maskType: 3
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/Back
+        weight: 1
+      - path: Armature/Back/Back.001
+        weight: 1
+      - path: Armature/Back/Back.001/UpperStrapRight
+        weight: 1
+      - path: Armature/Back/Back.002
+        weight: 1
+      - path: Armature/Back/Back.002/UpperStrapLeft
+        weight: 1
+      - path: Armature/Back/Front
+        weight: 1
+      - path: Cube.001
+        weight: 1
+      - path: Cube.002
+        weight: 1
+      - path: Cube.003
+        weight: 1
+      - path: Cube.004
+        weight: 1
+      - path: Cube.005
+        weight: 1
+      - path: Empty
+        weight: 1
+      maskType: 0
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     isReadable: 0

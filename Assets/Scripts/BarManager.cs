@@ -13,9 +13,10 @@ public class BarManager : MonoBehaviour
 
     [SerializeField] private GameObject _player;
 
-    [SerializeField] private float _poopMeter;
-    [SerializeField] private float _sneezMeter;
-    [SerializeField] private float _angryMeter;
+    [SerializeField] public float _poopMeter;
+    [SerializeField] public float _hungerMeter;
+    [SerializeField] public float _peeMeter;
+    [SerializeField] public float _angryMeter;
     [SerializeField] private float TimeToGetRandomEvent = 5;
 
     [SerializeField] private GameObject[] Guards;
@@ -62,38 +63,52 @@ public class BarManager : MonoBehaviour
 
         if(_angryMeter >= 100)
         {
+            Debug.Log("CRY");
             _angryMeter = Math.Min(_angryMeter, 100);
             AlertGuard(_cryRange);
         }
-        if (_sneezMeter >= 100)
+        if (_hungerMeter >= 100)
         {
-            _sneezMeter = 0;
-            AlertGuard(_sneezRange);
+            _hungerMeter = 0;
+
+            Hunger();
+
+            Debug.Log("HUNGRY");
+            //AlertGuard(_sneezRange);
         }
         if (_poopMeter >= 100)
         {
             _poopMeter = 0;
             Poop();
         }
+        if(_peeMeter >= 100)
+        {
+            _peeMeter = 0;
+            Pee();
+        }
 
         _poopMeterText.text = $"Poop: {_poopMeter}";
-        _sneezMeterText.text = $"Sneez: {_sneezMeter}";
+        _sneezMeterText.text = $"Sneez: {_hungerMeter}";
         _angryMeterText.text = $"Angry: {_angryMeter}";
     }
 
+
     private void RandomBarIncrease()
     {
-        int num = UnityEngine.Random.Range(0, 3);
+        int num = UnityEngine.Random.Range(0, 4);
         switch (num)
         {
             case 0:
                 _angryMeter++;
                 break;
             case 1:
-                //_poopMeter++;
+                _poopMeter++;
                 break;
             case 2:
-                _sneezMeter++;
+                _hungerMeter++;
+                break;
+            case 3:
+                _peeMeter++;
                 break;
             default:
                 Debug.Log("LITTLE PROBLEM");
@@ -112,6 +127,15 @@ public class BarManager : MonoBehaviour
     }
     private void Poop()
     {
-        SceneManager.LoadScene("Diaper", LoadSceneMode.Single);
+        throw new NotImplementedException();
+        //SceneManager.LoadScene("Diaper", LoadSceneMode.Single);
+    }
+    private void Pee()
+    {
+        throw new NotImplementedException();
+    }
+    private void Hunger()
+    {
+        throw new NotImplementedException();
     }
 }

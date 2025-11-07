@@ -1,12 +1,7 @@
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading;
-using NUnit.Framework;
-using TMPro;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.InputSystem;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class PlayerController : MonoBehaviour
 {
@@ -15,13 +10,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _baseSpeed;
     private float _currentSpeed;
 
-    [SerializeField] private TextMeshProUGUI _staminaText;
-    [SerializeField] private float _stamina = 100;
-    [SerializeField] private float _staminaIncreaseSpeed;
-    [SerializeField] private float _stamineDecreaseSpeed;
-    [SerializeField] private float TimeToRegainStamina = 3;
-    private float StaminTimer = 0;
-    private bool IsSprinting = false;
+    [SerializeField] private float _maxStamina, _staminaRegenRate;
+    private float _stamina, _staminaRegen;
 
     [SerializeField] private float _rotationSpeed;
     private Vector3 _direction;
@@ -41,42 +31,28 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask _groundLayer;
 
     [SerializeField] private float _sprintSpeedMulti;
+    private bool _isSprinting;
 
     private void Start()
     {
         _characterController = GetComponent<CharacterController>();
-        _characterController.enabled = true;
+        _playerAnimator = gameObject.GetComponent<Animator>();
         _mainCamera = Camera.main;
 
         _currentSpeed = _baseSpeed;
-        _playerAnimator = gameObject.GetComponent<Animator>();
+        _stamina = _maxStamina;
     }
 
     private void Update()
     {
         ApplyRotation();
-        _staminaText.text = $"Stamina: {Mathf.RoundToInt(_stamina)}";
-        StaminTimer += Time.deltaTime;
-        if (StaminTimer > TimeToRegainStamina && !IsSprinting)  // increase stamina if u wait a little time
-        {
-            _stamina += _staminaIncreaseSpeed;
-            _stamina = Mathf.Min(100, _stamina); // 100 = max stamina
-        }
-        if (IsSprinting) // descrease stamina if sprinting
-        {
-            _stamina -= _staminaIncreaseSpeed;
-            if(_stamina <= 0)
-            {
-                _stamina = 0;
-                ResetSpeed();
-            }  
-        }
     }
 
     private void FixedUpdate()
     {
         ApplyGravity();
         ApplyMovement();
+        UpdateStamina();
     }
 
     private bool IsGrounded()
@@ -114,6 +90,27 @@ public class PlayerController : MonoBehaviour
         _characterController.Move(_direction * _currentSpeed * Time.deltaTime);
     }
 
+    private void UpdateStamina()
+    {
+        if (_isSprinting)
+        {
+            _stamina--;
+        }
+        else
+        {
+            _staminaRegen += Time.deltaTime;
+            if (_staminaRegen >= _staminaRegenRate)
+            {
+                _staminaRegen = 0;
+                if (_stamina < _maxStamina)
+                {
+                    _stamina++;
+                    //_staminaBar.UpdateStaminaBar(_stamina, _maxStamina);
+                }
+            }
+        }  
+    }
+
     public void Move(InputAction.CallbackContext context)
     {
         _input = context.ReadValue<Vector2>();
@@ -130,22 +127,31 @@ public class PlayerController : MonoBehaviour
 
     public void Sprint(InputAction.CallbackContext context)
     {
-        if (context.performed && _stamina > 0)
+        if (context.performed && CanSprint)
         {
-            _stamina -= _stamineDecreaseSpeed;
-            _currentSpeed = _baseSpeed * _sprintSpeedMulti;
-            IsSprinting = true;
+            StartSprint();
         }
-        else if (context.canceled || _stamina <= 0)
+        else if (context.canceled || !CanSprint)
         {
-           ResetSpeed();
+            EndSprint();
         }
-        
     }
-    private void ResetSpeed()
+
+    public bool IsSprinting() => _isSprinting;
+
+    private bool CanSprint => _stamina > 0;
+
+    private void StartSprint()
     {
-        IsSprinting = false;
-        StaminTimer = 0;
+        _isSprinting = true;
+        _currentSpeed = _baseSpeed * _sprintSpeedMulti;
+
+        EndSprint();
+    }
+
+    private void EndSprint()
+    {
+        _isSprinting = false;
         _currentSpeed = _baseSpeed;
     }
 
