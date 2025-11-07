@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 4508316082437646523}
   - component: {fileID: 1378066011577300482}
   - component: {fileID: 8341088491732717185}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Guard
   m_TagString: Guard
   m_Icon: {fileID: 0}
@@ -94,9 +94,12 @@ MonoBehaviour:
   _memorizationTime: 10
   _timeAlert: 0
   _sightRange: 20
-  _sightAngle: 120
-  _attackRange: 1
+  _sightAngle: 160
+  _attackRange: 2
+  _sightMultiplierWhenSprinting: 1.5
   _noticeRangeWhenAlert: 5
+  _baseSpeed: 3.5
+  _runSpeed: 5
 --- !u!195 &8341088491732717185
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -110,7 +113,7 @@ NavMeshAgent:
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
-  m_AngularSpeed: 120
+  m_AngularSpeed: 300
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -279,7 +282,7 @@ GameObject:
   - component: {fileID: 2109055344306915905}
   - component: {fileID: 6765214415278027301}
   - component: {fileID: 8716028119944224696}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
