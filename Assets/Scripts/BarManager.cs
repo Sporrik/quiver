@@ -127,15 +127,15 @@ public class BarManager : MonoBehaviour
     }
     private void Poop()
     {
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
         //SceneManager.LoadScene("Diaper", LoadSceneMode.Single);
     }
     private void Pee()
     {
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
     private void Hunger()
     {
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 }
