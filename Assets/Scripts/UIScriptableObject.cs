@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class UIScriptableObject : ScriptableObject
 {
-    [SerializeField] private float _hapinessMeter;
+    [SerializeField] private float _happinessMeter;
     [SerializeField] private float _poopMeter;
     [SerializeField] private float _hungryMeter;
     [SerializeField] private float _peeMeter;
     [SerializeField] private float _staminaMeter;
 
-
+   // [SerializeField] PlayerController _playerController;
+    
 
     public float GetPoop()
     {
@@ -20,8 +21,8 @@ public class UIScriptableObject : ScriptableObject
     }
     public float GetHapiness()
     {
-        _hapinessMeter = Mathf.Max(_hapinessMeter, 0);
-        return Mathf.Min(_hapinessMeter, 100);
+        _happinessMeter = Mathf.Max(_happinessMeter, 0);
+        return Mathf.Min(_happinessMeter, 100);
     }
     public float GetHungry()
     {

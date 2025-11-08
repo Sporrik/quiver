@@ -3,7 +3,6 @@ using UnityEngine;
 public class Wipe : MonoBehaviour
 {
     private PoopManager _poopManager;
-    public Rigidbody Rb;
 
     void Start()
     {
@@ -12,7 +11,7 @@ public class Wipe : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Poop") && Rb.useGravity)
+        if (other.CompareTag("Poop"))
         {
             if (_poopManager != null)
             {
