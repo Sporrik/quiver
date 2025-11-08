@@ -15,7 +15,6 @@ public class UIScriptableObject : ScriptableObject
 
     public float GetPoop()
     {
-
         _poopMeter = Mathf.Max(_poopMeter, 0);
         return Mathf.Min(_poopMeter, 100);
     }
@@ -38,5 +37,27 @@ public class UIScriptableObject : ScriptableObject
     {
         _staminaMeter = Mathf.Max(_staminaMeter, 0);
         return Mathf.Min(_staminaMeter, 100);
+    }
+
+    //setters (changes by Warre)
+    public void IncrementPoop(float incrementValue)
+    {
+        _poopMeter += incrementValue;
+    }
+    public void IncrementHapiness(float incrementValue)
+    {
+        _happinessMeter += incrementValue;
+    }
+    public void IncrementHungry(float incrementValue)
+    {
+        _hungryMeter += incrementValue;
+    }
+    public void IncrementPee(float incrementValue)
+    {
+        _peeMeter += incrementValue;
+    }
+    public void IncrementStamina(float incrementValue)
+    {
+        _staminaMeter += incrementValue;
     }
 }
