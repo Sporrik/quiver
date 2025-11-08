@@ -61,6 +61,8 @@ public class GuardBehavior : MonoBehaviour
         float angle = _sightAngle / 2;
         Vector3 forward = transform.forward;
 
+        if (_player == null) return;
+
         float distanceToPlayer = (_player.transform.position - transform.position).magnitude;
 
         // Calculate left and right ray directions

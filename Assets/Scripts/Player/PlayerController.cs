@@ -131,7 +131,8 @@ public class PlayerController : MonoBehaviour
         {
             StartSprint();
         }
-        else if (context.canceled || !CanSprint)
+        
+        if (context.canceled || !CanSprint)
         {
             EndSprint();
         }
@@ -145,8 +146,6 @@ public class PlayerController : MonoBehaviour
     {
         _isSprinting = true;
         _currentSpeed = _baseSpeed * _sprintSpeedMulti;
-
-        EndSprint();
     }
 
     private void EndSprint()
