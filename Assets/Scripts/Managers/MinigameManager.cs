@@ -69,11 +69,14 @@ public class MinigameManager : MonoBehaviour
         );
     }
 
-    public void QuitMinigame()
+    public string QuitMinigame()
     {
+        string name = _currentMinigameScene.name;
         _miniGameIsLoaded = false;
 
         StartCoroutine(UnloadScene());
+
+        return name;
     }
 
     public void PauseMiniGame(bool pause)
