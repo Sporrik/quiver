@@ -7,12 +7,15 @@ public class MinigameScreen : MonoBehaviour
     [SerializeField] private RawImage _blackScreen;
     [SerializeField] private RawImage _border;
     [SerializeField] private GameObject _panel;
-    [SerializeField] private Vector2 _clipPosition;
 
-    [Header("Scene Sames:")]
+    [Header("Scene Names:")]
     [SerializeField] private string _diaperMinigame;
     [SerializeField] private string _peeMinigame;
     [SerializeField] private string _feedingMinigame;
+
+    [Header("Slide Animation:")]
+    [SerializeField] private Vector2 _clipPosition;
+    [SerializeField] private float _slideSpeed = 2500f;
 
     [Header("Minigame Bars:")]
     [SerializeField] private float _maxProgress = 50f;
@@ -31,7 +34,6 @@ public class MinigameScreen : MonoBehaviour
     private bool _slideOut = false;
 
     private float _panelWidth;
-    [SerializeField] private float _slideSpeed = 2500f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -45,7 +47,6 @@ public class MinigameScreen : MonoBehaviour
         _panel.transform.position = new Vector3(_clipPosition.x - _panelWidth / 2, _panelStartPos.y, _panelStartPos.z);
     }
 
-    // Update is called once per frame
     void Update()
     {
         SelectMiniGame();
@@ -57,7 +58,6 @@ public class MinigameScreen : MonoBehaviour
 
     private void SelectMiniGame()
     {
-        // temporary testing code
         if (Input.GetKeyUp(KeyCode.Space) && !_manager.MinigameIsRunning())
         {
             _slideIn = true;
