@@ -3,11 +3,22 @@ using UnityEngine.UI;
 
 public class MinigameScreen : MonoBehaviour
 {
+    [Header("Screen:")]
     [SerializeField] private RawImage _blackScreen;
     [SerializeField] private RawImage _border;
-
     [SerializeField] private GameObject _panel;
     [SerializeField] private Vector2 _clipPosition;
+
+    [Header("Scene Sames:")]
+    [SerializeField] private string _diaperMinigame;
+    [SerializeField] private string _peeMinigame;
+    [SerializeField] private string _feedingMinigame;
+
+    [Header("Minigame Bars")]
+    [SerializeField] private UIScriptableObject _bars;
+    [SerializeField] private float _maxProgress = 50f;
+
+    private UIManager _uiManagerScript;
 
     private MinigameManager _manager;
     private Camera _minigameCamera;
@@ -28,14 +39,21 @@ public class MinigameScreen : MonoBehaviour
         _manager = GetComponent<MinigameManager>();
 
         _panelWidth = _panel.GetComponent<RectTransform>().rect.width;
-
         _panelStartPos = _panel.transform.position;
-
         _panel.transform.position = new Vector3(_clipPosition.x - _panelWidth / 2, _panelStartPos.y, _panelStartPos.z);
     }
 
     // Update is called once per frame
     void Update()
+    {
+        SelectMiniGame();
+
+        DragPanel();
+
+        ToggleScreen();
+    }
+
+    private void SelectMiniGame()
     {
         // temporary testing code
         if (Input.GetKeyUp(KeyCode.Space) && !_manager.MinigameIsRunning())
@@ -47,19 +65,56 @@ public class MinigameScreen : MonoBehaviour
             _slideOut = true;
         }
 
-        if (_slideIn) SlideIn("BabyDiaper");
-        if (_slideOut) SlideOut();
-        // end temporary testing code
+        if (_slideIn)
+        {
+            if (_bars.GetPoop() >= _maxProgress)
+            {
+                SlideIn(_diaperMinigame);
+            }
+            else if (_bars.GetPee() >= _maxProgress)
+            {
+                SlideIn(_peeMinigame);
+            }
+            else if (_bars.GetHungry() >= _maxProgress)
+            {
+                SlideIn(_feedingMinigame);
+            }
+                 
+        }
 
-        DragPanel();
+        if (_slideOut)
+        {
+            SlideOut();
+        }
+    }
 
+    private void ResetMinigame()
+    {
+        string sceneName = _manager.QuitMinigame();
+
+        if(sceneName == _diaperMinigame)
+        {
+            _bars.ResetPoop();
+        }
+        else if(sceneName == _peeMinigame)
+        {
+            _bars.ResetPee();
+        }
+        else if( sceneName == _feedingMinigame)
+        {
+            _bars.ResetHungry();
+        }
+    }
+
+    private void ToggleScreen()
+    {
         if (GotClipped())
         {
             Debug.Log("Clipped screen to center!");
             _manager.PauseMiniGame(false);
             _blackScreen.enabled = false;
 
-            if(_minigameCamera != null)
+            if (_minigameCamera != null)
             {
                 _minigameCamera.enabled = true;
             }
@@ -74,6 +129,7 @@ public class MinigameScreen : MonoBehaviour
                 _minigameCamera.enabled = false;
             }
         }
+
     }
 
     private void DragPanel()
@@ -171,7 +227,9 @@ public class MinigameScreen : MonoBehaviour
         if (_clipPosition.x - _panelWidth / 2 >= _panel.transform.position.x && _manager.MinigameIsRunning())
         {
             _panel.transform.position = new Vector3(_clipPosition.x - _panelWidth / 2, _panelStartPos.y, _panelStartPos.z);
-            _manager.QuitMinigame();
+
+            ResetMinigame();
+
             _slideOut = false;
         }
         else if (_clipPosition.x - _panelWidth / 2 < _panel.transform.position.x)
