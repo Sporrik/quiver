@@ -60,4 +60,25 @@ public class UIScriptableObject : ScriptableObject
     {
         _staminaMeter += incrementValue;
     }
+
+    public void ResetPoop()
+    {
+        _poopMeter = 0;
+    }
+    public void ResetHapiness()
+    {
+        _happinessMeter = 0;
+    }
+    public void ResetHungry()
+    {
+        _hungryMeter = 0;
+    }
+    public void ResetPee()
+    {
+        _peeMeter = 0;
+    }
+    public void ResetStamina()
+    {
+        _staminaMeter = 0;
+    }
 }

@@ -67,6 +67,28 @@ public class UIManager : MonoBehaviour
 
     }
 
+    // getters
+    public float GetPoop()
+    {
+        return _uiData.GetPoop();
+    }
+    public float GetHapiness()
+    {
+        return _uiData.GetHapiness();
+    }
+    public float GetHungry()
+    {
+        return _uiData.GetHungry();
+    }
+    public float GetPee()
+    {
+        return _uiData.GetPee();
+    }
+    public float GetStamina()
+    {
+        return _uiData.GetStamina();
+    }
+
     //setters (changes by Warre)
     public void IncrementPoop()
     {
@@ -87,5 +109,27 @@ public class UIManager : MonoBehaviour
     public void IncrementStamina()
     {
         _uiData.IncrementStamina(_incrementValues[4]);
+    }
+
+    // resets
+    public void ResetPoop()
+    {
+        _uiData.ResetPoop();
+    }
+    public void ResetHapiness()
+    {
+        _uiData.ResetHapiness();
+    }
+    public void ResetHungry()
+    {
+        _uiData.ResetHungry();
+    }
+    public void ResetPee()
+    {
+        _uiData.ResetPee();
+    }
+    public void ResetStamina()
+    {
+        _uiData.ResetStamina();
     }
 }
