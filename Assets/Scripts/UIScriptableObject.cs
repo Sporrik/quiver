@@ -10,7 +10,8 @@ public class UIScriptableObject : ScriptableObject
     [SerializeField] private float _peeMeter;
     [SerializeField] private float _staminaMeter;
 
-
+   // [SerializeField] PlayerController _playerController;
+    
 
     public float GetPoop()
     {
