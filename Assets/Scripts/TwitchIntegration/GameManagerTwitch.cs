@@ -45,19 +45,19 @@ public class GameManagerTwitch : TwitchMonoBehaviour
     private string _username;
     private string _channelName;
     
-    [TwitchCommand("poop_command", "p1")]
+    [TwitchCommand("poop_command1", "p1_")]
     public void FillupPoopBar()
     {
         poopBar.transform.localScale += new Vector3(0.01f, 0, 0);
     }
 
-    [TwitchCommand("pee_command", "p2")]
+    [TwitchCommand("pee_command1", "p2_")]
     public void FillupPeeBar()
     {
         peeBar.transform.localScale += new Vector3(0.05f, 0, 0);
     }
 
-    [TwitchCommand("hunger_command", "h")]
+    [TwitchCommand("hunger_command1", "h_")]
     public void FillupHungerBar()
     {
         hungerBar.transform.localScale += new Vector3(0.025f, 0, 0);
@@ -153,11 +153,6 @@ public class GameManagerTwitch : TwitchMonoBehaviour
 
     }
 
-    private object ScalarRound(float elapsedUptime, int v)
-    {
-        throw new NotImplementedException();
-    }
-
     private int _msgCount = 0;
     private float _msgCountPerMin = 0;
     private float _msgCountPerSec = 0;
@@ -191,7 +186,7 @@ public class GameManagerTwitch : TwitchMonoBehaviour
         _username = userNameInput.text;
         _channelName = channelNameInput.text;
 
-        TwitchManager.Authenticate(_username, _channelName, _authorized);
+        //TwitchManager.Authenticate(_username, _channelName, _authorized);
         TwitchManager.SendChatMessage("Client Connected . . .");
     }
 }
