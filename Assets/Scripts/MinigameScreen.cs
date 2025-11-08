@@ -3,20 +3,21 @@ using UnityEngine.UI;
 
 public class MinigameScreen : MonoBehaviour
 {
-    [SerializeField] private RawImage _camera;
+    [SerializeField] private RawImage _blackScreen;
     [SerializeField] private RawImage _border;
 
     [SerializeField] private GameObject _panel;
     [SerializeField] private Vector2 _clipPosition;
 
     private MinigameManager _manager;
+    private Camera _minigameCamera;
 
     private Vector2 _lastMousePos;
     private Vector3 _panelStartPos;
 
     private bool _isDraggingPanel = false;
     private bool _slideIn = false;
-    private bool _slideOut = false; 
+    private bool _slideOut = false;
 
     private float _panelWidth;
     [SerializeField] private float _slideSpeed = 2500f;
@@ -56,22 +57,37 @@ public class MinigameScreen : MonoBehaviour
         {
             Debug.Log("Clipped screen to center!");
             _manager.PauseMiniGame(false);
+            _blackScreen.enabled = false;
+
+            if(_minigameCamera != null)
+            {
+                _minigameCamera.enabled = true;
+            }
         }
         else
         {
             _manager.PauseMiniGame(true);
-        }
+            _blackScreen.enabled = true;
 
-        _camera.texture = _manager.GetRenderTexture();
+            if (_minigameCamera != null)
+            {
+                _minigameCamera.enabled = false;
+            }
+        }
     }
 
     private void DragPanel()
     {
+        if (_manager.MinigameIsRunning())
+        {
+            _minigameCamera = _manager.GetCamera();
+        }
+
         float xDrag = GetDrag().x;
 
         if (Input.GetMouseButton(0))
         {
-            if (!IsInsideImage(_camera, _lastMousePos) && IsInsideImage(_border, _lastMousePos))
+            if (!IsInsideImage(_blackScreen, _lastMousePos) && IsInsideImage(_border, _lastMousePos))
             {
                 _isDraggingPanel = true;
 
@@ -136,13 +152,14 @@ public class MinigameScreen : MonoBehaviour
         if (GotClipped() && !_manager.MinigameIsRunning())
         {
             _manager.LoadMinigame(sceneName);
+
             _slideIn = false;
         }
-        else if(!GotClipped())
+        else if (!GotClipped())
         {
             _panel.transform.position = Vector3.MoveTowards
             (
-                _panel.transform.position, 
+                _panel.transform.position,
                 new Vector3(_clipPosition.x + _panelWidth / 2, _panelStartPos.y, _panelStartPos.z),
                 _slideSpeed * Time.deltaTime
             );
@@ -157,7 +174,7 @@ public class MinigameScreen : MonoBehaviour
             _manager.QuitMinigame();
             _slideOut = false;
         }
-        else if(_clipPosition.x - _panelWidth / 2 < _panel.transform.position.x)
+        else if (_clipPosition.x - _panelWidth / 2 < _panel.transform.position.x)
         {
             _panel.transform.position = Vector3.MoveTowards
             (

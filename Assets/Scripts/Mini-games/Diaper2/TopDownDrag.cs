@@ -11,12 +11,12 @@ public class TopDownDrag : MonoBehaviour
 
     public float DragPlaneY = 2f; // Hover height
 
-    private Camera mainCamera;
+    [SerializeField] private Camera mainCamera;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        mainCamera = Camera.main;
+        //mainCamera = Camera.main;
     }
 
     void OnMouseDown()

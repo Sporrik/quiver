@@ -8,23 +8,12 @@ public class MinigameManager : MonoBehaviour
     [SerializeField] private Transform _minigameSpawnPoint;
 
     [SerializeField] private List<string> _sceneNames;
-    [SerializeField] private List<Texture> _renderTextures;
 
     private int _currentMinigameIndex;
     private Scene _currentMinigameScene;
 
     private bool _miniGameIsLoaded = false;
     private bool _miniGameIsPaused = false;
-
-    private void Start()
-    {
-        
-    }
-
-    private void Update()
-    {
-
-    }
 
     private IEnumerator LoadScene(string sceneName, Vector3 sceneOffset)
     {
@@ -40,6 +29,10 @@ public class MinigameManager : MonoBehaviour
         {
             rootObject.transform.position += sceneOffset;
         }
+
+        yield return null;
+
+        _miniGameIsLoaded = true;
     }
 
     private IEnumerator UnloadScene()
@@ -54,11 +47,6 @@ public class MinigameManager : MonoBehaviour
         {
             Debug.LogWarning("No valid minigame scene to unload.");
         }
-    }
-
-    public Texture GetRenderTexture()
-    {
-        return _renderTextures[_currentMinigameIndex];
     }
 
     public void LoadMinigame(string sceneName)
@@ -95,11 +83,28 @@ public class MinigameManager : MonoBehaviour
 
     public bool MinigameIsRunning()
     {
-        return _miniGameIsLoaded;
+        return _currentMinigameScene.IsValid();
     }
 
     public bool IsMinigamePaused()
     {
         return _miniGameIsPaused;
+    }
+
+    public Camera GetCamera()
+    {
+        GameObject[] objs = _currentMinigameScene.GetRootGameObjects();
+
+        foreach (GameObject obj in objs)
+        {
+            Camera cam = obj.GetComponentInChildren<Camera>();
+            if (cam != null)
+            {
+                return cam;
+            }
+        }
+
+        Debug.Log("wtf");
+        return null;
     }
 }
