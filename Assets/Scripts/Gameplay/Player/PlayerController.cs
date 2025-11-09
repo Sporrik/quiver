@@ -89,7 +89,7 @@ public sealed class PlayerController : MonoBehaviour
         TickGravity(dt);                // apply gravity to vertical velocity
         TickRotation(dt);               // rotate towards movement
         TickMovement(dt);               // move character controller
-        TickAnimator();               // sync animation parameters
+        TickAnimator();                 // sync animation parameters
     }
 
     #endregion

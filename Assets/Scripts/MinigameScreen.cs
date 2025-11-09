@@ -19,9 +19,7 @@ public class MinigameScreen : MonoBehaviour
 
     [Header("Minigame Bars:")]
     [SerializeField] private float _maxProgress = 50f;
-    private UIManager _bars;
-
-    private UIManager _uiManagerScript;
+    [SerializeField] private UIManager _bars;
 
     private MinigameManager _manager;
     private Camera _minigameCamera;
@@ -39,8 +37,6 @@ public class MinigameScreen : MonoBehaviour
     void Start()
     {
         _manager = GetComponent<MinigameManager>();
-
-        _bars = GetComponent<UIManager>();
 
         _panelWidth = _panel.GetComponent<RectTransform>().rect.width;
         _panelStartPos = _panel.transform.position;
