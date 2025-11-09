@@ -14,7 +14,7 @@ public class GuardBehavior : MonoBehaviour
     [SerializeField] public bool _seesPlayer;
 
     [SerializeField] private List<GameObject> _path;
-    [SerializeField] private string[] _sightBlockLayers = { "Ground", "StaticLevel" };
+    [SerializeField] private string[] _sightBlockLayers = { "Ground", "Default" };
 
     [SerializeField] private float _memorizationTime = 10.0f;
     [SerializeField] private float _timeAlert;
