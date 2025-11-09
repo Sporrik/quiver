@@ -71,7 +71,6 @@ MonoBehaviour:
   _clipPosition: {x: 0, y: 0}
   _slideSpeed: 2500
   _maxProgress: 0
-  _bars: {fileID: 0}
 --- !u!1 &3452363302712667367
 GameObject:
   m_ObjectHideFlags: 0
@@ -99,8 +98,8 @@ RectTransform:
   m_GameObject: {fileID: 3452363302712667367}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.76, y: 0.76, z: 0.76}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1075623211624884484}
   - {fileID: 4374627812167184296}
