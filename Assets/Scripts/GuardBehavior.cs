@@ -235,7 +235,7 @@ public class GuardBehavior : MonoBehaviour
 
         if (player == null) return _sightRange;
 
-        if(player.IsSprinting()) return _sightRange * _sightMultiplierWhenSprinting;
+        if(player.IsSprinting) return _sightRange * _sightMultiplierWhenSprinting;
         
         return _sightRange;
     }

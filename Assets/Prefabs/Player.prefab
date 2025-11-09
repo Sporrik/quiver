@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4508316082437646523}
-  - component: {fileID: 2832852280429792993}
-  - component: {fileID: 1010097908257854610}
+  - component: {fileID: 6046866377545424347}
+  - component: {fileID: 1902933726362646622}
   - component: {fileID: 2630555844973547078}
   - component: {fileID: 6672333097141837501}
   m_Layer: 7
@@ -38,7 +38,7 @@ Transform:
   - {fileID: 5665890243977151886}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2832852280429792993
+--- !u!114 &6046866377545424347
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -47,22 +47,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 3499273087107311390}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a70e3635b9ed9854d87c8429eb759e24, type: 3}
+  m_Script: {fileID: 11500000, guid: 8c34f5a7d149db642b7b9da9b13684f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _baseSpeed: 4
-  _maxStamina: 0
-  _staminaRegenRate: 0
-  _rotationSpeed: 600
-  _gravityMultiplier: 1
-  _jumpPower: 2
-  _groundPosition: {fileID: 8232704844000420399}
-  _groundRadius: 0.2
-  _groundLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  _sprintSpeedMulti: 1.5
---- !u!114 &1010097908257854610
+  _playerCfg: {fileID: 11400000, guid: a0f1dcf10f3349d4b957e3207d84293d, type: 2}
+  _groundCheck: {fileID: 8232704844000420399}
+--- !u!114 &1902933726362646622
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -71,14 +61,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 3499273087107311390}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5bfd44bd41fe1940a59012c63604111, type: 3}
+  m_Script: {fileID: 11500000, guid: 74e80f62b46ffe14a999ce33a2a8b8ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _attackPoint: {fileID: 4508316082437646523}
-  _attackRange: 5
-  _enemyLayer:
+  _origin: {fileID: 4508316082437646523}
+  _range: 2
+  _interactableMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1024
 --- !u!114 &2630555844973547078
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -106,9 +96,9 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2832852280429792993}
+      - m_Target: {fileID: 6046866377545424347}
         m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: Move
+        m_MethodName: OnMove
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -122,9 +112,9 @@ MonoBehaviour:
     m_ActionName: 'Player/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1010097908257854610}
+      - m_Target: {fileID: 1902933726362646622}
         m_TargetAssemblyTypeName: PlayerInteraction, Assembly-CSharp
-        m_MethodName: Takedown
+        m_MethodName: OnTakedown
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -138,9 +128,9 @@ MonoBehaviour:
     m_ActionName: 'Player/Attack[/Mouse/leftButton,/Keyboard/enter]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1010097908257854610}
+      - m_Target: {fileID: 1902933726362646622}
         m_TargetAssemblyTypeName: PlayerInteraction, Assembly-CSharp
-        m_MethodName: Interact
+        m_MethodName: OnInteract
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -154,9 +144,9 @@ MonoBehaviour:
     m_ActionName: 'Player/Interact[/Keyboard/e]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2832852280429792993}
+      - m_Target: {fileID: 6046866377545424347}
         m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: Sprint
+        m_MethodName: OnSprint
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -208,6 +198,38 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 9caa3d8a-6b2f-4e8e-8bad-6ede561bd9be
     m_ActionName: UI/TrackedDeviceOrientation
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 43fee21f-1dd7-4a14-a658-b36d2ca40017
+    m_ActionName: 'MapBuilder/ChangeTileRight[/Keyboard/rightArrow,/Keyboard/2]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: d70b5673-8134-497d-86b4-281da5ddfe18
+    m_ActionName: 'MapBuilder/ChangeTileLeft[/Keyboard/leftArrow,/Keyboard/3]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 490d0f82-6974-471b-bba8-d7dafce513db
+    m_ActionName: 'MapBuilder/RotateTile[/Keyboard/o]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0e3e21e0-0ada-4458-bd1f-302db228ac0a
+    m_ActionName: 'MapBuilder/MoveCameraW[/Keyboard/w]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 38dd0861-363a-4731-be15-53b4c11b5bd7
+    m_ActionName: 'MapBuilder/MoveCameraS[/Keyboard/w]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 39b71530-7abf-4285-8cee-c250743f9396
+    m_ActionName: 'MapBuilder/MoveCameraW2[/Keyboard/w]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 074fc005-723e-488f-9e4a-5e285662e949
+    m_ActionName: 'MapBuilder/MoveCameraW3[/Keyboard/w]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: dafcc71f-ff0f-42bd-b37f-76c8d02ac612
+    m_ActionName: 'MapBuilder/DeleteTile[/Keyboard/1]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: 
