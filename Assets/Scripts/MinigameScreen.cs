@@ -77,7 +77,7 @@ public class MinigameScreen : MonoBehaviour
             {
                 SlideIn(_feedingMinigame);
             }
-                 
+
         }
 
         if (_slideOut)
@@ -90,15 +90,15 @@ public class MinigameScreen : MonoBehaviour
     {
         string sceneName = _manager.QuitMinigame();
 
-        if(sceneName == _diaperMinigame)
+        if (sceneName == _diaperMinigame)
         {
             _bars.ResetPoop();
         }
-        else if(sceneName == _peeMinigame)
+        else if (sceneName == _peeMinigame)
         {
             _bars.ResetPee();
         }
-        else if( sceneName == _feedingMinigame)
+        else if (sceneName == _feedingMinigame)
         {
             _bars.ResetHungry();
         }
