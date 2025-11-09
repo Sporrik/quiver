@@ -301,7 +301,7 @@ namespace TwitchIntegration
         
         private static void Log(string message, string color)
         {
-            if (_settings.isDebugMode) print($"<color={color}>{message}</color>");
+            //if (_settings.isDebugMode) print($"<color={color}>{message}</color>");
         }
         
         #region Unity Callbacks

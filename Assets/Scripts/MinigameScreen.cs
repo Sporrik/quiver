@@ -108,7 +108,7 @@ public class MinigameScreen : MonoBehaviour
     {
         if (GotClipped())
         {
-            Debug.Log("Clipped screen to center!");
+            //Debug.Log("Clipped screen to center!");
             _manager.PauseMiniGame(false);
             _blackScreen.enabled = false;
 

@@ -40,9 +40,14 @@ public class GuardBehavior : MonoBehaviour
 
     private float _distanceToPlayer;
 
+    private PlayerController playerController;
+
     private void Start()
     {
         _player = GameObject.FindWithTag("Player").transform;
+        playerController = _player.GetComponent<PlayerController>();
+
+
         _agent = GetComponent<NavMeshAgent>();
         _agent.speed = _baseSpeed;
 
@@ -151,7 +156,7 @@ public class GuardBehavior : MonoBehaviour
 
             if (distanceToLastPosition <= _attackRange + distanceMargin)
             {
-                Debug.Log($"Guard has reached the last seen player position!");
+                //Debug.Log($"Guard has reached the last seen player position!");
 
                 _timeAlert -= Time.deltaTime;
 
@@ -231,11 +236,11 @@ public class GuardBehavior : MonoBehaviour
 
     private float GetCurrentSightRange()
     {
-        PlayerController player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        //PlayerController player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>(); //-------------- playerController ------
 
-        if (player == null) return _sightRange;
+        if (playerController == null) return _sightRange;
 
-        if(player.IsSprinting) return _sightRange * _sightMultiplierWhenSprinting;
+        if(playerController.IsSprinting) return _sightRange * _sightMultiplierWhenSprinting;
         
         return _sightRange;
     }
@@ -243,7 +248,7 @@ public class GuardBehavior : MonoBehaviour
     {
         if(_distanceToPlayer < distanceToAlert)
         {
-            Debug.Log($" {gameObject.name} has seen player with {_distanceToPlayer} distance ");
+            //Debug.Log($" {gameObject.name} has seen player with {_distanceToPlayer} distance ");
             _lastPlayerPosition = _player.transform.position;
             _timeAlert = _memorizationTime;
             _agent.speed = _runSpeed;

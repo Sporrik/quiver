@@ -62,7 +62,7 @@ public class UIManager : MonoBehaviour
             _barIncreaseReversed = new Vector3((1 - _floatMeters[i]) * _localScale[i], _localscaleYZ.x, _localscaleYZ.y); // make an empty on the angrymeter
             _imageMeters[i].rectTransform.localScale = _barIncreaseReversed;
         }
-        Debug.Log(_barIncreaseReversed.x);
+        //Debug.Log(_barIncreaseReversed.x);
 
 
     }
