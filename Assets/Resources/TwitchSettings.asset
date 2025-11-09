@@ -14,8 +14,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initializeOnAwake: 1
   isDebugMode: 1
-  clientId: exiozgh7nck6bigrb5i9t3bndugtrs
+  clientId: xkzkiy7qbmqd1uts86eq1ai1u8n1gq
   commandPrefix: '!'
   redirectUri: http://localhost/
   commandsMode: 0
-  commandList: []
+  commandList:
+  - name: poop_command
+    enabled: 1
+    cooldown: 0
+  - name: happiness_command
+    enabled: 1
+    cooldown: 0
+  - name: stamina_command
+    enabled: 1
+    cooldown: 0
+  - name: hunger_command1
+    enabled: 1
+    cooldown: 0
+  - name: hunger_command
+    enabled: 1
+    cooldown: 0
+  - name: pee_command
+    enabled: 1
+    cooldown: 0
+  - name: pee_command1
+    enabled: 1
+    cooldown: 0
+  - name: poop_command1
+    enabled: 1
+    cooldown: 0
