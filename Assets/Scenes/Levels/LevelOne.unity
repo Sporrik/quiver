@@ -2858,14 +2858,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4840319883776909818, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
-      propertyPath: _uiData
-      value: 
-      objectReference: {fileID: 11400000, guid: 377fbeaf0c2d98543837ee90c8854047, type: 2}
     - target: {fileID: 5772064156095533354, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
-      propertyPath: _bars
+      propertyPath: _uiManager
       value: 
-      objectReference: {fileID: 152793986}
+      objectReference: {fileID: 736144059}
     - target: {fileID: 7894653813073029642, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
       propertyPath: m_Name
       value: Canvas
@@ -2875,22 +2871,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
---- !u!1 &152793984 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1077739383441998937, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
-  m_PrefabInstance: {fileID: 152793983}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &152793986 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4840319883776909818, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
-  m_PrefabInstance: {fileID: 152793983}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 152793984}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e7ac97e253892b4981e07b9ed1d33b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &158424700
 GameObject:
   m_ObjectHideFlags: 0
@@ -12720,6 +12700,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3069335}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &736144059 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8028574136635092120, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
+  m_PrefabInstance: {fileID: 152793983}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e7ac97e253892b4981e07b9ed1d33b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &743556976
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23402,12 +23393,8 @@ MonoBehaviour:
   channelNameInput: {fileID: 1038211757}
   userNameInput: {fileID: 1023480748}
   canvas: {fileID: 1140897545}
-<<<<<<< Updated upstream
-  UIManager: {fileID: 1533540268}
+  UIManager: {fileID: 0}
   refreshTime: 900
-=======
-  UIManager: {fileID: 152793984}
->>>>>>> Stashed changes
 --- !u!1 &1403738104
 GameObject:
   m_ObjectHideFlags: 0
