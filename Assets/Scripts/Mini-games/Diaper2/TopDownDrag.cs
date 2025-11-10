@@ -21,6 +21,9 @@ public class TopDownDrag : MonoBehaviour
 
     void OnMouseDown()
     {
+        if(this.isActiveAndEnabled == false)
+            return;
+
         IsDragging = true;
         rb.useGravity = false;
         rb.linearVelocity = Vector3.zero;
@@ -30,6 +33,9 @@ public class TopDownDrag : MonoBehaviour
 
     public void OnMouseUp()
     {
+        if (this.isActiveAndEnabled == false)
+            return;
+
         IsDragging = false;
         rb.useGravity = true;
 
