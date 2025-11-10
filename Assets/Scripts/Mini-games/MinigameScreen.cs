@@ -6,6 +6,7 @@ public class MinigameScreen : MonoBehaviour
     [Header("Screen:")]
     [SerializeField] private RawImage _blackScreen;
     [SerializeField] private RawImage _border;
+    [SerializeField] private RawImage _minigameArea;
     [SerializeField] private GameObject _panel;
 
     [Header("Scene Names:")]
@@ -37,6 +38,7 @@ public class MinigameScreen : MonoBehaviour
     void Start()
     {
         _manager = GetComponent<MinigameManager>();
+        _minigameArea.enabled = false;
 
         _panelWidth = _panel.GetComponent<RectTransform>().rect.width;
         _panelStartPos = _panel.transform.position;
@@ -141,7 +143,7 @@ public class MinigameScreen : MonoBehaviour
 
         if (Input.GetMouseButton(0))
         {
-            if (!IsInsideImage(_blackScreen, _lastMousePos) && IsInsideImage(_border, _lastMousePos))
+            if (!IsInsideImage(_minigameArea, _lastMousePos) && IsInsideImage(_border, _lastMousePos))
             {
                 _isDraggingPanel = true;
 
