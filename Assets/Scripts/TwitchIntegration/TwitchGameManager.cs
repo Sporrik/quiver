@@ -35,27 +35,32 @@ public class TwitchGameManager : TwitchMonoBehaviour
     [TwitchCommand("poop_command", "po")]
     public void FillupPoopBar()
     {
-        _uiManagerScript.IncrementPoop();
+        if (_uiManagerScript != null)
+            _uiManagerScript.IncrementPoop();
     }
     [TwitchCommand("pee_command", "pe")]
     public void FillupPeeBar()
     {
-        _uiManagerScript.IncrementPee();
+        if (_uiManagerScript != null)
+            _uiManagerScript.IncrementPee();
     }
     [TwitchCommand("hunger_command", "hunger")]
     public void FillupHungerBar()
     {
-        _uiManagerScript.IncrementHungry();
+        if (_uiManagerScript != null)
+            _uiManagerScript.IncrementHungry();
     }
     [TwitchCommand("happiness_command", "happy")]
     public void FillUpHappinessBar()
     {
-        _uiManagerScript.IncrementHapiness();
+        if (_uiManagerScript != null)
+            _uiManagerScript.IncrementHapiness();
     }
     [TwitchCommand("stamina_command", "stamina")]
     public void FillUpStaminaBar()
     {
-        _uiManagerScript.IncrementStamina();
+        if (_uiManagerScript != null)
+            _uiManagerScript.IncrementStamina();
     }
     #endregion
 
@@ -70,18 +75,20 @@ public class TwitchGameManager : TwitchMonoBehaviour
         TwitchManager.OnTwitchClientJoinedChat += TwitchChatConnect;
         TwitchManager.OnTwitchMessageReceived += (user, s) => AddUser(user);
 
-        for (var idx = 0; idx < _userIDsInChat.Count; idx++)
+        if (_userIDsInChat.Count > 0)
         {
-            _timeUserIDsInChat[idx] -= Time.deltaTime;
-
-            if (_timeUserIDsInChat[idx] < 0)
+            for (var idx = 0; idx < _userIDsInChat.Count; idx++)
             {
-                _timeUserIDsInChat.RemoveAt(idx);
-                _userIDsInChat.RemoveAt(idx);
-                if (_viewerCount > 0) _viewerCount--;
+                _timeUserIDsInChat[idx] -= Time.deltaTime;
+
+                if (_timeUserIDsInChat[idx] < 0)
+                {
+                    _timeUserIDsInChat.RemoveAt(idx);
+                    _userIDsInChat.RemoveAt(idx);
+                    if (_viewerCount > 0) _viewerCount--;
+                }
             }
         }
-
     }
 
     private void TwitchChatConnect()
