@@ -8,11 +8,11 @@ public class MenuManager : MonoBehaviour
 
     [SerializeField] private GameObject _twitchScreen;
     [SerializeField] private GameObject _controlScreen;
-
+    static public bool _isSinglePlayer = false;
 
     public void OnSinglePlayer()
     {
-
+        _isSinglePlayer = true;
         // set it for singleplayer
         SceneManager.LoadScene("LevelOne");
 
@@ -21,6 +21,7 @@ public class MenuManager : MonoBehaviour
 
     public void OnTwitch()
     {
+        _isSinglePlayer = false;
         _twitchScreen.SetActive(true);
 
     }
