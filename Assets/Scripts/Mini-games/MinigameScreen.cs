@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +9,7 @@ public class MinigameScreen : MonoBehaviour
     [SerializeField] private RawImage _border;
     [SerializeField] private RawImage _minigameArea;
     [SerializeField] private GameObject _panel;
+    [SerializeField] private float _borderScaleOnFullscreen = 1f;
 
     [Header("Scene Names:")]
     [SerializeField] private string _diaperMinigame;
@@ -20,7 +22,8 @@ public class MinigameScreen : MonoBehaviour
 
     [Header("Minigame Bars:")]
     [SerializeField] private float _maxProgress = 50f;
-    [SerializeField] private UIManager _bars;
+    [SerializeField] private GameObject _visualsBars;
+    [SerializeField] private UIManager _uiManager;
 
     private MinigameManager _manager;
     private Camera _minigameCamera;
@@ -39,6 +42,11 @@ public class MinigameScreen : MonoBehaviour
     {
         _manager = GetComponent<MinigameManager>();
         _minigameArea.enabled = false;
+
+        if(_visualsBars != null)
+        {
+            _visualsBars.SetActive(true);
+        }
 
         _panelWidth = _panel.GetComponent<RectTransform>().rect.width;
         _panelStartPos = _panel.transform.position;
@@ -67,15 +75,15 @@ public class MinigameScreen : MonoBehaviour
 
         if (_slideIn)
         {
-            if (_bars.GetPoop() >= _maxProgress)
+            if (_uiManager.GetPoop() >= _maxProgress)
             {
                 SlideIn(_diaperMinigame);
             }
-            else if (_bars.GetPee() >= _maxProgress)
+            else if (_uiManager.GetPee() >= _maxProgress)
             {
                 SlideIn(_peeMinigame);
             }
-            else if (_bars.GetHungry() >= _maxProgress)
+            else if (_uiManager.GetHungry() >= _maxProgress)
             {
                 SlideIn(_feedingMinigame);
             }
@@ -94,15 +102,15 @@ public class MinigameScreen : MonoBehaviour
 
         if (sceneName == _diaperMinigame)
         {
-            _bars.ResetPoop();
+            _uiManager.ResetPoop();
         }
         else if (sceneName == _peeMinigame)
         {
-            _bars.ResetPee();
+            _uiManager.ResetPee();
         }
         else if (sceneName == _feedingMinigame)
         {
-            _bars.ResetHungry();
+            _uiManager.ResetHungry();
         }
     }
 
@@ -111,12 +119,22 @@ public class MinigameScreen : MonoBehaviour
         if (GotClipped())
         {
             //Debug.Log("Clipped screen to center!");
+
             _manager.PauseMiniGame(false);
-            _blackScreen.enabled = false;
+
+            if(_manager.MinigameIsRunning())
+            {
+                _blackScreen.enabled = false;
+            }
 
             if (_minigameCamera != null)
             {
                 _minigameCamera.enabled = true;
+
+                if (_visualsBars != null)
+                {
+                    _visualsBars.SetActive(false);
+                }
             }
         }
         else
@@ -127,6 +145,11 @@ public class MinigameScreen : MonoBehaviour
             if (_minigameCamera != null)
             {
                 _minigameCamera.enabled = false;
+
+                if (_visualsBars != null)
+                {
+                    _visualsBars.SetActive(true);
+                }
             }
         }
 
@@ -197,8 +220,24 @@ public class MinigameScreen : MonoBehaviour
         if (_clipPosition.x + _panelWidth / 2 <= _panel.transform.position.x)
         {
             _panel.transform.position = new Vector3(_clipPosition.x + _panelWidth / 2, _panelStartPos.y, _panelStartPos.z);
+
             return true;
         }
+        else
+        {
+            _border.transform.localScale = Vector3.one;
+        }
+
+        float progress = Mathf.Max(_panel.transform.position.x, 0) / (_panelWidth / 2);
+
+        float scale = _borderScaleOnFullscreen * progress;
+
+        Debug.Log(scale);
+
+        scale = Mathf.Max(scale, 1);
+
+        _border.transform.localScale = new Vector3(scale, scale, scale);
+        _blackScreen.transform.localScale = new Vector3(scale, scale, scale);
 
         return false;
     }
