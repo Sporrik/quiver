@@ -75,18 +75,20 @@ public class TwitchGameManager : TwitchMonoBehaviour
         TwitchManager.OnTwitchClientJoinedChat += TwitchChatConnect;
         TwitchManager.OnTwitchMessageReceived += (user, s) => AddUser(user);
 
-        for (var idx = 0; idx < _userIDsInChat.Count; idx++)
+        if (_userIDsInChat.Count > 0)
         {
-            _timeUserIDsInChat[idx] -= Time.deltaTime;
-
-            if (_timeUserIDsInChat[idx] < 0)
+            for (var idx = 0; idx < _userIDsInChat.Count; idx++)
             {
-                _timeUserIDsInChat.RemoveAt(idx);
-                _userIDsInChat.RemoveAt(idx);
-                if (_viewerCount > 0) _viewerCount--;
+                _timeUserIDsInChat[idx] -= Time.deltaTime;
+
+                if (_timeUserIDsInChat[idx] < 0)
+                {
+                    _timeUserIDsInChat.RemoveAt(idx);
+                    _userIDsInChat.RemoveAt(idx);
+                    if (_viewerCount > 0) _viewerCount--;
+                }
             }
         }
-
     }
 
     private void TwitchChatConnect()
