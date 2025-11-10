@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour
 {
+
+    [SerializeField] private GameObject _controlScreen;
     public void OnSinglePlayer()
     {
         Debug.Log("Single");
@@ -17,11 +19,17 @@ public class MenuManager : MonoBehaviour
 
     public void OnControls()
     {
-
+        _controlScreen.SetActive(true);
     }
 
     public void OnHowToPlay()
     {
+
+    }
+
+    public void OnBacktoMainMenu()
+    {
+        _controlScreen.SetActive(false);
 
     }
 
