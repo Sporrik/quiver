@@ -35,27 +35,32 @@ public class TwitchGameManager : TwitchMonoBehaviour
     [TwitchCommand("poop_command", "po")]
     public void FillupPoopBar()
     {
-        _uiManagerScript.IncrementPoop();
+        if (_uiManagerScript != null)
+            _uiManagerScript.IncrementPoop();
     }
     [TwitchCommand("pee_command", "pe")]
     public void FillupPeeBar()
     {
-        _uiManagerScript.IncrementPee();
+        if (_uiManagerScript != null)
+            _uiManagerScript.IncrementPee();
     }
     [TwitchCommand("hunger_command", "hunger")]
     public void FillupHungerBar()
     {
-        _uiManagerScript.IncrementHungry();
+        if (_uiManagerScript != null)
+            _uiManagerScript.IncrementHungry();
     }
     [TwitchCommand("happiness_command", "happy")]
     public void FillUpHappinessBar()
     {
-        _uiManagerScript.IncrementHapiness();
+        if (_uiManagerScript != null)
+            _uiManagerScript.IncrementHapiness();
     }
     [TwitchCommand("stamina_command", "stamina")]
     public void FillUpStaminaBar()
     {
-        _uiManagerScript.IncrementStamina();
+        if (_uiManagerScript != null)
+            _uiManagerScript.IncrementStamina();
     }
     #endregion
 
