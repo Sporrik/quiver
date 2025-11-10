@@ -74,7 +74,7 @@ public class MinigameManager : MonoBehaviour
         string name = _currentMinigameScene.name;
         _miniGameIsLoaded = false;
 
-        StartCoroutine(UnloadScene());
+        StartCoroutine(UnloadScene()); // error
 
         return name;
     }
