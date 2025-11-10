@@ -4,15 +4,15 @@ using TMPro;
 public class PeeMiniGame : MonoBehaviour
 {
     public int CurrentPeeAmount = 0;
-    public int TargetPeeAmount = 300;
+    [SerializeField] private int TargetPeeAmount = 300;
 
-    public Transform PeeOrigin;
-    public Transform Baby;
-    public TextMeshProUGUI PeeCountText;
-    public ParticleSystem PeeEffect;
-    public ParticleSystem SplashEffect;
-    public int PeeRange = 30;
-    public float Speed = 75f;
+    [SerializeField] private Transform PeeOrigin;
+    [SerializeField] private Transform Baby;
+    [SerializeField] private TextMeshProUGUI PeeCountText;
+    [SerializeField] private ParticleSystem PeeEffect;
+    [SerializeField] private ParticleSystem SplashEffect;
+    [SerializeField] private int PeeRange = 30;
+    [SerializeField] private float Speed = 75f;
 
     private int _currentRange;
     private float _currentSpeed;

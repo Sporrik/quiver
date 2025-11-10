@@ -3,12 +3,12 @@ using UnityEngine;
 public class DragBaby : MonoBehaviour
 {
     [Header("Drag Settings")]
-    public float dragSpeed = 10f; // Speed multiplier for dragging
-    public float damping = 5f; // Damping to smooth the movement
+    [SerializeField] private float dragSpeed = 10f; // Speed multiplier for dragging
+    [SerializeField] private float damping = 5f; // Damping to smooth the movement
 
     [Header("Position Limits")]
-    public float minX = -5f; // Minimum X position
-    public float maxX = 5f; // Maximum X position
+    [SerializeField] private float minX = -5f; // Minimum X position
+    [SerializeField] private float maxX = 5f; // Maximum X position
 
     private Camera mainCamera;
     private bool isDragging = false;
