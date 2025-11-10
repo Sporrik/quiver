@@ -21,9 +21,12 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private float _goalEnterDistance;
     private GameObject _goal;
 
+    List<GameObject> guards = new List<GameObject>();
+    List<GuardBehavior> guardBehaviors = new List<GuardBehavior>();
+
     private void Awake()
     {
-        if(!_loadFirstLevel)
+        if (!_loadFirstLevel)
         {
             _loadFirstLevel = true;
             LoadLevel();
@@ -36,11 +39,22 @@ public class LevelManager : MonoBehaviour
     {
         // temporary goal fix
         _player = GameObject.FindGameObjectWithTag("Player");
+        _goal = GameObject.FindGameObjectWithTag("Goal");
+
+        GameObject.FindGameObjectsWithTag("Guard", guards);
+
+        for (var idx = 0; idx > guards.Count; idx++)
+        {
+            guardBehaviors[idx] = guards[idx].GetComponent<GuardBehavior>();
+
+        }
+
     }
 
     private void Update()
     {
-        _goal = GameObject.FindGameObjectWithTag("Goal");
+        //TODO make a bool that resets/sets everything at beginning of level, if true level is set and don't do the expensive calls anymore
+
         ManageLoseConditions();
         ManageWinCondition();
         ManageLevelReset();
@@ -49,43 +63,43 @@ public class LevelManager : MonoBehaviour
     private void ManageLoseConditions()
     {
         if (_gameOver) return;
-        
+
         if (_player == null) return;
 
-        List<GameObject> guards = new List<GameObject>();
-        GameObject.FindGameObjectsWithTag("Guard", guards);
+        //List<GameObject> guards = new List<GameObject>();
+        //GameObject.FindGameObjectsWithTag("Guard", guards);
         if (guards.Count == 0) return;
 
-        foreach (GameObject guard in guards)
+        foreach (GuardBehavior guardBehavior in guardBehaviors)
         {
-            if (guard.GetComponent<GuardBehavior>().CanGetCaught(_player.transform.position))
+            if (guardBehavior.CanGetCaught(_player.transform.position))
             {
                 TriggerGameOver();
-                Debug.Log("The player got caught!");
+                //Debug.Log("The player got caught!");
             }
         }
     }
 
     private void ManageWinCondition()
     {
-        if(_goal == null) return;
+        if (_goal == null) return;
 
         if (_player == null) return;
 
         float playerToGoalDistance = (_goal.transform.position - _player.transform.position).magnitude;
         //Debug.Log(_goal.gameObject.name);
 
-        if(playerToGoalDistance < _goalEnterDistance)
+        if (playerToGoalDistance < _goalEnterDistance)
         {
             EnterNextLevel();
 
-            Debug.Log("Going to the next level");
+            //Debug.Log("Going to the next level");
         }
     }
 
     private void ManageLevelReset()
     {
-        if(_gameOver && _timeUntilRestart <= 0f)
+        if (_gameOver && _timeUntilRestart <= 0f)
         {
             _gameOver = false;
             LoadLevel();
@@ -107,7 +121,7 @@ public class LevelManager : MonoBehaviour
     {
         _currentLevel++;
 
-        if( _currentLevel >= _levelNames.Count() ) _currentLevel = 0;
+        if (_currentLevel >= _levelNames.Count()) _currentLevel = 0;
 
         LoadLevel();
     }

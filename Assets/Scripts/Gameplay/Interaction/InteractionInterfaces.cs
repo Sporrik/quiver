@@ -34,4 +34,9 @@ namespace Gameplay.Interaction
             GameObject = t.gameObject;
         }
     }
+
+    public interface IAwareness
+    {
+        bool IsAware { get; }
+    }
 }

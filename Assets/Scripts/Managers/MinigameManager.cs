@@ -51,9 +51,9 @@ public class MinigameManager : MonoBehaviour
 
     public void LoadMinigame(string sceneName)
     {
-        for(int index = 0;  index < _sceneNames.Count; ++index)
+        for (int index = 0; index < _sceneNames.Count; ++index)
         {
-            if( _sceneNames[index] == sceneName )
+            if (_sceneNames[index] == sceneName)
             {
                 if (_miniGameIsLoaded) QuitMinigame();
 

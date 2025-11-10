@@ -30,7 +30,7 @@ public class GameManagerTwitch : TwitchMonoBehaviour
     [SerializeField] private GameObject amountOfHungerGameObject;
 
     private Vector3 _targetPosition;
-    private readonly System.Action<bool> _authorized = null;
+    //private readonly System.Action<bool> _authorized = null;
 
     private GameObject _authorizationEmpty;
     private TextMeshProUGUI _messagesPerMinuteTextMeshProUGUI;
