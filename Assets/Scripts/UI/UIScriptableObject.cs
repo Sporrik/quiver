@@ -1,3 +1,4 @@
+﻿using System;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "UIData", menuName = "Scriptable Objects/UIData")]
@@ -10,8 +11,6 @@ public class UIScriptableObject : ScriptableObject
     [SerializeField] private float _peeMeter;
     [SerializeField] private float _staminaMeter;
 
-   // [SerializeField] PlayerController _playerController;
-    
 
     public float GetPoop()
     {
@@ -56,9 +55,9 @@ public class UIScriptableObject : ScriptableObject
     {
         _peeMeter += incrementValue;
     }
-    public void IncrementStamina(float incrementValue)
+    public void SetStamina(float setValue)
     {
-        _staminaMeter += incrementValue;
+        _staminaMeter = setValue;
     }
 
     public void ResetPoop()
@@ -79,6 +78,6 @@ public class UIScriptableObject : ScriptableObject
     }
     public void ResetStamina()
     {
-        _staminaMeter = 0;
+        _staminaMeter = 100;
     }
 }
