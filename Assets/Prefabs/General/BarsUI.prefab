@@ -147,76 +147,6 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
---- !u!1 &1486065440203953224
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2531737067852600430}
-  - component: {fileID: 8825291907283440168}
-  m_Layer: 0
-  m_Name: UIManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2531737067852600430
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1486065440203953224}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 144.83691, y: -601.35175, z: 2.3332117}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3242591797061958204}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8825291907283440168
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1486065440203953224}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e7ac97e253892b4981e07b9ed1d33b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _imageMeters:
-  - {fileID: 3806473070097087031}
-  - {fileID: 5225042291595719572}
-  - {fileID: 5690574068393101713}
-  - {fileID: 3347740224632275083}
-  - {fileID: 517920293872381890}
-  _floatMeters:
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  _localScale:
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  _incrementValues:
-  - 1
-  - 1
-  - 1
-  - 1
-  - 1
-  _uiData: {fileID: 11400000, guid: 377fbeaf0c2d98543837ee90c8854047, type: 2}
-  _localscaleYZ: {x: 0.51, y: 1}
 --- !u!1 &2110144505001103809
 GameObject:
   m_ObjectHideFlags: 0
@@ -250,7 +180,6 @@ RectTransform:
   - {fileID: 2621907559113618169}
   - {fileID: 7759208395954718093}
   - {fileID: 5073570682057875861}
-  - {fileID: 2531737067852600430}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
