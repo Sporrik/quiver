@@ -7,9 +7,9 @@ public class TopDownDrag : MonoBehaviour
     private Rigidbody rb;
     public bool IsDragging = false;
 
-    public GameObject CurrentlyDraggedObject;
+    [SerializeField] private GameObject CurrentlyDraggedObject;
 
-    public float DragPlaneY = 2f; // Hover height
+    [SerializeField] private float DragPlaneY = 2f; // Hover height
 
     [SerializeField] private Camera mainCamera;
 
@@ -24,6 +24,7 @@ public class TopDownDrag : MonoBehaviour
         if(this.isActiveAndEnabled == false)
             return;
 
+        DragPlaneY = transform.position.y + DragPlaneY;
         IsDragging = true;
         rb.useGravity = false;
         rb.linearVelocity = Vector3.zero;

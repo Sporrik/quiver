@@ -1,6 +1,5 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
 public class DragBaby : MonoBehaviour
 {
     [Header("Drag Settings")]
@@ -12,16 +11,13 @@ public class DragBaby : MonoBehaviour
     public float maxX = 5f; // Maximum X position
 
     private Camera mainCamera;
-    private Rigidbody rb;
     private bool isDragging = false;
     private Vector3 targetPosition;
 
     void Start()
     {
-        // Cache the main camera and Rigidbody reference
+        // Cache the main camera reference
         mainCamera = Camera.main;
-        rb = GetComponent<Rigidbody>();
-        rb.isKinematic = false; // Rigidbody must not be kinematic for physics interactions
     }
 
     void Update()
@@ -33,21 +29,9 @@ public class DragBaby : MonoBehaviour
 
             // Clamp the X position within the specified limits
             targetPosition.x = Mathf.Clamp(mousePosition.x, minX, maxX);
-        }
-    }
-
-    void FixedUpdate()
-    {
-        if (isDragging)
-        {
-            // Calculate the direction to the target position
-            Vector3 direction = (targetPosition - transform.position);
 
             // Smoothly move the object toward the target position
-            Vector3 velocity = direction * dragSpeed;
-
-            // Apply the velocity to the Rigidbody
-            rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, velocity, Time.fixedDeltaTime * damping);
+            transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * damping);
         }
     }
 
@@ -56,18 +40,12 @@ public class DragBaby : MonoBehaviour
         // Start dragging and set the initial target position
         isDragging = true;
         targetPosition = transform.position;
-
-        // Stop any existing velocity to prevent sudden jumps
-        rb.linearVelocity = Vector3.zero;
     }
 
     void OnMouseUp()
     {
         // Stop dragging
         isDragging = false;
-
-        // Stop the object's movement when released
-        rb.linearVelocity = Vector3.zero;
     }
 
     private Vector3 GetMouseWorldPosition()
