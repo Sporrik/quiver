@@ -266,9 +266,11 @@ namespace TwitchIntegration
                 filteredArgs[0] = user;
                 increment = 1;
             }
-            
+
             if (parameters.Length - increment != args.Count)
-                throw new TwitchCommandException("Invalid number of arguments for command: " + commandName);
+            {
+                //throw new TwitchCommandException("Invalid number of arguments for command: " + commandName);
+            }
             
             for (var i = 0; i < args.Count; i++)
             {
