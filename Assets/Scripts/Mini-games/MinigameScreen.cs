@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +9,7 @@ public class MinigameScreen : MonoBehaviour
     [SerializeField] private RawImage _border;
     [SerializeField] private RawImage _minigameArea;
     [SerializeField] private GameObject _panel;
+    [SerializeField] private float _borderScaleOnFullscreen = 1f;
 
     [Header("Scene Names:")]
     [SerializeField] private string _diaperMinigame;
@@ -117,8 +119,13 @@ public class MinigameScreen : MonoBehaviour
         if (GotClipped())
         {
             //Debug.Log("Clipped screen to center!");
+
             _manager.PauseMiniGame(false);
-            _blackScreen.enabled = false;
+
+            if(_manager.MinigameIsRunning())
+            {
+                _blackScreen.enabled = false;
+            }
 
             if (_minigameCamera != null)
             {
@@ -213,8 +220,24 @@ public class MinigameScreen : MonoBehaviour
         if (_clipPosition.x + _panelWidth / 2 <= _panel.transform.position.x)
         {
             _panel.transform.position = new Vector3(_clipPosition.x + _panelWidth / 2, _panelStartPos.y, _panelStartPos.z);
+
             return true;
         }
+        else
+        {
+            _border.transform.localScale = Vector3.one;
+        }
+
+        float progress = Mathf.Max(_panel.transform.position.x, 0) / (_panelWidth / 2);
+
+        float scale = _borderScaleOnFullscreen * progress;
+
+        Debug.Log(scale);
+
+        scale = Mathf.Max(scale, 1);
+
+        _border.transform.localScale = new Vector3(scale, scale, scale);
+        _blackScreen.transform.localScale = new Vector3(scale, scale, scale);
 
         return false;
     }

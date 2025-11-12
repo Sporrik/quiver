@@ -2862,6 +2862,10 @@ PrefabInstance:
       propertyPath: _uiManager
       value: 
       objectReference: {fileID: 736144059}
+    - target: {fileID: 5772064156095533354, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
+      propertyPath: _borderScaleOnFullscreen
+      value: 1.2
+      objectReference: {fileID: 0}
     - target: {fileID: 7894653813073029642, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
       propertyPath: m_Name
       value: Canvas
@@ -29211,7 +29215,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1750621094
 Transform:
   m_ObjectHideFlags: 0

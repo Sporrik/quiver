@@ -86,10 +86,10 @@ public class BarManager : MonoBehaviour
 
         }
 
-        if(_scriptableObject.GetHapiness() >= 100)
-        {
-            AlertGuard();
-        }
+        //if(_scriptableObject.GetHapiness() >= 100)
+        //{
+        //    AlertGuard();
+        //}
 
         //_poopMeterText.text = $"Poop: {_poopMeter}";
         //_sneezMeterText.text = $"Sneez: {_hungerMeter}";
@@ -117,15 +117,15 @@ public class BarManager : MonoBehaviour
         }
     }
 
-    private void AlertGuard()
-    {
-        Debug.Log("Alert");
-        foreach (var guard in Guards)
-        {
-            GuardBehavior b = guard.GetComponent<GuardBehavior>();
-            b.AlertGuardsToPosition(_cryRange);
-        }
-    }
+    //private void AlertGuard()
+    //{
+    //    Debug.Log("Alert");
+    //    foreach (var guard in Guards)
+    //    {
+    //        GuardBehavior b = guard.GetComponent<GuardBehavior>();
+    //        b.AlertGuardsToPosition(_cryRange);
+    //    }
+    //}
     //private void Poop()
     //{
     //    //throw new NotImplementedException();
