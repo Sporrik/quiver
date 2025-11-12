@@ -22,8 +22,8 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private float _goalEnterDistance;
     private GameObject _goal;
 
-    List<GameObject> guards = new List<GameObject>();
-    List<GuardBehavior> guardBehaviors = new List<GuardBehavior>();
+    private List<GameObject> guards = new List<GameObject>();
+    private List<GuardBehavior> guardBehaviors = new List<GuardBehavior>();
 
     private void Awake()
     {
@@ -42,12 +42,13 @@ public class LevelManager : MonoBehaviour
         _player = GameObject.FindGameObjectWithTag("Player");
         _goal = GameObject.FindGameObjectWithTag("Goal");
 
-        GameObject.FindGameObjectsWithTag("Guard", guards);
+        guards = new List<GameObject>(GameObject.FindGameObjectsWithTag("Guard"));
 
-        for (var idx = 0; idx > guards.Count; idx++)
+        guardBehaviors = new List<GuardBehavior>();
+
+        for (var idx = 0; idx < guards.Count; idx++)
         {
-            guardBehaviors[idx] = guards[idx].GetComponent<GuardBehavior>();
-
+            guardBehaviors.Add(guards[idx].GetComponent<GuardBehavior>());
         }
 
     }
