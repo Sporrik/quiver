@@ -31,6 +31,9 @@ public class BarManager : MonoBehaviour
     [SerializeField] private float _cryRange;
     [SerializeField] private float _timeToGetAngry;
 
+    private bool _isSinglePlayer = false;
+
+
 
     private float _eventTimer;
     private float _happyTimer;
@@ -41,6 +44,9 @@ public class BarManager : MonoBehaviour
         Debug.Log(Guards);
         _playerController.OnStaminaChanged += OnStaminaChanged;
         //Physics.OverlapSphere()
+
+
+        _isSinglePlayer = _scriptableObject.GetGameModeSinglePlayer();
     }
 
     private void OnStaminaChanged(float stamina, float max)
@@ -62,7 +68,7 @@ public class BarManager : MonoBehaviour
         _eventTimer += Time.deltaTime;
         _happyTimer += Time.deltaTime;
 
-        if(_eventTimer >= TimeToGetRandomEvent)
+        if(_eventTimer >= TimeToGetRandomEvent && _isSinglePlayer) // random increase for singleplayer purposes
         {
             _eventTimer -= TimeToGetRandomEvent;
             RandomBarIncrease();
