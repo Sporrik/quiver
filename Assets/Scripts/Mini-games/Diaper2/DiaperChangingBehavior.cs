@@ -2,13 +2,18 @@ using UnityEngine;
 
 public class DiaperChangingBehavior : MonoBehaviour
 {
+    [Header("Animation:")]
+    [SerializeField] private Animator _animator;
+    [SerializeField] private float _animationSpeed = 1f;
+
+    [Header("Colliders:")]
     [SerializeField] private Collider _leftStrap;
     [SerializeField] private Collider _rightStrap;
     [SerializeField] private Collider _frontStrap;
 
+    [Header("Camera:")]
     [SerializeField] private Camera _camera;
 
-    private Animator _animator;
 
     private Vector3 _lastMousePosition;
     private bool _isDragging = false;
@@ -16,7 +21,7 @@ public class DiaperChangingBehavior : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Start()
     {
-        _animator = GetComponent<Animator>();
+        _animator.speed = _animationSpeed;
     }
 
     // Update is called once per frame
@@ -43,11 +48,13 @@ public class DiaperChangingBehavior : MonoBehaviour
             if(dragDirection.y > 0)
             {
                 _animator.SetBool("frontIsWorn", true);
+                _isDragging = false;
             }
 
             if (dragDirection.y < 0)
             {
                 _animator.SetBool("frontIsWorn", false);
+                _isDragging = false;
             }
         }
 
@@ -56,11 +63,13 @@ public class DiaperChangingBehavior : MonoBehaviour
             if (dragDirection.x > 0)
             {
                 _animator.SetBool("leftIsWorn", false);
+                _isDragging = false;
             }
 
             if (dragDirection.x < 0)
             {
                 _animator.SetBool("leftIsWorn", true);
+                _isDragging = false;
             }
         }
 
@@ -69,11 +78,13 @@ public class DiaperChangingBehavior : MonoBehaviour
             if (dragDirection.x > 0)
             {
                 _animator.SetBool("rightIsWorn", true);
+                _isDragging = false;
             }
 
             if (dragDirection.x < 0)
             {
                 _animator.SetBool("rightIsWorn", false);
+                _isDragging = false;
             }
         }
     }
@@ -112,5 +123,5 @@ public class DiaperChangingBehavior : MonoBehaviour
             return Vector2.zero;
         }
     }
-    
+
 }
