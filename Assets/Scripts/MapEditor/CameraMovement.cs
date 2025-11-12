@@ -10,12 +10,14 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] private float CameraSpeed = 1f;
     [SerializeField] private float CameraRotationSpeed = 100f;
 
+    private float BaseCameraSpeed;
     private void Start()
     {
         CameraPosition = transform.position;
         CameraRotation = transform.eulerAngles.y;
         CameraSpeed /= 10;
         CameraRotationSpeed /= 10;
+        BaseCameraSpeed = CameraSpeed;
     }
 
     private void FixedUpdate()
@@ -24,6 +26,14 @@ public class CameraMovement : MonoBehaviour
         Vector3 right = new Vector3(transform.right.x, 0, transform.right.z).normalized;
 
         // Movement input
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            CameraSpeed = BaseCameraSpeed * 3;
+        }
+        else
+        {
+            CameraSpeed = BaseCameraSpeed;
+        }
         if (Input.GetKey(KeyCode.W))
         {
             CameraPosition += forward * CameraSpeed;

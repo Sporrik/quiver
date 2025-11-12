@@ -8,7 +8,7 @@ public class FlipBaby : MonoBehaviour
     public float rotationSpeed = 2f; // Speed of rotation lerp
 
     [Header("Drag Settings")]
-    public Camera camera; // Reference to the camera
+    public new Camera camera; // Reference to the camera
     public Collider triggerCollider; // Collider to detect dragging
 
     private bool isDragging = false;
