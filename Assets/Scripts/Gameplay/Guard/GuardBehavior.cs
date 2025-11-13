@@ -34,6 +34,8 @@ namespace Gameplay.AI
         public float FovExitLag => _fovExitLag;
         public bool SeesPlayer => _seesPlayer;
         public float DistanceToPlayer => _distanceToPlayer;
+
+        public float CatchRange => _guardCfg.Perception.CatchRange;
         public bool IsAware => _state == State.Chasing || (_state == State.Searching && _alertTimeRemaining > 0f);
 
         public event Action<GuardBehavior> OnPlayerSpotted;

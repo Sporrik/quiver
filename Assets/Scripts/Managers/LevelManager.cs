@@ -74,11 +74,10 @@ public class LevelManager : MonoBehaviour
 
         foreach (GuardBehavior guardBehavior in guardBehaviors)
         {
-            //if (guardBehavior.CanGetCaught(_player.transform.position))
-            //{
-            //    TriggerGameOver();
-            //    //Debug.Log("The player got caught!");
-            //}
+            if (guardBehavior.DistanceToPlayer <= guardBehavior.CatchRange && guardBehavior.SeesPlayer)
+            {
+                TriggerGameOver();
+            }
         }
     }
 
