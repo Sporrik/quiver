@@ -33,6 +33,8 @@ public class BarManager : MonoBehaviour
 
     private bool _isSinglePlayer = false;
 
+    
+
 
 
     private float _eventTimer;

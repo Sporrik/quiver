@@ -9,7 +9,12 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private GameObject _twitchScreen;
     [SerializeField] private GameObject _controlScreen;
     [SerializeField] private GameObject _PlayScreen;
+
+    [SerializeField] private GameObject _twitchObject;
+
     [SerializeField] private UIScriptableObject _ScriptableObject;
+    private bool _singlePlayer = true;
+
 
     public void OnSinglePlayer()
     {
@@ -21,21 +26,24 @@ public class MenuManager : MonoBehaviour
         Debug.Log("Single");
     }
 
-    public void OnTwitch()
+    public void OnToggleSwitch()
     {
 
-        _ScriptableObject.SetSinglePlayer(false);
+        _singlePlayer = !_singlePlayer;
 
+        _ScriptableObject.SetSinglePlayer(_singlePlayer);
 
-        _twitchScreen.SetActive(true);
+        _twitchObject.SetActive(!_singlePlayer);
+
 
     }
 
     public void OnPlayWithTwitch()
     {
+        SceneManager.LoadScene("LevelOne");
+
         // check if it is autorized;
         // set it for multiplayer
-        SceneManager.LoadScene("LevelOne");
         print("LOAD GAME");
     }
 
@@ -46,8 +54,18 @@ public class MenuManager : MonoBehaviour
 
     public void OnPlay()
     {
-        _PlayScreen.SetActive(true);
-        _twitchScreen.SetActive(false);
+        // _PlayScreen.SetActive(true);
+        if (_singlePlayer)
+        {
+            SceneManager.LoadScene("LevelOne");
+            print("LOAD GAME");
+
+        }
+        else
+        {
+            _twitchScreen.SetActive(true);
+            print("Open LoginScreen");
+        }
     }
 
     public void OnQuit()
