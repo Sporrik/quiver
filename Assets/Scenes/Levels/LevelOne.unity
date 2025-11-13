@@ -16057,101 +16057,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1010097908257854610, guid: 56651abbb63f8cc41b8c6a77384e0c1c, type: 3}
-      propertyPath: _interactionPoint
-      value: 
-      objectReference: {fileID: 968453109}
-    - target: {fileID: 1010097908257854610, guid: 56651abbb63f8cc41b8c6a77384e0c1c, type: 3}
-      propertyPath: _interactionLayer.m_Bits
-      value: 1024
-      objectReference: {fileID: 0}
-    - target: {fileID: 2630555844973547078, guid: 56651abbb63f8cc41b8c6a77384e0c1c, type: 3}
-      propertyPath: m_ActionEvents.Array.size
-      value: 22
-      objectReference: {fileID: 0}
-    - target: {fileID: 2630555844973547078, guid: 56651abbb63f8cc41b8c6a77384e0c1c, type: 3}
-      propertyPath: m_ActionEvents.Array.data[14].m_ActionId
-      value: 43fee21f-1dd7-4a14-a658-b36d2ca40017
-      objectReference: {fileID: 0}
-    - target: {fileID: 2630555844973547078, guid: 56651abbb63f8cc41b8c6a77384e0c1c, type: 3}
-      propertyPath: m_ActionEvents.Array.data[15].m_ActionId
-      value: d70b5673-8134-497d-86b4-281da5ddfe18
-      objectReference: {fileID: 0}
-    - target: {fileID: 2630555844973547078, guid: 56651abbb63f8cc41b8c6a77384e0c1c, type: 3}
-      propertyPath: m_ActionEvents.Array.data[16].m_ActionId
-      value: 490d0f82-6974-471b-bba8-d7dafce513db
-      objectReference: {fileID: 0}
-    - target: {fileID: 2630555844973547078, guid: 56651abbb63f8cc41b8c6a77384e0c1c, type: 3}
-      propertyPath: m_ActionEvents.Array.data[17].m_ActionId
-      value: 0e3e21e0-0ada-4458-bd1f-302db228ac0a
-      objectReference: {fileID: 0}
-    - target: {fileID: 2630555844973547078, guid: 56651abbb63f8cc41b8c6a77384e0c1c, type: 3}
-      propertyPath: m_ActionEvents.Array.data[18].m_ActionId
-      value: 38dd0861-363a-4731-be15-53b4c11b5bd7
-      objectReference: {fileID: 0}
-    - target: {fileID: 2630555844973547078, guid: 56651abbb63f8cc41b8c6a77384e0c1c, type: 3}
-      propertyPath: m_ActionEvents.Array.data[19].m_ActionId
-      value: 39b71530-7abf-4285-8cee-c250743f9396
-      objectReference: {fileID: 0}
-    - target: {fileID: 2630555844973547078, guid: 56651abbb63f8cc41b8c6a77384e0c1c, type: 3}
-      propertyPath: m_ActionEvents.Array.data[20].m_ActionId
-      value: 074fc005-723e-488f-9e4a-5e285662e949
-      objectReference: {fileID: 0}
-    - target: {fileID: 2630555844973547078, guid: 56651abbb63f8cc41b8c6a77384e0c1c, type: 3}
-      propertyPath: m_ActionEvents.Array.data[21].m_ActionId
-      value: dafcc71f-ff0f-42bd-b37f-76c8d02ac612
-      objectReference: {fileID: 0}
-    - target: {fileID: 2630555844973547078, guid: 56651abbb63f8cc41b8c6a77384e0c1c, type: 3}
-      propertyPath: m_ActionEvents.Array.data[14].m_ActionName
-      value: 'MapBuilder/ChangeTileRight[/Keyboard/rightArrow,/Keyboard/2]'
-      objectReference: {fileID: 0}
-    - target: {fileID: 2630555844973547078, guid: 56651abbb63f8cc41b8c6a77384e0c1c, type: 3}
-      propertyPath: m_ActionEvents.Array.data[15].m_ActionName
-      value: 'MapBuilder/ChangeTileLeft[/Keyboard/leftArrow,/Keyboard/3]'
-      objectReference: {fileID: 0}
-    - target: {fileID: 2630555844973547078, guid: 56651abbb63f8cc41b8c6a77384e0c1c, type: 3}
-      propertyPath: m_ActionEvents.Array.data[16].m_ActionName
-      value: 'MapBuilder/RotateTile[/Keyboard/r]'
-      objectReference: {fileID: 0}
-    - target: {fileID: 2630555844973547078, guid: 56651abbb63f8cc41b8c6a77384e0c1c, type: 3}
-      propertyPath: m_ActionEvents.Array.data[17].m_ActionName
-      value: 'MapBuilder/MoveCameraW[/Keyboard/w]'
-      objectReference: {fileID: 0}
-    - target: {fileID: 2630555844973547078, guid: 56651abbb63f8cc41b8c6a77384e0c1c, type: 3}
-      propertyPath: m_ActionEvents.Array.data[18].m_ActionName
-      value: 'MapBuilder/MoveCameraS[/Keyboard/w]'
-      objectReference: {fileID: 0}
-    - target: {fileID: 2630555844973547078, guid: 56651abbb63f8cc41b8c6a77384e0c1c, type: 3}
-      propertyPath: m_ActionEvents.Array.data[19].m_ActionName
-      value: 'MapBuilder/MoveCameraW2[/Keyboard/w]'
-      objectReference: {fileID: 0}
-    - target: {fileID: 2630555844973547078, guid: 56651abbb63f8cc41b8c6a77384e0c1c, type: 3}
-      propertyPath: m_ActionEvents.Array.data[20].m_ActionName
-      value: 'MapBuilder/MoveCameraW3[/Keyboard/w]'
-      objectReference: {fileID: 0}
-    - target: {fileID: 2630555844973547078, guid: 56651abbb63f8cc41b8c6a77384e0c1c, type: 3}
-      propertyPath: m_ActionEvents.Array.data[21].m_ActionName
-      value: 'MapBuilder/DeleteTile[/Keyboard/1]'
-      objectReference: {fileID: 0}
-    - target: {fileID: 2832852280429792993, guid: 56651abbb63f8cc41b8c6a77384e0c1c, type: 3}
-      propertyPath: _maxStamina
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 2832852280429792993, guid: 56651abbb63f8cc41b8c6a77384e0c1c, type: 3}
-      propertyPath: _sprintSpeedMulti
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2832852280429792993, guid: 56651abbb63f8cc41b8c6a77384e0c1c, type: 3}
-      propertyPath: _staminaRegenRate
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3499273087107311390, guid: 56651abbb63f8cc41b8c6a77384e0c1c, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 3587962252654163647, guid: 56651abbb63f8cc41b8c6a77384e0c1c, type: 3}
-      propertyPath: m_Layer
-      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4508316082437646523, guid: 56651abbb63f8cc41b8c6a77384e0c1c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -16193,21 +16101,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8255930871322662646, guid: 56651abbb63f8cc41b8c6a77384e0c1c, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 9209522993226699394, guid: 56651abbb63f8cc41b8c6a77384e0c1c, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3499273087107311390, guid: 56651abbb63f8cc41b8c6a77384e0c1c, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 968453110}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 56651abbb63f8cc41b8c6a77384e0c1c, type: 3}
 --- !u!1 &968453104 stripped
 GameObject:
@@ -16219,27 +16116,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4508316082437646523, guid: 56651abbb63f8cc41b8c6a77384e0c1c, type: 3}
   m_PrefabInstance: {fileID: 968453103}
   m_PrefabAsset: {fileID: 0}
---- !u!135 &968453110
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 968453104}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 1.2
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &969801348
 GameObject:
   m_ObjectHideFlags: 0
