@@ -41,6 +41,8 @@ public class BarManager : MonoBehaviour
     private float _happyTimer;
     void Start()
     {
+
+
         _playerController = _player.GetComponent<PlayerController>();   
         Guards = GameObject.FindGameObjectsWithTag("Guard");
         Debug.Log(Guards);

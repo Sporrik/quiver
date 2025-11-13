@@ -15,6 +15,18 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private UIScriptableObject _ScriptableObject;
     private bool _singlePlayer = true;
 
+    private void Start()
+    {
+
+        // syncronise singleplayer button
+        if(_ScriptableObject.GetGameModeSinglePlayer() == false)
+        {
+            _singlePlayer = false;
+            _twitchObject.SetActive(!_singlePlayer); // shows when single player is false -> true image
+        }
+
+    }
+
 
     public void OnSinglePlayer()
     {
