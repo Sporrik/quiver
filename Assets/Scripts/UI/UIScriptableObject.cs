@@ -10,11 +10,11 @@ public class UIScriptableObject : ScriptableObject
     [SerializeField] private float _hungryMeter;
     [SerializeField] private float _peeMeter;
     [SerializeField] private float _staminaMeter;
-    [SerializeField] private bool _gameMode;
+    [SerializeField] private bool _gameModeSinglePlayer;
 
     public bool GetGameModeSinglePlayer()
     {
-        return _gameMode;
+        return _gameModeSinglePlayer;
     }
     public float GetPoop()
     {
@@ -70,7 +70,7 @@ public class UIScriptableObject : ScriptableObject
     }
     public void SetSinglePlayer(bool gameMode)
     {
-        _gameMode = gameMode;
+        _gameModeSinglePlayer = gameMode;
     }
 
     public void ResetPoop()
