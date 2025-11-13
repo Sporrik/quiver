@@ -18,7 +18,6 @@ namespace Gameplay.GuardCfg
         {
             [Header("Vision")]
             [SerializeField, Min(0f)] private float _sightRange = 10f;
-            [SerializeField, Min(0f)] private float _catchRange = 10f;
             [SerializeField, Range(0f, 180f)] private float _sightAngle = 120f;
             [SerializeField, Min(1f), Tooltip("Range multiplier when target is sprinting")]
             private float _sightSprintMulti = 1.2f;
@@ -28,7 +27,6 @@ namespace Gameplay.GuardCfg
             private float _searchingNoticeRange;
 
             public float SightRange => _sightRange;
-            public float CatchRange => _catchRange;
             public float SightAngle => _sightAngle;
             public float SightSprintMulti => _sightSprintMulti;
             public float SightAlertMulti => _sightAlertMulti;

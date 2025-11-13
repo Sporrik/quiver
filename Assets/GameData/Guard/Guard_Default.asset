@@ -17,24 +17,24 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   _perception:
-    _sightRange: 30
+    _sightRange: 10
     _sightAngle: 120
-    _sightSprintMulti: 1.5
-    _sightAlertMulti: 1.5
-    _searchingNoticeRange: 10
+    _sightSprintMulti: 1.2
+    _sightAlertMulti: 1.2
+    _searchingNoticeRange: 0
   _movement:
-    _walkSpeed: 5
-    _runSpeed: 7
+    _walkSpeed: 3.5
+    _runSpeed: 5
     _waypointArriveDistance: 1
     _rotationSpeed: 360
   _search:
     _alertTime: 8
-    _scanYawSpeed: 2
-    _scanMaxTurnAngle: 45
+    _scanYawSpeed: 75
+    _scanMaxTurnAngle: 90
   _combat:
-    _attackRange: 100
+    _attackRange: 2
   _debug:
     _drawGizmos: 1
   _stability:
-    _stateCooldownSeconds: 1
+    _stateCooldownSeconds: 0.35
     _fovExitLag: 5
