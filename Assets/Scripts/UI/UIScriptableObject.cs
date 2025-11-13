@@ -10,8 +10,12 @@ public class UIScriptableObject : ScriptableObject
     [SerializeField] private float _hungryMeter;
     [SerializeField] private float _peeMeter;
     [SerializeField] private float _staminaMeter;
+    [SerializeField] private bool _gameMode;
 
-
+    public bool GetGameModeSinglePlayer()
+    {
+        return _gameMode;
+    }
     public float GetPoop()
     {
         _poopMeter = Mathf.Max(_poopMeter, 0);
@@ -63,6 +67,10 @@ public class UIScriptableObject : ScriptableObject
     public void SetStamina(float setValue)
     {
         _staminaMeter = setValue;
+    }
+    public void SetSinglePlayer(bool gameMode)
+    {
+        _gameMode = gameMode;
     }
 
     public void ResetPoop()

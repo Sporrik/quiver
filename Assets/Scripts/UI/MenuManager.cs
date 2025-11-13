@@ -8,12 +8,14 @@ public class MenuManager : MonoBehaviour
 
     [SerializeField] private GameObject _twitchScreen;
     [SerializeField] private GameObject _controlScreen;
-    static public bool _isSinglePlayer = false;
+    [SerializeField] private GameObject _PlayScreen;
+    [SerializeField] private UIScriptableObject _ScriptableObject;
 
     public void OnSinglePlayer()
     {
-        _isSinglePlayer = true;
         // set it for singleplayer
+        _ScriptableObject.SetSinglePlayer(true);
+
         SceneManager.LoadScene("LevelOne");
 
         Debug.Log("Single");
@@ -21,7 +23,10 @@ public class MenuManager : MonoBehaviour
 
     public void OnTwitch()
     {
-        _isSinglePlayer = false;
+
+        _ScriptableObject.SetSinglePlayer(false);
+
+
         _twitchScreen.SetActive(true);
 
     }
@@ -39,17 +44,28 @@ public class MenuManager : MonoBehaviour
         _controlScreen.SetActive(true);
     }
 
-    public void OnHowToPlay()
+    public void OnPlay()
     {
-
+        _PlayScreen.SetActive(true);
+        _twitchScreen.SetActive(false);
     }
+
+    public void OnQuit()
+    {
+        Application.Quit();
+    }
+
 
     public void OnBacktoMainMenu()
     {
         _controlScreen.SetActive(false);
         _twitchScreen.SetActive(false);
+        _PlayScreen.SetActive(false);
 
     }
+   
+
+
 
 
 
