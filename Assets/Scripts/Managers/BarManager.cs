@@ -7,31 +7,53 @@ using UnityEngine.SceneManagement;
 
 public class BarManager : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI _poopMeterText;
-    [SerializeField] private TextMeshProUGUI _sneezMeterText;
-    [SerializeField] private TextMeshProUGUI _angryMeterText;
+    //[SerializeField] private TextMeshProUGUI _poopMeterText;
+    //[SerializeField] private TextMeshProUGUI _sneezMeterText;
+    //[SerializeField] private TextMeshProUGUI _angryMeterText;
 
     [SerializeField] private GameObject _player;
+    private PlayerController _playerController;
 
-    [SerializeField] public float _poopMeter;
-    [SerializeField] public float _hungerMeter;
-    [SerializeField] public float _peeMeter;
-    [SerializeField] public float _angryMeter;
-    [SerializeField] private float TimeToGetRandomEvent = 5;
+    //[SerializeField] public float _poopMeter;
+    //[SerializeField] public float _hungerMeter;
+    //[SerializeField] public float _peeMeter;
+    //[SerializeField] public float _angryMeter;
+    [SerializeField] private float TimeToGetRandomEvent = 1;
+
+    [SerializeField] private float _amountToIncreaseBar;
+    [SerializeField] private float _amountToIncreaseHapiness;
 
     [SerializeField] private GameObject[] Guards;
 
-    [SerializeField] private float _sneezRange;
-    [SerializeField] private float _cryRange;
+    [SerializeField] private UIScriptableObject _scriptableObject;
 
-    private float Timer;
+  //  [SerializeField] private float _sneezRange;
+    [SerializeField] private float _cryRange;
+    [SerializeField] private float _timeToGetAngry;
+
+    private bool _isSinglePlayer = false;
+
+    
+
+
+
+    private float _eventTimer;
+    private float _happyTimer;
     void Start()
     {
-        
+        _playerController = _player.GetComponent<PlayerController>();   
         Guards = GameObject.FindGameObjectsWithTag("Guard");
         Debug.Log(Guards);
-
+        _playerController.OnStaminaChanged += OnStaminaChanged;
         //Physics.OverlapSphere()
+
+
+        _isSinglePlayer = _scriptableObject.GetGameModeSinglePlayer();
+    }
+
+    private void OnStaminaChanged(float stamina, float max)
+    {
+        _scriptableObject.SetStamina(stamina);
     }
 
     // Update is called once per frame
@@ -39,76 +61,63 @@ public class BarManager : MonoBehaviour
     {
         //if (Input.GetKey(KeyCode.P))
         //    _poopMeter++;
-        
+
         //if (Input.GetKey(KeyCode.S))
         //    _sneezMeter++;
 
         //if (Input.GetKey(KeyCode.A))
         //    _angryMeter++;
+        _eventTimer += Time.deltaTime;
+        _happyTimer += Time.deltaTime;
 
-        Timer += Time.deltaTime;
-        if(Timer >= TimeToGetRandomEvent)
+        if(_eventTimer >= TimeToGetRandomEvent && _isSinglePlayer) // random increase for singleplayer purposes
         {
-            Timer -= TimeToGetRandomEvent;
+            _eventTimer -= TimeToGetRandomEvent;
             RandomBarIncrease();
 
         }
-
-
-        if (Input.GetKeyUp(KeyCode.Z))
+        if(_scriptableObject.GetHungry() >= 100 && _happyTimer >= _timeToGetAngry)
         {
-            Debug.Log("STOP CRYING");
-            _angryMeter = 0;
+            _happyTimer = 0;
+            _scriptableObject.IncrementHapiness(_amountToIncreaseHapiness);
+        }
+        if(_scriptableObject.GetPoop() >= 100 && _happyTimer >= _timeToGetAngry)
+        {
+            _happyTimer = 0;
+            _scriptableObject.IncrementHapiness(_amountToIncreaseHapiness);
+
+        }
+        if (_scriptableObject.GetPee() >= 100 && _happyTimer >= _timeToGetAngry)
+        {
+            _happyTimer = 0;
+            _scriptableObject.IncrementHapiness(_amountToIncreaseHapiness);
+
         }
 
-        if(_angryMeter >= 100)
-        {
-            Debug.Log("CRY");
-            _angryMeter = Math.Min(_angryMeter, 100);
-            AlertGuard(_cryRange);
-        }
-        if (_hungerMeter >= 100)
-        {
-            _hungerMeter = 0;
+        //if(_scriptableObject.GetHapiness() >= 100)
+        //{
+        //    AlertGuard();
+        //}
 
-            Hunger();
-
-            Debug.Log("HUNGRY");
-            //AlertGuard(_sneezRange);
-        }
-        if (_poopMeter >= 100)
-        {
-            _poopMeter = 0;
-            Poop();
-        }
-        if(_peeMeter >= 100)
-        {
-            _peeMeter = 0;
-            Pee();
-        }
-
-        _poopMeterText.text = $"Poop: {_poopMeter}";
-        _sneezMeterText.text = $"Sneez: {_hungerMeter}";
-        _angryMeterText.text = $"Angry: {_angryMeter}";
+        //_poopMeterText.text = $"Poop: {_poopMeter}";
+        //_sneezMeterText.text = $"Sneez: {_hungerMeter}";
+        //_angryMeterText.text = $"Angry: {_angryMeter}";
     }
 
 
     private void RandomBarIncrease()
     {
-        int num = UnityEngine.Random.Range(0, 4);
+        int num = UnityEngine.Random.Range(1, 4);
         switch (num)
         {
-            case 0:
-                _angryMeter++;
-                break;
             case 1:
-                _poopMeter++;
+                _scriptableObject.IncrementPoop(_amountToIncreaseBar);
                 break;
             case 2:
-                _hungerMeter++;
+                _scriptableObject.IncrementHungry(_amountToIncreaseBar);
                 break;
             case 3:
-                _peeMeter++;
+                _scriptableObject.IncrementPee(_amountToIncreaseBar);
                 break;
             default:
                 Debug.Log("LITTLE PROBLEM");
@@ -116,26 +125,26 @@ public class BarManager : MonoBehaviour
         }
     }
 
-    private void AlertGuard(float range)
-    {
-        Debug.Log("Alert");
-        foreach (var guard in Guards)
-        {
-            GuardBehavior b = guard.GetComponent<GuardBehavior>();
-            b.AlertGuardsToPosition(range);
-        }
-    }
-    private void Poop()
-    {
-        //throw new NotImplementedException();
-        //SceneManager.LoadScene("Diaper", LoadSceneMode.Single);
-    }
-    private void Pee()
-    {
-        //throw new NotImplementedException();
-    }
-    private void Hunger()
-    {
-        //throw new NotImplementedException();
-    }
+    //private void AlertGuard()
+    //{
+    //    Debug.Log("Alert");
+    //    foreach (var guard in Guards)
+    //    {
+    //        GuardBehavior b = guard.GetComponent<GuardBehavior>();
+    //        b.AlertGuardsToPosition(_cryRange);
+    //    }
+    //}
+    //private void Poop()
+    //{
+    //    //throw new NotImplementedException();
+    //    //SceneManager.LoadScene("Diaper", LoadSceneMode.Single);
+    //}
+    //private void Pee()
+    //{
+    //    //throw new NotImplementedException();
+    //}
+    //private void Hunger()
+    //{
+    //    //throw new NotImplementedException();
+    //}
 }

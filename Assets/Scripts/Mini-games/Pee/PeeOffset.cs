@@ -25,6 +25,5 @@ public class PeeOffset : MonoBehaviour
             );
        
         piss.startSpeed = (PeeOrigin.transform.position - gameObject.transform.position).magnitude * 3.25f;
-
     }
 }

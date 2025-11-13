@@ -25,7 +25,11 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
-
+        _uiData.ResetHapiness();
+        _uiData.ResetHungry();
+        _uiData.ResetPee();
+        _uiData.ResetStamina();
+        _uiData.ResetPoop();
         //_player = GameObject.FindGameObjectWithTag("Player");
         //_barManagerObject = GameObject.Find("BarManager");
 
@@ -108,7 +112,7 @@ public class UIManager : MonoBehaviour
     }
     public void IncrementStamina()
     {
-        _uiData.IncrementStamina(_incrementValues[4]);
+        _uiData.SetStamina(_incrementValues[4]);
     }
 
     // resets

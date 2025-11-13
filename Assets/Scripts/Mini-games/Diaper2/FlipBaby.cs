@@ -3,13 +3,13 @@ using UnityEngine;
 public class FlipBaby : MonoBehaviour
 {
     [Header("Rotation Settings")]
-    [SerializeField] private Vector3 rotationA = new Vector3(0, 0, 0); // Starting rotation (Euler angles)
-    [SerializeField] private Vector3 rotationB = new Vector3(0, 180, 0); // Target rotation (Euler angles)
-    [SerializeField] private float rotationSpeed = 2f; // Speed of rotation lerp
+    public Vector3 rotationA = new Vector3(0, 0, 0); // Starting rotation (Euler angles)
+    public Vector3 rotationB = new Vector3(0, 180, 0); // Target rotation (Euler angles)
+    public float rotationSpeed = 2f; // Speed of rotation lerp
 
     [Header("Drag Settings")]
-    [SerializeField] private new Camera camera; // Reference to the camera
-    [SerializeField] private Collider triggerCollider; // Collider to detect dragging
+    public new Camera camera; // Reference to the camera
+    public Collider triggerCollider; // Collider to detect dragging
 
     private bool isDragging = false;
     private bool isRotatingToB = false; // Flag to determine rotation direction

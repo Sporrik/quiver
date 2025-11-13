@@ -1,3 +1,4 @@
+﻿using System;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "UIData", menuName = "Scriptable Objects/UIData")]
@@ -9,10 +10,12 @@ public class UIScriptableObject : ScriptableObject
     [SerializeField] private float _hungryMeter;
     [SerializeField] private float _peeMeter;
     [SerializeField] private float _staminaMeter;
+    [SerializeField] private bool _gameModeSinglePlayer;
 
-   // [SerializeField] PlayerController _playerController;
-    
-
+    public bool GetGameModeSinglePlayer()
+    {
+        return _gameModeSinglePlayer;
+    }
     public float GetPoop()
     {
         _poopMeter = Mathf.Max(_poopMeter, 0);
@@ -43,22 +46,31 @@ public class UIScriptableObject : ScriptableObject
     public void IncrementPoop(float incrementValue)
     {
         _poopMeter += incrementValue;
+        _poopMeter = Mathf.Min(_poopMeter, 100);
+
     }
     public void IncrementHapiness(float incrementValue)
     {
         _happinessMeter += incrementValue;
+        _happinessMeter = Mathf.Min(_happinessMeter, 100);
     }
     public void IncrementHungry(float incrementValue)
     {
         _hungryMeter += incrementValue;
+        _hungryMeter = Mathf.Min(_hungryMeter, 100);
     }
     public void IncrementPee(float incrementValue)
     {
         _peeMeter += incrementValue;
+        _peeMeter = Mathf.Min(_peeMeter, 100);
     }
-    public void IncrementStamina(float incrementValue)
+    public void SetStamina(float setValue)
     {
-        _staminaMeter += incrementValue;
+        _staminaMeter = setValue;
+    }
+    public void SetSinglePlayer(bool gameMode)
+    {
+        _gameModeSinglePlayer = gameMode;
     }
 
     public void ResetPoop()
@@ -79,6 +91,6 @@ public class UIScriptableObject : ScriptableObject
     }
     public void ResetStamina()
     {
-        _staminaMeter = 0;
+        _staminaMeter = 100;
     }
 }

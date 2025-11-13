@@ -5,8 +5,6 @@ using System.IO;
 using UnityEngine;
 
 using UnityEditor.Formats.Fbx.Exporter;
-using Autodesk.Fbx;
-using UnityEditor;
 
 [System.Serializable]
 public class TileDataListWrapper
