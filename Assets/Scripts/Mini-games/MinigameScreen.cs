@@ -27,6 +27,7 @@ public class MinigameScreen : MonoBehaviour
 
     private MinigameManager _manager;
     private Camera _minigameCamera;
+    // TODO add a way to read the win conditions of minigame
 
     private Vector2 _lastMousePos;
     private Vector3 _panelStartPos;
@@ -64,7 +65,7 @@ public class MinigameScreen : MonoBehaviour
 
     private void SelectMiniGame()
     {
-        if (Input.GetKeyUp(KeyCode.Space) && !_manager.MinigameIsRunning())
+        if (Input.GetKeyUp(KeyCode.Space) && !GotClipped())
         {
             _slideIn = true;
         }
@@ -92,7 +93,7 @@ public class MinigameScreen : MonoBehaviour
 
         if (_slideOut)
         {
-            SlideOut();
+            SlideOut(false);
         }
     }
 
@@ -232,8 +233,6 @@ public class MinigameScreen : MonoBehaviour
 
         float scale = _borderScaleOnFullscreen * progress;
 
-        Debug.Log(scale);
-
         scale = Mathf.Max(scale, 1);
 
         _border.transform.localScale = new Vector3(scale, scale, scale);
@@ -244,9 +243,12 @@ public class MinigameScreen : MonoBehaviour
 
     public void SlideIn(string sceneName)
     {
-        if (GotClipped() && !_manager.MinigameIsRunning())
+        if (GotClipped())
         {
-            _manager.LoadMinigame(sceneName);
+            if (!_manager.MinigameIsRunning())
+            {
+                _manager.LoadMinigame(sceneName);
+            }
 
             _slideIn = false;
         }
@@ -261,13 +263,13 @@ public class MinigameScreen : MonoBehaviour
         }
     }
 
-    public void SlideOut()
+    public void SlideOut(bool unloadScene = false)
     {
-        if (_clipPosition.x - _panelWidth / 2 >= _panel.transform.position.x && _manager.MinigameIsRunning())
+        if (_clipPosition.x - _panelWidth / 2 >= _panel.transform.position.x)
         {
             _panel.transform.position = new Vector3(_clipPosition.x - _panelWidth / 2, _panelStartPos.y, _panelStartPos.z);
 
-            ResetMinigame();
+            if(unloadScene) ResetMinigame();
 
             _slideOut = false;
         }

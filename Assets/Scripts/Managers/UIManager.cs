@@ -40,7 +40,7 @@ public class UIManager : MonoBehaviour
         for (int i = 0; i < _imageMeters.Length; i++)
         {
             {
-                _localScale[i] = _imageMeters[i].transform.localScale.x; // scale = scale of each meter
+                _localScale[i] = _imageMeters[i].transform.localScale.x; // localscale = scale of each meter
 
             }
 
@@ -66,6 +66,9 @@ public class UIManager : MonoBehaviour
             _barIncreaseReversed = new Vector3((1 - _floatMeters[i]) * _localScale[i], _localscaleYZ.x, _localscaleYZ.y); // make an empty on the angrymeter
             _imageMeters[i].rectTransform.localScale = _barIncreaseReversed;
         }
+
+        _imageMeters[4].rectTransform.localScale = new Vector3(_floatMeters[4] * _localScale[4], 0.15f, 1); // custon staminameter
+
         //Debug.Log(_barIncreaseReversed.x);
 
 
