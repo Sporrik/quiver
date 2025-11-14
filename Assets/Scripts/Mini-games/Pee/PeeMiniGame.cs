@@ -13,6 +13,7 @@ public class PeeMiniGame : MonoBehaviour
     [SerializeField] private ParticleSystem SplashEffect;
     [SerializeField] private int PeeRange = 30;
     [SerializeField] private float Speed = 75f;
+    public bool TaskComplete = false;
 
     private int _currentRange;
     private float _currentSpeed;
@@ -77,6 +78,7 @@ public class PeeMiniGame : MonoBehaviour
         if (CurrentPeeAmount >= TargetPeeAmount)
         {
             Debug.Log("Pee Mini-game Complete!");
+            TaskComplete = true;
         }
     }
 }
