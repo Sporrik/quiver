@@ -96,18 +96,14 @@ public sealed class PlayerController : MonoBehaviour
 
     #region Input Callbacks
 
-    public void OnMove(InputAction.CallbackContext ctx)
+    public void OnMove(InputValue ctx)
     {
-        _moveInput = ctx.ReadValue<Vector2>();
+        _moveInput = ctx.Get<Vector2>();
     }
 
-    public void OnSprint(InputAction.CallbackContext ctx)
+    public void OnSprint(InputValue ctx)
     {
-        if (ctx.performed)
-            _sprintHeld = true;
-
-        if (ctx.canceled)
-            _sprintHeld = false;
+        _sprintHeld = ctx.Get<float>()>0.5f;
     }
 
     public void OnJump(InputAction.CallbackContext ctx)
@@ -153,6 +149,7 @@ public sealed class PlayerController : MonoBehaviour
         Vector3 vertical = Vector3.up * _verticalVelocity;
 
         _characterController.Move((horizontal + vertical) * dt);
+        //Debug.Log((horizontal + vertical) * dt);
     }
 
     #endregion
@@ -249,6 +246,8 @@ public sealed class PlayerController : MonoBehaviour
 
         _animator.SetFloat(SpeedParam, moveMagnitude);
         _animator.SetBool(SprintParam, _isSprinting);
+
+        //Debug.Log(_isSprinting+ ":" +_sprintHeld);
     }
 
     #endregion

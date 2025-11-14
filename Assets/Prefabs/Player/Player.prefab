@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1902933726362646622}
   - component: {fileID: 2630555844973547078}
   - component: {fileID: 6672333097141837501}
+  - component: {fileID: 924816245738880586}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -65,7 +66,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _origin: {fileID: 4508316082437646523}
-  _range: 2
+  _range: 6
   _interactableMask:
     serializedVersion: 2
     m_Bits: 1024
@@ -209,27 +210,15 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 490d0f82-6974-471b-bba8-d7dafce513db
-    m_ActionName: 'MapBuilder/RotateTile[/Keyboard/o]'
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 0e3e21e0-0ada-4458-bd1f-302db228ac0a
-    m_ActionName: 'MapBuilder/MoveCameraW[/Keyboard/w]'
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 38dd0861-363a-4731-be15-53b4c11b5bd7
-    m_ActionName: 'MapBuilder/MoveCameraS[/Keyboard/w]'
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 39b71530-7abf-4285-8cee-c250743f9396
-    m_ActionName: 'MapBuilder/MoveCameraW2[/Keyboard/w]'
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 074fc005-723e-488f-9e4a-5e285662e949
-    m_ActionName: 'MapBuilder/MoveCameraW3[/Keyboard/w]'
+    m_ActionName: 'MapBuilder/RotateTile[/Keyboard/r]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: dafcc71f-ff0f-42bd-b37f-76c8d02ac612
     m_ActionName: 'MapBuilder/DeleteTile[/Keyboard/1]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 36bb8ef1-5164-4f0b-ac0e-91891db4dfbe
+    m_ActionName: 'MapBuilder/SwitchInBound[/Keyboard/4]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: 
@@ -260,6 +249,27 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!135 &924816245738880586
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3499273087107311390}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1.2
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3587962252654163647
 GameObject:
   m_ObjectHideFlags: 0
@@ -269,7 +279,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8232704844000420399}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: groundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -303,7 +313,7 @@ GameObject:
   - component: {fileID: 414565474645367474}
   - component: {fileID: 597907959401211629}
   - component: {fileID: 799260279218664551}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -411,7 +421,7 @@ GameObject:
   - component: {fileID: 2109055344306915905}
   - component: {fileID: 6765214415278027301}
   - component: {fileID: 8716028119944224696}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}

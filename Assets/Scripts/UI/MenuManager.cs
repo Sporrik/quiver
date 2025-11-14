@@ -8,12 +8,24 @@ public class MenuManager : MonoBehaviour
 
     [SerializeField] private GameObject _twitchScreen;
     [SerializeField] private GameObject _controlScreen;
-    [SerializeField] private GameObject _PlayScreen;
+    [SerializeField] private GameObject _settingsScreen;
 
     [SerializeField] private GameObject _twitchObject;
 
     [SerializeField] private UIScriptableObject _ScriptableObject;
     private bool _singlePlayer = true;
+
+    private void Start()
+    {
+
+        // syncronise singleplayer button
+        if(_ScriptableObject.GetGameModeSinglePlayer() == false)
+        {
+            _singlePlayer = false;
+            _twitchObject.SetActive(!_singlePlayer); // shows when single player is false -> true image
+        }
+
+    }
 
 
     public void OnSinglePlayer()
@@ -52,6 +64,12 @@ public class MenuManager : MonoBehaviour
         _controlScreen.SetActive(true);
     }
 
+    public void OnSettings()
+    {
+        _settingsScreen.SetActive(true);
+    }
+
+
     public void OnPlay()
     {
         // _PlayScreen.SetActive(true);
@@ -78,7 +96,8 @@ public class MenuManager : MonoBehaviour
     {
         _controlScreen.SetActive(false);
         _twitchScreen.SetActive(false);
-        _PlayScreen.SetActive(false);
+        _settingsScreen.SetActive(false);
+
 
     }
    

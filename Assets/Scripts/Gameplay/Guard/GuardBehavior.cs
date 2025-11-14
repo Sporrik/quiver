@@ -31,9 +31,15 @@ namespace Gameplay.AI
         [SerializeField] private float _alertTimeRemaining;
         [SerializeField] private bool _hadVisualLastFrame;
 
+
+        [Header("BarManager")]
+        [SerializeField] private BarManager _barManager;
+
         public float FovExitLag => _fovExitLag;
         public bool SeesPlayer => _seesPlayer;
         public float DistanceToPlayer => _distanceToPlayer;
+
+        public float CatchRange => _guardCfg.Combat.AttackRange;
         public bool IsAware => _state == State.Chasing || (_state == State.Searching && _alertTimeRemaining > 0f);
 
         public event Action<GuardBehavior> OnPlayerSpotted;
@@ -58,11 +64,12 @@ namespace Gameplay.AI
             Vector3 v = to - from;
             float d = v.magnitude;
             if (d <= Mathf.Epsilon) return false;
-            return !Physics.Raycast(from, v / d, d, mask, QueryTriggerInteraction.Ignore);
+            return !Physics.Raycast(from, v / d, d, mask);
         }
 
         private void Awake()
         {
+            _barManager.OnBabyCrying += HearingPlayer;
             _agent = GetComponent<NavMeshAgent>();
 
             // Check references
@@ -80,6 +87,8 @@ namespace Gameplay.AI
                 _agent.SetDestination(_waypoints[_waypointIndex].position);
         }
 
+        
+
         private void Update()
         {
             UpdatePerception();
@@ -93,10 +102,10 @@ namespace Gameplay.AI
             _seesPlayer = false;
             if (_player == null) return;
 
-            Vector3 toPlayer = _player.position - transform.position;
-            _distanceToPlayer = toPlayer.magnitude;
+            _distanceToPlayer = Vector3.Distance(_player.transform.position, transform.position);
 
             float sight = _guardCfg.Perception.SightRange;
+
             if (_state == State.Searching)
             {
                 sight *= _guardCfg.Perception.SightAlertMulti;
@@ -108,8 +117,10 @@ namespace Gameplay.AI
             // Angle check from eyes
             Vector3 fromEyes = _player.position - _eyes.position;
             Vector3 dirFromEyes = fromEyes.normalized;
+
             float halfFov = _guardCfg.Perception.SightAngle * 0.5f;
             float extra = hadPrev ? (_guardCfg.Stability.FovExitLag * 0.5f) : 0f; // widen only when exiting
+
             if (Vector3.Angle(_eyes.forward, dirFromEyes) > (halfFov + extra)) return;
 
             // LoS
@@ -117,6 +128,7 @@ namespace Gameplay.AI
                 _seesPlayer = true;
         }
 
+        // don't think we need this
         private bool BlockedFromEyes(Vector3 targetPos)
         {
             Vector3 v = targetPos - _eyes.position;
@@ -126,7 +138,7 @@ namespace Gameplay.AI
         }
 
         // ---------- FSM ----------
-        private bool CanChangeState() => Time.time >= _nextStateChangeTime;
+        private bool CanChangeState() => Time.time >= _nextStateChangeTime;     // potential to quick switching state (no reset?)
 
         private void TickState()
         {
@@ -177,6 +189,11 @@ namespace Gameplay.AI
             _alertTimeRemaining = _guardCfg.Search.AlertTime;
             SetRunSpeed();
             OnPlayerSpotted?.Invoke(this);
+            Chase();
+        }
+
+        private void HearingPlayer(BarManager manager)
+        {
             Chase();
         }
 
@@ -270,9 +287,11 @@ namespace Gameplay.AI
             if (_guardCfg == null || !_guardCfg.Debug.DrawGizmos) return;
             if (_eyes == null) return;
 
+            // field of view
             Gizmos.color = Color.yellow;
             DrawCone(_eyes.position, _eyes.forward, _guardCfg.Perception.SightRange, _guardCfg.Perception.SightAngle);
 
+            // attack range
             Gizmos.color = Color.cyan;
             Gizmos.DrawWireSphere(transform.position, _guardCfg.Combat.AttackRange);
 
@@ -287,6 +306,9 @@ namespace Gameplay.AI
         {
             const int steps = 36;
             float half = angle * 0.5f;
+
+            forward = forward.normalized; // in case this hasn't happend yet
+
             Vector3 prev = origin + Quaternion.AngleAxis(-half, Vector3.up) * forward * radius;
             for (int i = 1; i <= steps; i++)
             {

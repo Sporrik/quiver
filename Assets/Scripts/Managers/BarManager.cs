@@ -1,3 +1,4 @@
+using Gameplay.AI;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -33,7 +34,8 @@ public class BarManager : MonoBehaviour
 
     private bool _isSinglePlayer = false;
 
-    
+    public event Action<BarManager> OnBabyCrying;
+
 
 
 
@@ -41,10 +43,13 @@ public class BarManager : MonoBehaviour
     private float _happyTimer;
     void Start()
     {
+
+
         _playerController = _player.GetComponent<PlayerController>();   
         Guards = GameObject.FindGameObjectsWithTag("Guard");
         Debug.Log(Guards);
         _playerController.OnStaminaChanged += OnStaminaChanged;
+       
         //Physics.OverlapSphere()
 
 
@@ -67,6 +72,13 @@ public class BarManager : MonoBehaviour
 
         //if (Input.GetKey(KeyCode.A))
         //    _angryMeter++;
+
+        if(_scriptableObject.GetHapiness() >= 100)
+        {
+            OnBabyCrying.Invoke(this);
+        }
+
+
         _eventTimer += Time.deltaTime;
         _happyTimer += Time.deltaTime;
 
