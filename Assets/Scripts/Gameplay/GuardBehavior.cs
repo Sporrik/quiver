@@ -41,12 +41,21 @@ public class GuardBehavior : MonoBehaviour
     private float _distanceToPlayer;
 
     private PlayerController playerController;
+    private Animator _animator;
+
+    private bool _isLooking;
+
+    private static readonly int ChaseState = Animator.StringToHash("IsChasing");
+    private static readonly int LookingState = Animator.StringToHash("IsLooking");
+
+
+
 
     private void Start()
     {
         _player = GameObject.FindWithTag("Player").transform;
         playerController = _player.GetComponent<PlayerController>();
-
+        _animator = _player.GetComponentInChildren<Animator>();
 
         _agent = GetComponent<NavMeshAgent>();
         _agent.speed = _baseSpeed;
@@ -57,6 +66,7 @@ public class GuardBehavior : MonoBehaviour
     {
         PlayerDetection();
         FollowPath();
+        TickAnimator();
     }
 
     private void OnDrawGizmos()
@@ -212,6 +222,7 @@ public class GuardBehavior : MonoBehaviour
 
     private void LookAround()
     {
+        _isLooking = true;
         const float maxTurnAngle = 90f;
         float rotationSpeed = 75f;
 
@@ -228,6 +239,7 @@ public class GuardBehavior : MonoBehaviour
         {
             _turnLeft = !_turnLeft;
         }
+        _isLooking =false;
     }
     public bool CanGetCaught(Vector3 position)
     {
@@ -253,5 +265,13 @@ public class GuardBehavior : MonoBehaviour
             _timeAlert = _memorizationTime;
             _agent.speed = _runSpeed;
         }
+    }
+
+    private void TickAnimator()
+    {
+        if (_animator == null) return;
+
+        _animator.SetBool(ChaseState, _seesPlayer);
+        _animator.SetBool(LookingState, _isLooking);
     }
 }
