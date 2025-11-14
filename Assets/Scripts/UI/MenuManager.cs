@@ -8,7 +8,7 @@ public class MenuManager : MonoBehaviour
 
     [SerializeField] private GameObject _twitchScreen;
     [SerializeField] private GameObject _controlScreen;
-    [SerializeField] private GameObject _PlayScreen;
+    [SerializeField] private GameObject _settingsScreen;
 
     [SerializeField] private GameObject _twitchObject;
 
@@ -64,6 +64,12 @@ public class MenuManager : MonoBehaviour
         _controlScreen.SetActive(true);
     }
 
+    public void OnSettings()
+    {
+        _settingsScreen.SetActive(true);
+    }
+
+
     public void OnPlay()
     {
         // _PlayScreen.SetActive(true);
@@ -90,7 +96,8 @@ public class MenuManager : MonoBehaviour
     {
         _controlScreen.SetActive(false);
         _twitchScreen.SetActive(false);
-        _PlayScreen.SetActive(false);
+        _settingsScreen.SetActive(false);
+
 
     }
    
