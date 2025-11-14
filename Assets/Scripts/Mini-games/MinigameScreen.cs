@@ -232,8 +232,6 @@ public class MinigameScreen : MonoBehaviour
 
         float scale = _borderScaleOnFullscreen * progress;
 
-        Debug.Log(scale);
-
         scale = Mathf.Max(scale, 1);
 
         _border.transform.localScale = new Vector3(scale, scale, scale);
