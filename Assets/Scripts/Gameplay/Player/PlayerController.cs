@@ -1,65 +1,50 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CharacterController))]
 [DisallowMultipleComponent]
 public sealed class PlayerController : MonoBehaviour
 {
     #region Inspector
-
     [SerializeField] private PlayerConfig _playerCfg;
     [SerializeField] private Transform _groundCheck;
-
     #endregion
 
     #region Components
-
     private CharacterController _characterController;
     private Animator _animator;
     private Camera _camera;
-
+    private PlayerInputRelay _input;
     #endregion
 
     #region Runtime State
-
     private Vector2 _moveInput;     // raw axes
     private Vector3 _moveDirWorld;  // camera-relative XZ
     private float _verticalVelocity;
     private float _currentSpeed;
-
     #endregion
 
     #region Stamina State
-
     private float _stamina;
     private float _regenDelayTimer;
     private bool _sprintHeld;
     private bool _isSprinting;
-
     #endregion
 
     #region Animator Parameters
-
     private static readonly int SpeedParam = Animator.StringToHash("Speed");
     private static readonly int SprintParam = Animator.StringToHash("IsSprinting");
-
     #endregion
 
     #region Constants / Buffers
-
     private const float BASE_GRAVITY = -9.81f;
     private const float GROUND_STICK = -2f;
-
     private static readonly Collider[] _groundHits = new Collider[4];
-
     #endregion
 
     #region Events / Read-Only
-
     public event System.Action<float, float> OnStaminaChanged;
     public bool IsSprinting => _isSprinting;
     public float StaminaNorm => _playerCfg.Stamina ? _stamina / _playerCfg.Stamina.Max : 0f;
-
     #endregion
 
     #region Unity Lifecycle
@@ -69,11 +54,10 @@ public sealed class PlayerController : MonoBehaviour
         _animator = GetComponent<Animator>();
         _camera = Camera.main;
 
-        if (_playerCfg.Movement == null)
-            Debug.LogError("PlayerController: MovementConfig missing.");
-
-        if (_playerCfg.Stamina == null)
-            Debug.LogError("PlayerController: StaminaConfig missing.");
+        if (_playerCfg.Movement == null) Debug.LogError("PlayerController: MovementConfig missing.");
+        if (_playerCfg.Stamina == null) Debug.LogError("PlayerController: StaminaConfig missing.");
+        if (_input == null) _input = GetComponent<PlayerInputRelay>();
+        if (_input == null) Debug.LogError("PlayerController: PlayerInputRelay Missing");
 
         _currentSpeed = _playerCfg.Movement ? _playerCfg.Movement.BaseSpeed : 0f;
         _stamina = _playerCfg.Stamina ? _playerCfg.Stamina.Max : 0f;
@@ -83,6 +67,7 @@ public sealed class PlayerController : MonoBehaviour
     {
         float dt = Time.deltaTime;
 
+        ReadInput();
         ReadWorldspaceMoveDirection();  // input -> world-space vector
         HandleSprintState();            // decide start/stop sprinting
         TickStamina(dt);                // drain / regen stamina
@@ -91,32 +76,19 @@ public sealed class PlayerController : MonoBehaviour
         TickMovement(dt);               // move character controller
         TickAnimator();                 // sync animation parameters
     }
-
-    #endregion
-
-    #region Input Callbacks
-
-    public void OnMove(InputValue ctx)
-    {
-        _moveInput = ctx.Get<Vector2>();
-    }
-
-    public void OnSprint(InputValue ctx)
-    {
-        _sprintHeld = ctx.Get<float>()>0.5f;
-    }
-
-    public void OnJump(InputAction.CallbackContext ctx)
-    {
-        if (!ctx.started) return;
-        if (!IsGrounded()) return;
-
-        _verticalVelocity += _playerCfg.Movement.JumpPower;
-    }
-
     #endregion
 
     #region Movement & Rotation
+    private void ReadInput()
+    {
+        _moveInput = _input ? _input.Move : Vector2.zero;
+        _sprintHeld = _input && _input.SprintHeld;
+
+        if (_input != null && _input.JumpStartedThisFrame() && IsGrounded())
+        {
+            _verticalVelocity = +_playerCfg.Movement.JumpPower;
+        }
+    }
 
     private void ReadWorldspaceMoveDirection()
     {
@@ -147,15 +119,11 @@ public sealed class PlayerController : MonoBehaviour
     {
         Vector3 horizontal = _moveDirWorld * _currentSpeed;
         Vector3 vertical = Vector3.up * _verticalVelocity;
-
         _characterController.Move((horizontal + vertical) * dt);
-        //Debug.Log((horizontal + vertical) * dt);
     }
-
     #endregion
 
     #region Gravity & Grounding
-
     private void TickGravity(float dt)
     {
         if (IsGrounded())
@@ -177,11 +145,9 @@ public sealed class PlayerController : MonoBehaviour
         int count = Physics.OverlapSphereNonAlloc(_groundCheck.position, _playerCfg.GroundRadius, _groundHits, _playerCfg.GroundMask, QueryTriggerInteraction.Ignore);
         return count > 0;
     }
-
     #endregion
 
     #region Sprint & Stamina
-
     private bool CanSprint => !_isSprinting && _sprintHeld && _stamina >= _playerCfg.Stamina.SprintThreshold;
 
     private void HandleSprintState()
@@ -231,11 +197,9 @@ public sealed class PlayerController : MonoBehaviour
         if (!Mathf.Approximately(prev, _stamina))
             OnStaminaChanged?.Invoke(_stamina, _playerCfg.Stamina.Max);
     }
-
     #endregion
 
     # region Animation
-
     private void TickAnimator()
     {
         if (_animator == null) return;
@@ -249,6 +213,5 @@ public sealed class PlayerController : MonoBehaviour
 
         //Debug.Log(_isSprinting+ ":" +_sprintHeld);
     }
-
     #endregion
 }

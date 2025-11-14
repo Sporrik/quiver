@@ -5,7 +5,6 @@ using Gameplay.Interaction;
 public sealed class PlayerInteraction : MonoBehaviour
 {
     #region Inspector
-
     [Header("Interaction Settings")]
     [SerializeField] private Transform _origin;
     [SerializeField, Min(0f)] private float _range = 2f;
@@ -13,18 +12,14 @@ public sealed class PlayerInteraction : MonoBehaviour
 
     [Header("Input Relay")]
     [SerializeField] private PlayerInputRelay _input;
-
     #endregion
 
     #region Components / State
-
     private readonly Collider[] _hits = new Collider[8];
     private Interactor _interactor;
-
     #endregion
 
     #region Unity Lifecycle
-
     private void Awake()
     {
         _interactor = new Interactor(transform);
@@ -49,11 +44,9 @@ public sealed class PlayerInteraction : MonoBehaviour
             TryTakedown();
         }
     }
-
     #endregion
 
     #region Query + Execute
-
     private void TryInteract()
     {
         int count = OverlapAtOrigin();
@@ -79,28 +72,23 @@ public sealed class PlayerInteraction : MonoBehaviour
             }
         }
     }
-
     #endregion
 
     #region Helpers
-
     private int OverlapAtOrigin()
     {
         return Physics.OverlapSphereNonAlloc(_origin.position, _range, _hits, _interactableMask, QueryTriggerInteraction.Ignore);
     }
-
     #endregion
 
 #if UNITY_EDITOR
     #region Gizmos
-
     private void OnDrawGizmosSelected()
     {
         if (_origin == null) return;
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(_origin.position, _range);
     }
-
     #endregion
 #endif
 }

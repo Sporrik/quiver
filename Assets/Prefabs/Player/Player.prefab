@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4508316082437646523}
   - component: {fileID: 6046866377545424347}
   - component: {fileID: 1902933726362646622}
+  - component: {fileID: 4145930650660878587}
   - component: {fileID: 2630555844973547078}
   - component: {fileID: 6672333097141837501}
   - component: {fileID: 924816245738880586}
@@ -70,6 +71,19 @@ MonoBehaviour:
   _interactableMask:
     serializedVersion: 2
     m_Bits: 1024
+  _input: {fileID: 4145930650660878587}
+--- !u!114 &4145930650660878587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3499273087107311390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c5e291068869c3468255d9f4be08bb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2630555844973547078
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -97,8 +111,8 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6046866377545424347}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+      - m_Target: {fileID: 4145930650660878587}
+        m_TargetAssemblyTypeName: PlayerInputRelay, Assembly-CSharp
         m_MethodName: OnMove
         m_Mode: 0
         m_Arguments:
@@ -113,8 +127,8 @@ MonoBehaviour:
     m_ActionName: 'Player/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1902933726362646622}
-        m_TargetAssemblyTypeName: PlayerInteraction, Assembly-CSharp
+      - m_Target: {fileID: 4145930650660878587}
+        m_TargetAssemblyTypeName: PlayerInputRelay, Assembly-CSharp
         m_MethodName: OnTakedown
         m_Mode: 0
         m_Arguments:
@@ -129,8 +143,8 @@ MonoBehaviour:
     m_ActionName: 'Player/Attack[/Mouse/leftButton,/Keyboard/enter]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1902933726362646622}
-        m_TargetAssemblyTypeName: PlayerInteraction, Assembly-CSharp
+      - m_Target: {fileID: 4145930650660878587}
+        m_TargetAssemblyTypeName: PlayerInputRelay, Assembly-CSharp
         m_MethodName: OnInteract
         m_Mode: 0
         m_Arguments:
@@ -145,8 +159,8 @@ MonoBehaviour:
     m_ActionName: 'Player/Interact[/Keyboard/e]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6046866377545424347}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+      - m_Target: {fileID: 4145930650660878587}
+        m_TargetAssemblyTypeName: PlayerInputRelay, Assembly-CSharp
         m_MethodName: OnSprint
         m_Mode: 0
         m_Arguments:
