@@ -4,7 +4,6 @@ using UnityEngine;
 public class GridScript : MonoBehaviour
 {
     [SerializeField] private float size = 1.0f;
-    [SerializeField] private float sizeGrid = 10.0f;
     [SerializeField] private float yChangeTest;
 
     public Vector3 GetNearestPointOnGrid(Vector3 position)
@@ -20,18 +19,5 @@ public class GridScript : MonoBehaviour
         result += transform.position;
 
         return result;
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.yellow;
-        for (float x = transform.position.x; x < (sizeGrid - MathF.Abs(transform.position.x)-1); x++)
-        {
-            for (float z = transform.position.z; z < (sizeGrid - MathF.Abs(transform.position.z)-1); z++)
-            {
-                var point = GetNearestPointOnGrid(new Vector3(x, 0.0f, z));
-                Gizmos.DrawSphere(point,0.1f);
-            }
-        }
     }
 }

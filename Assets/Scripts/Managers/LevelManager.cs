@@ -4,6 +4,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Gameplay.AI;
 
 public class LevelManager : MonoBehaviour
 {
@@ -21,8 +22,8 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private float _goalEnterDistance;
     private GameObject _goal;
 
-    List<GameObject> guards = new List<GameObject>();
-    List<GuardBehavior> guardBehaviors = new List<GuardBehavior>();
+    private List<GameObject> guards = new List<GameObject>();
+    private List<GuardBehavior> guardBehaviors = new List<GuardBehavior>();
 
     private void Awake()
     {
@@ -41,20 +42,19 @@ public class LevelManager : MonoBehaviour
         _player = GameObject.FindGameObjectWithTag("Player");
         _goal = GameObject.FindGameObjectWithTag("Goal");
 
-        GameObject.FindGameObjectsWithTag("Guard", guards);
+        guards = new List<GameObject>(GameObject.FindGameObjectsWithTag("Guard"));
 
-        for (var idx = 0; idx > guards.Count; idx++)
+        guardBehaviors = new List<GuardBehavior>();
+
+        for (var idx = 0; idx < guards.Count; idx++)
         {
-            guardBehaviors[idx] = guards[idx].GetComponent<GuardBehavior>();
-
+            guardBehaviors.Add(guards[idx].GetComponent<GuardBehavior>());
         }
 
     }
 
     private void Update()
     {
-        //TODO make a bool that resets/sets everything at beginning of level, if true level is set and don't do the expensive calls anymore
-
         ManageLoseConditions();
         ManageWinCondition();
         ManageLevelReset();
@@ -72,10 +72,9 @@ public class LevelManager : MonoBehaviour
 
         foreach (GuardBehavior guardBehavior in guardBehaviors)
         {
-            if (guardBehavior.CanGetCaught(_player.transform.position))
+            if (guardBehavior.DistanceToPlayer <= guardBehavior.CatchRange && guardBehavior.SeesPlayer)
             {
                 TriggerGameOver();
-                //Debug.Log("The player got caught!");
             }
         }
     }
@@ -87,13 +86,10 @@ public class LevelManager : MonoBehaviour
         if (_player == null) return;
 
         float playerToGoalDistance = (_goal.transform.position - _player.transform.position).magnitude;
-        //Debug.Log(_goal.gameObject.name);
 
         if (playerToGoalDistance < _goalEnterDistance)
         {
             EnterNextLevel();
-
-            //Debug.Log("Going to the next level");
         }
     }
 
