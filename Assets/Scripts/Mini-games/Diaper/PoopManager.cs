@@ -26,6 +26,12 @@ public class PoopManager : MonoBehaviour
 
     [SerializeField] private List<GameObject> _UITips;
 
+    [Header("Win Condition:")]
+    [SerializeField] private MinigameWinToggle _winToggle;
+    [SerializeField] private float _timeUntilQuit = 3f;
+
+    private bool _won = false;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -100,6 +106,8 @@ public class PoopManager : MonoBehaviour
         {
             TaskCompleted = true;
             SetActiveTip(_UITips[5]);
+
+            _won = true;
         }
 
         // Check if the baby is facing the camera
@@ -118,6 +126,17 @@ public class PoopManager : MonoBehaviour
             CleanDiaper.GetComponent<DiaperChangingBehavior>().enabled = true;
             SetActiveTip(_UITips[4]);
             hasShownCleanDiaperTip = true;
+        }
+
+        if(_won)
+        {
+            if (_timeUntilQuit <= 0)
+            {
+                _winToggle.WinMinigame();
+            }
+            
+            _timeUntilQuit -= Time.deltaTime;
+            
         }
     }
 

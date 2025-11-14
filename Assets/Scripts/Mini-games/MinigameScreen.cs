@@ -95,6 +95,11 @@ public class MinigameScreen : MonoBehaviour
         {
             SlideOut(false);
         }
+
+        if(_manager.WonMinigame())
+        {
+            SlideOut(true);
+        }
     }
 
     private void ResetMinigame()
@@ -117,41 +122,44 @@ public class MinigameScreen : MonoBehaviour
 
     private void ToggleScreen()
     {
+        bool isPaused = _manager.IsMinigamePaused();
+
         if (GotClipped())
         {
-            //Debug.Log("Clipped screen to center!");
+            _blackScreen.enabled = false;
 
-            _manager.PauseMiniGame(false);
-
-            if(_manager.MinigameIsRunning())
+            if (_visualsBars != null)
             {
-                _blackScreen.enabled = false;
+                _visualsBars.SetActive(false);
             }
 
-            if (_minigameCamera != null)
-            {
-                _minigameCamera.enabled = true;
+            if (!isPaused) return;
 
-                if (_visualsBars != null)
-                {
-                    _visualsBars.SetActive(false);
-                }
+            // will disable cameras and canvases of the minigame
+            if (_manager.MinigameIsRunning())
+            {
+                Debug.Log("resuming minigame");
+                _manager.PauseMiniGame(false);
             }
         }
         else
         {
-            _manager.PauseMiniGame(true);
             _blackScreen.enabled = true;
 
-            if (_minigameCamera != null)
+            if (_visualsBars != null)
             {
-                _minigameCamera.enabled = false;
-
-                if (_visualsBars != null)
-                {
-                    _visualsBars.SetActive(true);
-                }
+                _visualsBars.SetActive(true);
             }
+
+            if (isPaused) return;
+
+            // will enable cameras and canvases of the minigame
+            if (_manager.MinigameIsRunning())
+            {
+                Debug.Log("pausing minigame");
+                _manager.PauseMiniGame(true);
+            }
+
         }
 
     }

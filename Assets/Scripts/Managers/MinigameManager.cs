@@ -11,6 +11,7 @@ public class MinigameManager : MonoBehaviour
 
     private int _currentMinigameIndex;
     private Scene _currentMinigameScene;
+    private MinigameWinToggle _currentMinigameWinToggle = null;
 
     private bool _miniGameIsLoaded = false;
     private bool _miniGameIsPaused = false;
@@ -25,9 +26,16 @@ public class MinigameManager : MonoBehaviour
 
         _currentMinigameScene = SceneManager.GetSceneByName(sceneName);
 
-        foreach (GameObject rootObject in _currentMinigameScene.GetRootGameObjects())
+        foreach (GameObject obj in _currentMinigameScene.GetRootGameObjects())
         {
-            rootObject.transform.position += sceneOffset;
+            obj.transform.position += sceneOffset;
+
+            MinigameWinToggle winCond = obj.GetComponent<MinigameWinToggle>();
+
+            if (winCond != null)
+            {
+                _currentMinigameWinToggle = winCond;
+            }
         }
 
         yield return null;
@@ -73,6 +81,7 @@ public class MinigameManager : MonoBehaviour
     {
         string name = _currentMinigameScene.name;
         _miniGameIsLoaded = false;
+        _currentMinigameWinToggle = null;
 
         StartCoroutine(UnloadScene()); // error
 
@@ -82,6 +91,28 @@ public class MinigameManager : MonoBehaviour
     public void PauseMiniGame(bool pause)
     {
         _miniGameIsPaused = pause;
+
+        GameObject[] objs = _currentMinigameScene.GetRootGameObjects();
+
+        foreach (GameObject obj in objs)
+        {
+            Canvas canvas = obj.GetComponentInChildren<Canvas>();
+
+            if (canvas != null)
+            {
+                canvas.enabled = !pause;
+                continue; // assuming nobody puts a camera in a canvas
+            }
+
+            Camera cam = obj.GetComponentInChildren<Camera>();
+
+            if (cam != null)
+            {
+                cam.enabled = !pause;
+            }
+
+        }
+
     }
 
     public bool MinigameIsRunning()
@@ -96,18 +127,16 @@ public class MinigameManager : MonoBehaviour
 
     public Camera GetCamera()
     {
-        GameObject[] objs = _currentMinigameScene.GetRootGameObjects();
-
-        foreach (GameObject obj in objs)
-        {
-            Camera cam = obj.GetComponentInChildren<Camera>();
-            if (cam != null)
-            {
-                return cam;
-            }
-        }
-
-        Debug.Log("wtf");
+        
         return null;
     }
+
+    public bool WonMinigame()
+    {
+        if (!_miniGameIsLoaded) return false;
+        if (_currentMinigameWinToggle == null) return false;
+
+        return _currentMinigameWinToggle.WonMinigame();
+    }
+
 }
