@@ -31,6 +31,10 @@ namespace Gameplay.AI
         [SerializeField] private float _alertTimeRemaining;
         [SerializeField] private bool _hadVisualLastFrame;
 
+
+        [Header("BarManager")]
+        [SerializeField] private BarManager _barManager;
+
         public float FovExitLag => _fovExitLag;
         public bool SeesPlayer => _seesPlayer;
         public float DistanceToPlayer => _distanceToPlayer;
@@ -65,6 +69,7 @@ namespace Gameplay.AI
 
         private void Awake()
         {
+            _barManager.OnBabyCrying += HearingPlayer;
             _agent = GetComponent<NavMeshAgent>();
 
             // Check references
@@ -81,6 +86,8 @@ namespace Gameplay.AI
             if (_waypoints.Count > 0)
                 _agent.SetDestination(_waypoints[_waypointIndex].position);
         }
+
+        
 
         private void Update()
         {
@@ -182,6 +189,11 @@ namespace Gameplay.AI
             _alertTimeRemaining = _guardCfg.Search.AlertTime;
             SetRunSpeed();
             OnPlayerSpotted?.Invoke(this);
+            Chase();
+        }
+
+        private void HearingPlayer(BarManager manager)
+        {
             Chase();
         }
 
