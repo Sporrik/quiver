@@ -201,25 +201,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bed9406dfdda22b4c81158e95d449ff8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _guardCfg: {fileID: 11400000, guid: 1ab3f8c2779962b42bf78822edb08dd8, type: 2}
+  _takedown: {fileID: 11400000, guid: 1ba09ded2f791c049a360ea76e4a82d6, type: 2}
+  _fovExitLag: 5
+  _nextStateChangeTime: 0
   _player: {fileID: 0}
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  _eyes: {fileID: 6259552457180336021}
+  _eyes: {fileID: 0}
+  _waypoints: []
   _seesPlayer: 0
-  _path: []
-  _sightBlockLayers:
-  - Ground
-  - Default
-  _memorizationTime: 10
-  _timeAlert: 0
-  _sightRange: 0
-  _sightAngle: 0
-  _attackRange: 0
-  _sightMultiplierWhenSprinting: 1
-  _noticeRangeWhenAlert: 10
-  _baseSpeed: 3.5
-  _runSpeed: 5
+  _distanceToPlayer: 0
+  _alertTimeRemaining: 0
+  _hadVisualLastFrame: 0
+  _barManager: {fileID: 0}
+  _state: 0
 --- !u!195 &6070402396504903127
 NavMeshAgent:
   m_ObjectHideFlags: 0

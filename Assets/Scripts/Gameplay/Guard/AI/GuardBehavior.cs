@@ -10,7 +10,7 @@ namespace Gameplay.AI
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(NavMeshAgent))]
-    public sealed class GuardBehavior : MonoBehaviour, ITakedownTarget, IAwareness
+    public sealed class GuardBehavior : MonoBehaviour, ITakedownTarget, IAwareness, IGuardAlertable
     {
         [Header("Config")]
         [SerializeField] private GuardConfig _guardCfg;
@@ -30,10 +30,6 @@ namespace Gameplay.AI
         [SerializeField] private float _distanceToPlayer;
         [SerializeField] private float _alertTimeRemaining;
         [SerializeField] private bool _hadVisualLastFrame;
-
-
-        [Header("BarManager")]
-        [SerializeField] private BarManager _barManager;
 
         public float FovExitLag => _fovExitLag;
         public bool SeesPlayer => _seesPlayer;
@@ -56,20 +52,8 @@ namespace Gameplay.AI
         private bool _turnLeft;
         private float _takedownCooldownUntil;
 
-        // Helpers
-        private void SetWalkSpeed() => _agent.speed = _guardCfg.Movement.WalkSpeed;
-        private void SetRunSpeed() => _agent.speed = _guardCfg.Movement.RunSpeed;
-        private bool HasLineOfSight(Vector3 from, Vector3 to, LayerMask mask)
-        {
-            Vector3 v = to - from;
-            float d = v.magnitude;
-            if (d <= Mathf.Epsilon) return false;
-            return !Physics.Raycast(from, v / d, d, mask);
-        }
-
         private void Awake()
         {
-            _barManager.OnBabyCrying += HearingPlayer;
             _agent = GetComponent<NavMeshAgent>();
 
             // Check references
@@ -87,12 +71,24 @@ namespace Gameplay.AI
                 _agent.SetDestination(_waypoints[_waypointIndex].position);
         }
 
-        
-
         private void Update()
         {
             UpdatePerception();
             TickState();
+            _hadVisualLastFrame = _seesPlayer;
+        }
+
+        // ---------- Helpers ----------
+        private void SetWalkSpeed() => _agent.speed = _guardCfg.Movement.WalkSpeed;
+
+        private void SetRunSpeed() => _agent.speed = _guardCfg.Movement.RunSpeed;
+
+        private bool HasLineOfSight(Vector3 from, Vector3 to, LayerMask mask)
+        {
+            Vector3 v = to - from;
+            float d = v.magnitude;
+            if (d <= Mathf.Epsilon) return false;
+            return !Physics.Raycast(from, v / d, d, mask);
         }
 
         // ---------- Perception ---------
@@ -126,15 +122,6 @@ namespace Gameplay.AI
             // LoS
             if (HasLineOfSight(_eyes.position, _player.position, _guardCfg.LoSMask))
                 _seesPlayer = true;
-        }
-
-        // don't think we need this
-        private bool BlockedFromEyes(Vector3 targetPos)
-        {
-            Vector3 v = targetPos - _eyes.position;
-            float d = v.magnitude;
-            if (d <= Mathf.Epsilon) return true;
-            return Physics.Raycast(_eyes.position, v / d, d, _guardCfg.LoSMask, QueryTriggerInteraction.Ignore);
         }
 
         // ---------- FSM ----------
@@ -192,11 +179,6 @@ namespace Gameplay.AI
             Chase();
         }
 
-        private void HearingPlayer(BarManager manager)
-        {
-            Chase();
-        }
-
         private void Chase()
         {
             if (_player == null) return;
@@ -245,6 +227,12 @@ namespace Gameplay.AI
             _lastKnownPos = worldPos;
             EnterSearching(worldPos);
             SetRunSpeed();
+        }
+
+        public void OnCryAlert(Vector3 sourcePosition, float radius)
+        {
+            AlertToPosition(sourcePosition);
+            _alertTimeRemaining = Mathf.Max(_alertTimeRemaining, _guardCfg.Search.AlertTime);
         }
 
         // ---------- ITakedownTarget ----------
