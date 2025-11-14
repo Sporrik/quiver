@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 using Gameplay.Interaction;
 
 [DisallowMultipleComponent]
@@ -11,6 +10,9 @@ public sealed class PlayerInteraction : MonoBehaviour
     [SerializeField] private Transform _origin;
     [SerializeField, Min(0f)] private float _range = 2f;
     [SerializeField] private LayerMask _interactableMask;
+
+    [Header("Input Relay")]
+    [SerializeField] private PlayerInputRelay _input;
 
     #endregion
 
@@ -26,24 +28,26 @@ public sealed class PlayerInteraction : MonoBehaviour
     private void Awake()
     {
         _interactor = new Interactor(transform);
-        if (_origin == null)
-            _origin = transform;    //fallback
+        if (_origin == null) _origin = transform;   // fallback
+        if (_input == null)
+        {
+            _input = GetComponent<PlayerInputRelay>();
+            if (_input == null)
+                Debug.LogError($"{nameof(PlayerInteraction)}: PlayerInputRelay missing on GameObject.");
+        }
     }
 
-    #endregion
-
-    #region Input
-
-    public void OnInteract(InputAction.CallbackContext ctx)
+    private void Update()
     {
-        if (!ctx.started) return;
-        TryInteract();
-    }
+        if (_input != null && _input.InteractStartedThisFrame())
+        {
+            TryInteract();
+        }
 
-    public void OnTakedown(InputAction.CallbackContext ctx)
-    {
-        if (!ctx.started) return;
-        TryTakedown();
+        if (_input != null && _input.TakedownStartedThisFrame())
+        {
+            TryTakedown();
+        }
     }
 
     #endregion
