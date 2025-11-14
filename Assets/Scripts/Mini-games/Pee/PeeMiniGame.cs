@@ -17,7 +17,7 @@ public class PeeMiniGame : MonoBehaviour
     private int _currentRange;
     private float _currentSpeed;
 
-    private bool _turnLeft = false;
+    [SerializeField] private bool _turnLeft = false;
     private float _timer;
     private float _interval = 3f;
     
