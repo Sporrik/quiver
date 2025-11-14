@@ -55,8 +55,6 @@ public class LevelManager : MonoBehaviour
 
     private void Update()
     {
-        //TODO make a bool that resets/sets everything at beginning of level, if true level is set and don't do the expensive calls anymore
-
         ManageLoseConditions();
         ManageWinCondition();
         ManageLevelReset();
@@ -88,13 +86,10 @@ public class LevelManager : MonoBehaviour
         if (_player == null) return;
 
         float playerToGoalDistance = (_goal.transform.position - _player.transform.position).magnitude;
-        //Debug.Log(_goal.gameObject.name);
 
         if (playerToGoalDistance < _goalEnterDistance)
         {
             EnterNextLevel();
-
-            //Debug.Log("Going to the next level");
         }
     }
 
