@@ -95,11 +95,6 @@ public class MinigameScreen : MonoBehaviour
         {
             SlideOut(false);
         }
-
-        if(_manager.WonMinigame())
-        {
-            SlideOut(true);
-        }
     }
 
     private void ResetMinigame()
@@ -122,44 +117,41 @@ public class MinigameScreen : MonoBehaviour
 
     private void ToggleScreen()
     {
-        bool isPaused = _manager.IsMinigamePaused();
-
         if (GotClipped())
         {
-            _blackScreen.enabled = false;
+            //Debug.Log("Clipped screen to center!");
 
-            if (_visualsBars != null)
+            _manager.PauseMinigame(false);
+
+            if(_manager.MinigameIsRunning())
             {
-                _visualsBars.SetActive(false);
+                _blackScreen.enabled = false;
             }
 
-            if (!isPaused) return;
-
-            // will disable cameras and canvases of the minigame
-            if (_manager.MinigameIsRunning())
+            if (_minigameCamera != null)
             {
-                Debug.Log("resuming minigame");
-                _manager.PauseMiniGame(false);
+                _minigameCamera.enabled = true;
+
+                if (_visualsBars != null)
+                {
+                    _visualsBars.SetActive(false);
+                }
             }
         }
         else
         {
+            _manager.PauseMinigame(true);
             _blackScreen.enabled = true;
 
-            if (_visualsBars != null)
+            if (_minigameCamera != null)
             {
-                _visualsBars.SetActive(true);
+                _minigameCamera.enabled = false;
+
+                if (_visualsBars != null)
+                {
+                    _visualsBars.SetActive(true);
+                }
             }
-
-            if (isPaused) return;
-
-            // will enable cameras and canvases of the minigame
-            if (_manager.MinigameIsRunning())
-            {
-                Debug.Log("pausing minigame");
-                _manager.PauseMiniGame(true);
-            }
-
         }
 
     }

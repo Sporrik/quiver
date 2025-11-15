@@ -1,162 +1,153 @@
 using Gameplay.AI;
-using NUnit.Framework;
 using System;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class BarManager : MonoBehaviour
+namespace Gameplay
 {
-    //[SerializeField] private TextMeshProUGUI _poopMeterText;
-    //[SerializeField] private TextMeshProUGUI _sneezMeterText;
-    //[SerializeField] private TextMeshProUGUI _angryMeterText;
-
-    [SerializeField] private GameObject _player;
-    private PlayerController _playerController;
-
-    //[SerializeField] public float _poopMeter;
-    //[SerializeField] public float _hungerMeter;
-    //[SerializeField] public float _peeMeter;
-    //[SerializeField] public float _angryMeter;
-    [SerializeField] private float TimeToGetRandomEvent = 1;
-
-    [SerializeField] private float _amountToIncreaseBar;
-    [SerializeField] private float _amountToIncreaseHapiness;
-
-    [SerializeField] private GameObject[] Guards;
-
-    [SerializeField] private UIScriptableObject _scriptableObject;
-
-  //  [SerializeField] private float _sneezRange;
-    [SerializeField] private float _cryRange;
-    [SerializeField] private float _timeToGetAngry;
-
-    private bool _isSinglePlayer = false;
-
-    public event Action<BarManager> OnBabyCrying;
-
-
-
-
-    private float _eventTimer;
-    private float _happyTimer;
-    void Start()
+    [DisallowMultipleComponent]
+    public sealed class BarManager : MonoBehaviour
     {
+        #region Inspector
+        [Header("Player")]
+        [SerializeField] private PlayerController _playerController;
 
+        [Header("UI/Data")]
+        [SerializeField] private UIScriptableObject _scriptableObject;
 
-        _playerController = _player.GetComponent<PlayerController>();   
-        Guards = GameObject.FindGameObjectsWithTag("Guard");
-        Debug.Log(Guards);
-        _playerController.OnStaminaChanged += OnStaminaChanged;
-       
-        //Physics.OverlapSphere()
+        [Header("Random Singleplayer Ticks")]
+        [SerializeField, Min(0f)] private float _timeToGetRandomEvent = 1f;
+        [SerializeField, Min(0f)] private float _amountToIncreaseBar = 5f;
+        [SerializeField] private bool _singlePlayerOverride = false;
 
+        [Header("Unhappiness Gain")]
+        [SerializeField, Min(0f)] private float _timeToGetAngry = 3f;
+        [SerializeField, Min(0f)] private float _amountToIncreaseHappiness = 5f;
 
-        _isSinglePlayer = _scriptableObject.GetGameModeSinglePlayer();
+        [Header("Cry/Alert")]
+        [SerializeField, Min(0f)] private float _cryRange = 12f;
+        [SerializeField] private LayerMask _guardMask;
+        [SerializeField, Min(0f)] private float _cryCooldown = 2f;
+        #endregion
+
+        #region Events
+        public event Action<BarManager> OnBabyCrying;
+        #endregion
+
+        #region State
+        private float _eventTimer;
+        private float _angryTimer;
+        private float _cryCooldownTimer;
+        private bool _isSinglePlayer;
+        private readonly Collider[] _guardHits = new Collider[16];
+        #endregion
+
+        #region Unity
+        private void Awake()
+        {
+            if (_playerController == null) Debug.LogError($"{nameof(BarManager)}: PlayerController missing.", this);
+            if (_scriptableObject == null) Debug.LogError($"{nameof(BarManager)}: UIScriptableObject missing.", this);
+
+            _isSinglePlayer = _singlePlayerOverride || (_scriptableObject != null && _scriptableObject.GetGameModeSinglePlayer());
+        }
+
+        private void OnEnable()
+        {
+            if (_playerController != null)
+            {
+                _playerController.OnStaminaChanged += HandleStaminaChanged;
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (_playerController != null)
+            {
+                _playerController.OnStaminaChanged -= HandleStaminaChanged;
+            }
+        }
+
+        private void Update()
+        {
+            if (_scriptableObject == null) return;
+
+            float dt = Time.deltaTime;
+            _eventTimer += dt;
+            _angryTimer += dt;
+            if (_cryCooldownTimer > 0f) _cryCooldownTimer -= dt;
+
+            if (_isSinglePlayer && _eventTimer >= _timeToGetRandomEvent)
+            {
+                _eventTimer -= _timeToGetRandomEvent;
+                RandomBarIncrease();
+            }
+
+            bool anyNeedMaxed = _scriptableObject.GetHungry() >= 100f
+                             || _scriptableObject.GetPoop() >= 100f
+                             || _scriptableObject.GetPee() >= 100f;
+
+            if (anyNeedMaxed && _angryTimer >= _timeToGetAngry)
+            {
+                _angryTimer = 0f;
+                _scriptableObject.IncrementHapiness(_amountToIncreaseHappiness);
+            }
+
+            if (_scriptableObject.GetHapiness() >= 100f && _cryCooldownTimer <= 0f)
+            {
+                _cryCooldownTimer = _cryCooldown;
+                OnBabyCrying?.Invoke(this);
+                AlertGuardsInRange();
+
+            }
+        }
+        #endregion
+
+        #region Handlers
+        private void HandleStaminaChanged(float stamina, float max)
+        {
+            _scriptableObject?.SetStamina(stamina);
+        }
+        #endregion
+
+        #region Logic
+        private void RandomBarIncrease()
+        {
+            int pick = UnityEngine.Random.Range(1, 4);
+            switch (pick)
+            {
+                case 1: _scriptableObject.IncrementPoop(_amountToIncreaseBar); break;
+                case 2: _scriptableObject.IncrementHungry(_amountToIncreaseBar); break;
+                case 3: _scriptableObject.IncrementPee(_amountToIncreaseBar); break;
+                default: Debug.LogWarning("RandomBarIncrease: unexpected branch."); break;
+            }
+        }
+
+        private void AlertGuardsInRange()
+        {
+            int count = Physics.OverlapSphereNonAlloc(transform.position,
+                                                      _cryRange,
+                                                      _guardHits,
+                                                      _guardMask,
+                                                      QueryTriggerInteraction.Ignore);
+
+            for (int i = 0; i < count; i++)
+            {
+                var c = _guardHits[i];
+                if (!c) continue;
+
+                if (c.TryGetComponent<IGuardAlertable>(out var alertable))
+                {
+                    alertable.OnCryAlert(transform.position, _cryRange);
+                }
+            }
+        }
+        #endregion
+
+#if UNITY_EDITOR
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireSphere(transform.position, _cryRange);
+        }
+#endif
     }
-
-    private void OnStaminaChanged(float stamina, float max)
-    {
-        _scriptableObject.SetStamina(stamina);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        //if (Input.GetKey(KeyCode.P))
-        //    _poopMeter++;
-
-        //if (Input.GetKey(KeyCode.S))
-        //    _sneezMeter++;
-
-        //if (Input.GetKey(KeyCode.A))
-        //    _angryMeter++;
-
-        if(_scriptableObject.GetHapiness() >= 100)
-        {
-            OnBabyCrying.Invoke(this);
-        }
-
-
-        _eventTimer += Time.deltaTime;
-        _happyTimer += Time.deltaTime;
-
-        if(_eventTimer >= TimeToGetRandomEvent && _isSinglePlayer) // random increase for singleplayer purposes
-        {
-            _eventTimer -= TimeToGetRandomEvent;
-            RandomBarIncrease();
-
-        }
-        if(_scriptableObject.GetHungry() >= 100 && _happyTimer >= _timeToGetAngry)
-        {
-            _happyTimer = 0;
-            _scriptableObject.IncrementHapiness(_amountToIncreaseHapiness);
-        }
-        if(_scriptableObject.GetPoop() >= 100 && _happyTimer >= _timeToGetAngry)
-        {
-            _happyTimer = 0;
-            _scriptableObject.IncrementHapiness(_amountToIncreaseHapiness);
-
-        }
-        if (_scriptableObject.GetPee() >= 100 && _happyTimer >= _timeToGetAngry)
-        {
-            _happyTimer = 0;
-            _scriptableObject.IncrementHapiness(_amountToIncreaseHapiness);
-
-        }
-
-        //if(_scriptableObject.GetHapiness() >= 100)
-        //{
-        //    AlertGuard();
-        //}
-
-        //_poopMeterText.text = $"Poop: {_poopMeter}";
-        //_sneezMeterText.text = $"Sneez: {_hungerMeter}";
-        //_angryMeterText.text = $"Angry: {_angryMeter}";
-    }
-
-
-    private void RandomBarIncrease()
-    {
-        int num = UnityEngine.Random.Range(1, 4);
-        switch (num)
-        {
-            case 1:
-                _scriptableObject.IncrementPoop(_amountToIncreaseBar);
-                break;
-            case 2:
-                _scriptableObject.IncrementHungry(_amountToIncreaseBar);
-                break;
-            case 3:
-                _scriptableObject.IncrementPee(_amountToIncreaseBar);
-                break;
-            default:
-                Debug.Log("LITTLE PROBLEM");
-                break;
-        }
-    }
-
-    //private void AlertGuard()
-    //{
-    //    Debug.Log("Alert");
-    //    foreach (var guard in Guards)
-    //    {
-    //        GuardBehavior b = guard.GetComponent<GuardBehavior>();
-    //        b.AlertGuardsToPosition(_cryRange);
-    //    }
-    //}
-    //private void Poop()
-    //{
-    //    //throw new NotImplementedException();
-    //    //SceneManager.LoadScene("Diaper", LoadSceneMode.Single);
-    //}
-    //private void Pee()
-    //{
-    //    //throw new NotImplementedException();
-    //}
-    //private void Hunger()
-    //{
-    //    //throw new NotImplementedException();
-    //}
 }

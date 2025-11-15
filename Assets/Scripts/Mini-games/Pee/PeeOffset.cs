@@ -23,7 +23,9 @@ public class PeeOffset : MonoBehaviour
                 gameObject.transform.position.y,
                 PeeTarget.transform.transform.position.z
             );
-       
-        piss.startSpeed = (PeeOrigin.transform.position - gameObject.transform.position).magnitude * 3.25f;
+
+        float speed = (PeeOrigin.transform.position - transform.position).magnitude * 3.25f;
+        var main = piss.main;
+        main.startSpeed = speed;
     }
 }
