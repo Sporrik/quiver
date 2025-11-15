@@ -195,18 +195,4 @@ public sealed class MinigameManager : MonoBehaviour
         yield return CoLoad(nextScene);
     }
     #endregion
-
-#if UNITY_EDITOR
-    private void OnValidate()
-    {
-        // Keep duplicate names out and strip blanks during authoring
-        if (_sceneNames == null) return;
-        for (int i = _sceneNames.Count - 1; i >= 0; i--)
-            if (string.IsNullOrWhiteSpace(_sceneNames[i])) _sceneNames.RemoveAt(i);
-        // distinct pass
-        var set = new HashSet<string>(_sceneNames);
-        if (set.Count != _sceneNames.Count)
-            _sceneNames = new List<string>(set);
-    }
-#endif
 }
