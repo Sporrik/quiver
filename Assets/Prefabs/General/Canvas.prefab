@@ -471,6 +471,8 @@ GameObject:
   - component: {fileID: 4182398214142527157}
   - component: {fileID: 9204357996419857805}
   - component: {fileID: 6210381632915936622}
+  - component: {fileID: 3995895189127996198}
+  - component: {fileID: 3189340153497916631}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -566,6 +568,47 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &3995895189127996198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7894653813073029642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 792f8a7239479df4386eae5b6f88e307, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _minigameSpawnPoint: {fileID: 2339469992440194841}
+  _sceneNames: []
+  _allowSwapWhileRunning: 1
+  _state: 0
+--- !u!114 &3189340153497916631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7894653813073029642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd637998f03b5ca4a9d978c70a23e6f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _blackScreen: {fileID: 706788966343369367}
+  _border: {fileID: 2008647110964533351}
+  _minigameArea: {fileID: 596766446876992008}
+  _panel: {fileID: 2803527776641870814}
+  _borderScaleOnFullscreen: 1
+  _diaperMinigame: BabyDiaper
+  _peeMinigame: 
+  _feedingMinigame: 
+  _clipPosition: {x: 0, y: 0}
+  _slideSpeed: 2500
+  _maxProgress: 0
+  _visualsBars: {fileID: 7203782767202302930}
+  _uiManager: {fileID: 8028574136635092120}
 --- !u!1001 &7412588783346258537
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -820,6 +863,11 @@ MonoBehaviour:
 --- !u!224 &6030398456336486447 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3242591797061958204, guid: 732df393f2051e24e9a09a260f11994e, type: 3}
+  m_PrefabInstance: {fileID: 9128875047471622675}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7203782767202302930 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2110144505001103809, guid: 732df393f2051e24e9a09a260f11994e, type: 3}
   m_PrefabInstance: {fileID: 9128875047471622675}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &8755071060514407889 stripped
