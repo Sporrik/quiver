@@ -2,14 +2,14 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Collider))]
-public class TopDownDrag : MonoBehaviour
+public class SimpleDrag : MonoBehaviour
 {
     private Rigidbody rb;
     public bool IsDragging = false;
 
     [SerializeField] private GameObject CurrentlyDraggedObject;
 
-    [SerializeField] private float DragPlaneY = 2f; // Hover height
+    [SerializeField] private Transform DragPlaneYTransform;
 
     [SerializeField] private Camera mainCamera;
 
@@ -18,16 +18,12 @@ public class TopDownDrag : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        //mainCamera = Camera.main;
-
-        DragPlaneY = transform.position.y + DragPlaneY;
-
         originalY = transform.position.y;
     }
 
     void OnMouseDown()
     {
-        if(this.isActiveAndEnabled == false)
+        if (this.isActiveAndEnabled == false)
             return;
 
         IsDragging = true;
@@ -43,11 +39,10 @@ public class TopDownDrag : MonoBehaviour
             return;
 
         IsDragging = false;
-        rb.useGravity = true;
+        gameObject.GetComponent<MoveToObject>().MoveTo(0);
 
         if (CurrentlyDraggedObject == gameObject)
             CurrentlyDraggedObject = null;
-
     }
 
     void Update()
@@ -55,12 +50,12 @@ public class TopDownDrag : MonoBehaviour
         if (IsDragging)
         {
             Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-            Plane dragPlane = new Plane(Vector3.up, new Vector3(0f, DragPlaneY, 0f));
+            Plane dragPlane = new Plane(Vector3.up, new Vector3(0f, DragPlaneYTransform.position.y, 0f));
             if (dragPlane.Raycast(ray, out float enter))
             {
                 Vector3 hitPoint = ray.GetPoint(enter);
 
-                Vector3 targetPosition = new Vector3(hitPoint.x, DragPlaneY, hitPoint.z);
+                Vector3 targetPosition = new Vector3(hitPoint.x, DragPlaneYTransform.position.y, hitPoint.z);
                 rb.MovePosition(Vector3.Lerp(transform.position, targetPosition, 0.4f));
             }
         }

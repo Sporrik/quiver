@@ -1,21 +1,37 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PoopManager : MonoBehaviour
 {
-    public List<GameObject> Poops;
-    public float SpawnMultiplier = 0.75f;
+    [SerializeField] private List<GameObject> Poops;
+    [SerializeField] private float SpawnMultiplier = 0.75f;
     public int CurrentPoops;
-    public bool AllPoopCleaned = false;
+    [SerializeField] private bool AllPoopCleaned = false;
+    [SerializeField] private bool BabyIsFlipped = false;
     public bool TaskCompleted = false;
     private int _amountToSpawn;
 
-    public DiaperChangingBehavior DirtyDiaper;
-    public DiaperChangingBehavior CleanDiaper;
-    public GameObject Baby;
+    [SerializeField] private DiaperChangingBehavior DirtyDiaper;
+    [SerializeField] private DiaperChangingBehavior CleanDiaper;
+    [SerializeField] private GameObject Baby;
 
-    public bool DirtyDiaperCompleted = false;
-    public bool CleanDiaperCompleted = false;
+    [SerializeField] private bool DirtyDiaperCompleted = false;
+    public bool CleanDiaperEquipped = false;
+    [SerializeField] private bool CleanDiaperCompleted = false;
+    private bool hasMovedDirtyDiaper = false;
+    private bool firstFlipTipShown = false;
+    private bool hasShownCleanDiaperTip = false;
+    private bool hasShownFlip2Tip = false;
+
+    [SerializeField] private List<GameObject> _UITips;
+
+    [Header("Win Condition:")]
+    [SerializeField] private MinigameWinToggle _winToggle;
+    [SerializeField] private float _timeUntilQuit = 3f;
+
+    private bool _won = false;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -39,20 +55,22 @@ public class PoopManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         if (CurrentPoops <= 0 && AllPoopCleaned == false)
         {
             Debug.Log("All Poops Cleaned!");
             AllPoopCleaned = true;
         }
 
-        if(DirtyDiaper.GetComponent<Animator>().GetBool("frontIsWorn") == false
+        //Open diaper check
+        if (DirtyDiaper.GetComponent<Animator>().GetBool("frontIsWorn") == false
             && DirtyDiaper.GetComponent<Animator>().GetBool("leftIsWorn") == false
-            && DirtyDiaper.GetComponent<Animator>().GetBool("rightIsWorn") == false)
+            && DirtyDiaper.GetComponent<Animator>().GetBool("rightIsWorn") == false &&DirtyDiaperCompleted == false)
         {
             DirtyDiaperCompleted = true;
+            SetActiveTip(_UITips[1]);
         }
 
+        //Clean diaper check
         if (CleanDiaper.GetComponent<Animator>().GetBool("frontIsWorn") == true
             && CleanDiaper.GetComponent<Animator>().GetBool("leftIsWorn") == true
             && CleanDiaper.GetComponent<Animator>().GetBool("rightIsWorn") == true)
@@ -60,23 +78,87 @@ public class PoopManager : MonoBehaviour
             CleanDiaperCompleted = true;
         }
 
-        if (DirtyDiaperCompleted)
+        if(Baby.GetComponent<FlipBaby>().isFlipped == true && AllPoopCleaned == false && firstFlipTipShown == false)
         {
-            DirtyDiaper.GetComponent<BoxCollider>().enabled = true;
-            DirtyDiaper.GetComponent<Rigidbody>().isKinematic = false;
-            DirtyDiaper.GetComponent<Rigidbody>().useGravity = true;
-            DirtyDiaper.GetComponent<TopDownDrag>().enabled = true;
+            SetActiveTip(_UITips[2]);
+            firstFlipTipShown = true;
+        }
+
+        if (DirtyDiaperCompleted && !hasMovedDirtyDiaper)
+        {
+            hasMovedDirtyDiaper = true;
             DirtyDiaper.GetComponent<DiaperChangingBehavior>().enabled = false;
             Baby.GetComponent<CapsuleCollider>().enabled = true;
             Baby.GetComponent<FlipBaby>().enabled = true;
 
+            StartCoroutine(DelayedMoveTo());
         }
 
+        // Check clean diaper equipped
+        if (AllPoopCleaned && DirtyDiaperCompleted == true && TaskCompleted == false && hasShownFlip2Tip == false)
+        {
+            SetActiveTip(_UITips[1]);
+            hasShownFlip2Tip = true;
+        }
+
+        // Win condition
         if (AllPoopCleaned && DirtyDiaperCompleted == true && CleanDiaperCompleted == true && TaskCompleted == false)
         {
-            Debug.Log("Task Completed!");
             TaskCompleted = true;
-            // You can add additional logic here for when the task is completed
+            SetActiveTip(_UITips[5]);
+
+            _won = true;
+        }
+
+        // Check if the baby is facing the camera
+        if (AllPoopCleaned && Baby.transform.rotation.eulerAngles == new Vector3(270f, 0f, 0f) && BabyIsFlipped == false &&BabyIsFlipped==false)
+        {
+            Baby.GetComponent<FlipBaby>().enabled = false;
+            Baby.GetComponent<CapsuleCollider>().enabled = false;
+            CleanDiaper.GetComponent<DragDiaper>().enabled = true;
+            BabyIsFlipped = true;
+            SetActiveTip(_UITips[3]);
+        }
+
+        // Enable closing the clean diaper
+        if (CleanDiaperEquipped && hasShownCleanDiaperTip == false)
+        {
+            CleanDiaper.GetComponent<DiaperChangingBehavior>().enabled = true;
+            SetActiveTip(_UITips[4]);
+            hasShownCleanDiaperTip = true;
+        }
+
+        if(_won)
+        {
+            if (_timeUntilQuit <= 0)
+            {
+                _winToggle.WinMinigame();
+            }
+            
+            _timeUntilQuit -= Time.deltaTime;
+            
+        }
+    }
+
+    private IEnumerator DelayedMoveTo()
+    {
+        yield return new WaitForSeconds(1f);
+
+        DirtyDiaper.gameObject.GetComponent<MoveToObject>().MoveTo(0);
+    }
+
+    private void SetActiveTip(GameObject tipToEnable)
+    {
+        // Disable all GameObjects in the _UITips list
+        foreach (GameObject tip in _UITips)
+        {
+            tip.SetActive(false);
+        }
+
+        // Enable the specified GameObject
+        if (tipToEnable != null)
+        {
+            tipToEnable.SetActive(true);
         }
     }
 }

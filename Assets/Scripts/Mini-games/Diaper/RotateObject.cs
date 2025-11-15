@@ -4,13 +4,13 @@ using UnityEngine;
 public class RotateObject : MonoBehaviour
 {
     [Header("Axis Lock")]
-    public bool enableX = false;
-    public bool enableY = true;
-    public bool enableZ = false;
+    [SerializeField] private bool enableX = false;
+    [SerializeField] private bool enableY = true;
+    [SerializeField] private bool enableZ = false;
 
     [Header("Rotation Settings")]
-    public float torqueForce = 5f; // Force multiplier for torque
-    public float angularDamp = 2f; // Damping to smooth the rotation
+    [SerializeField] private float torqueForce = 5f; // Force multiplier for torque
+    [SerializeField] private float angularDamp = 2f; // Damping to smooth the rotation
 
     private Camera mainCamera;
     private Rigidbody rb;

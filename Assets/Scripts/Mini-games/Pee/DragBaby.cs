@@ -1,80 +1,54 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
 public class DragBaby : MonoBehaviour
 {
     [Header("Drag Settings")]
-    public float dragSpeed = 10f; // Speed multiplier for dragging
-    public float damping = 5f; // Damping to smooth the movement
+    [SerializeField] private float dragSpeed = 10f; // Speed multiplier for dragging
 
-    [Header("Position Limits")]
-    public float minX = -5f; // Minimum X position
-    public float maxX = 5f; // Maximum X position
-
-    private Camera mainCamera;
-    private Rigidbody rb;
+    [SerializeField] private Camera _camera;
     private bool isDragging = false;
     private Vector3 targetPosition;
-
-    void Start()
-    {
-        // Cache the main camera and Rigidbody reference
-        mainCamera = Camera.main;
-        rb = GetComponent<Rigidbody>();
-        rb.isKinematic = false; // Rigidbody must not be kinematic for physics interactions
-    }
 
     void Update()
     {
         if (isDragging)
         {
-            // Update the target position based on the mouse position
+            // Get the current position of the object
+            Vector3 currentPosition = transform.position;
+
+            // Update only the X position based on the mouse position
             Vector3 mousePosition = GetMouseWorldPosition();
-
-            // Clamp the X position within the specified limits
-            targetPosition.x = Mathf.Clamp(mousePosition.x, minX, maxX);
-        }
-    }
-
-    void FixedUpdate()
-    {
-        if (isDragging)
-        {
-            // Calculate the direction to the target position
-            Vector3 direction = (targetPosition - transform.position);
+            targetPosition = new Vector3(mousePosition.x, currentPosition.y, currentPosition.z);
 
             // Smoothly move the object toward the target position
-            Vector3 velocity = direction * dragSpeed;
-
-            // Apply the velocity to the Rigidbody
-            rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, velocity, Time.fixedDeltaTime * damping);
+            transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * dragSpeed);
         }
     }
 
     void OnMouseDown()
     {
-        // Start dragging and set the initial target position
+        // Start dragging
         isDragging = true;
-        targetPosition = transform.position;
-
-        // Stop any existing velocity to prevent sudden jumps
-        rb.linearVelocity = Vector3.zero;
+        Debug.Log("Started Dragging");
     }
 
     void OnMouseUp()
     {
         // Stop dragging
         isDragging = false;
-
-        // Stop the object's movement when released
-        rb.linearVelocity = Vector3.zero;
+        GetComponent<MoveToObject>().MoveTo(0);
+        Debug.Log("Stopped Dragging");
     }
 
     private Vector3 GetMouseWorldPosition()
     {
-        // Get the mouse position in screen space and convert it to world space
+        // Get the mouse position in screen space
         Vector3 screenPosition = Input.mousePosition;
-        screenPosition.z = Mathf.Abs(mainCamera.transform.position.z - transform.position.z);
-        return mainCamera.ScreenToWorldPoint(screenPosition);
+
+        // Calculate the distance from the camera to the object along the camera's forward direction
+        screenPosition.z = Vector3.Dot(transform.position - _camera.transform.position, _camera.transform.forward);
+
+        // Convert the screen position to world space
+        return _camera.ScreenToWorldPoint(screenPosition);
     }
 }
