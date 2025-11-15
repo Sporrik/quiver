@@ -1,113 +1,212 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MinigameManager : MonoBehaviour
+[DisallowMultipleComponent]
+public sealed class MinigameManager : MonoBehaviour
 {
+    #region Inspector
+    [Header("Placement")]
     [SerializeField] private Transform _minigameSpawnPoint;
 
-    [SerializeField] private List<string> _sceneNames;
+    [Header("Minigame Scenes (names)")]
+    [SerializeField] private List<string> _sceneNames = new();
 
-    private int _currentMinigameIndex;
+    [Header("Options")]
+    [Tooltip("If true, unloading then loading another minigame happens as a single operation")]
+    [SerializeField] private bool _allowSwapWhileRunning = true;
+    #endregion
+
+    #region Events
+    public event System.Action<string> Opened;     // sceneName
+    public event System.Action<string> Closed;     // previous sceneName
+    public event System.Action<string> LoadFailed; // sceneName
+    public event System.Action Paused;
+    public event System.Action Resumed;
+    #endregion
+
+    #region State
+    private enum MiniState { Idle, Loading, Running, Paused, Unloading }
+    [SerializeField] private MiniState _state = MiniState.Idle;
+
+    private int _currentMinigameIndex = -1;
     private Scene _currentMinigameScene;
 
-    private bool _miniGameIsLoaded = false;
-    private bool _miniGameIsPaused = false;
+    public string CurrentSceneName => _currentMinigameScene.IsValid() ? _currentMinigameScene.name : string.Empty;
+    public bool IsBusy => _state == MiniState.Loading || _state == MiniState.Unloading;
+    #endregion
 
-    private IEnumerator LoadScene(string sceneName, Vector3 sceneOffset)
-    {
-        // offsets the entire scene so it doesn't spawn inside of the levels
-
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-
-        yield return new WaitUntil(() => asyncLoad.isDone);
-
-        _currentMinigameScene = SceneManager.GetSceneByName(sceneName);
-
-        foreach (GameObject rootObject in _currentMinigameScene.GetRootGameObjects())
-        {
-            rootObject.transform.position += sceneOffset;
-        }
-
-        yield return null;
-
-        _miniGameIsLoaded = true;
-    }
-
-    private IEnumerator UnloadScene()
-    {
-        if (_currentMinigameScene.IsValid())
-        {
-            AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync(_currentMinigameScene);
-            yield return new WaitUntil(() => asyncUnload.isDone);
-            Debug.Log($"Scene '{_sceneNames[_currentMinigameIndex]}' unloaded!");
-        }
-        else
-        {
-            Debug.LogWarning("No valid minigame scene to unload.");
-        }
-    }
-
+    #region Public API
     public void LoadMinigame(string sceneName)
     {
-        for (int index = 0; index < _sceneNames.Count; ++index)
+        int index = _sceneNames.FindIndex(n => n == sceneName);
+        if (index < 0)
         {
-            if (_sceneNames[index] == sceneName)
-            {
-                if (_miniGameIsLoaded) QuitMinigame();
-
-                _currentMinigameIndex = index;
-
-                _miniGameIsLoaded = true;
-            }
+            Debug.LogError($"{nameof(MinigameManager)}: Scene '{sceneName}' not found in list");
+            LoadFailed?.Invoke(sceneName);
+            return;
         }
 
-        StartCoroutine
-        (
-            LoadScene(_sceneNames[_currentMinigameIndex], _minigameSpawnPoint.position)
-        );
+        if (_state is MiniState.Running or MiniState.Paused && CurrentSceneName == sceneName) return;
+
+        if (IsBusy)
+        {
+            Debug.LogWarning($"{nameof(MinigameManager)}: Busy '{_state}'. Try again later.");
+            return;
+        }
+
+        if (_state is MiniState.Running or MiniState.Paused)
+        {
+            if (_allowSwapWhileRunning)
+                StartCoroutine(CoSwap(_sceneNames[index]));
+            else
+                Debug.LogWarning($"{nameof(MinigameManager)}: A minigame is running; call QuitMinigame() first or enable swap.");
+            return;
+        }
+
+        _currentMinigameIndex = index;
+        StartCoroutine(CoLoad(_sceneNames[index]));
     }
 
     public string QuitMinigame()
     {
-        string name = _currentMinigameScene.name;
-        _miniGameIsLoaded = false;
+        if (!MinigameIsRunning()) return string.Empty;
 
-        StartCoroutine(UnloadScene()); // error
+        if (IsBusy)
+        {
+            Debug.LogWarning($"{nameof(MinigameManager)}: Busy {_state}. Quit Ignored.");
+            return CurrentSceneName;
+        }
 
-        return name;
+        StartCoroutine(CoUnload());
+        return CurrentSceneName;
     }
 
-    public void PauseMiniGame(bool pause)
+    public void PauseMinigame(bool paused)
     {
-        _miniGameIsPaused = pause;
+        if (!MinigameIsRunning()) return;
+
+        if (paused && _state == MiniState.Running)
+        {
+            _state = MiniState.Paused;
+            Paused?.Invoke();
+        }
+        else if (!paused && _state == MiniState.Paused)
+        {
+            _state = MiniState.Running;
+            Resumed?.Invoke();
+        }
     }
 
-    public bool MinigameIsRunning()
-    {
-        return _currentMinigameScene.IsValid();
-    }
+    public bool MinigameIsRunning() => _currentMinigameScene.IsValid();
 
-    public bool IsMinigamePaused()
-    {
-        return _miniGameIsPaused;
-    }
+    public bool IsMinigamePaused() => _state == MiniState.Paused;
 
     public Camera GetCamera()
     {
-        GameObject[] objs = _currentMinigameScene.GetRootGameObjects();
-
-        foreach (GameObject obj in objs)
+        if (!_currentMinigameScene.IsValid())
         {
-            Camera cam = obj.GetComponentInChildren<Camera>();
-            if (cam != null)
-            {
-                return cam;
-            }
+            Debug.LogWarning($"{nameof(MinigameManager)} GetCamera() called but no minigame is running.");
+            return null;
         }
 
-        Debug.Log("wtf");
+        var roots = _currentMinigameScene.GetRootGameObjects();
+        foreach (var root in roots)
+        {
+            var cam = root.GetComponentInChildren<Camera>();
+            if (cam != null) return cam;
+        }
+
+        Debug.Log($"{nameof(MinigameManager)}: No camera found in minigame scene.");
         return null;
     }
+    #endregion
+
+    #region Coroutines
+    private IEnumerator CoLoad(string sceneName)
+    {
+        _state = MiniState.Loading;
+
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+        if (asyncLoad == null)
+        {
+            Debug.LogError($"{nameof(MinigameManager)}: LoadSceneAsync returned null for '{sceneName}'.");
+            LoadFailed?.Invoke(sceneName);
+            _state = MiniState.Idle;
+            yield break;
+        }
+
+        yield return new WaitUntil(() => asyncLoad.isDone);
+
+        _currentMinigameScene = SceneManager.GetSceneByName(sceneName);
+        if (!_currentMinigameScene.IsValid())
+        {
+            Debug.LogError($"[MinigameManager] Loaded scene handle invalid for '{sceneName}'.");
+            LoadFailed?.Invoke(sceneName);
+            _state = MiniState.Idle;
+            yield break;
+        }
+
+        // Offset minigame roots to spawn position
+        if (_minigameSpawnPoint != null)
+        {
+            Vector3 offset = _minigameSpawnPoint.position;
+            foreach (GameObject root in _currentMinigameScene.GetRootGameObjects())
+                root.transform.position += offset;
+        }
+
+        // Finish
+        _state = MiniState.Running;
+        _currentMinigameIndex = _sceneNames.FindIndex(n => n == sceneName);
+        Opened?.Invoke(sceneName);
+        yield return null;
+    }
+
+    private IEnumerator CoUnload()
+    {
+        _state = MiniState.Unloading;
+
+        string prevName = CurrentSceneName;
+
+        AsyncOperation unload = SceneManager.UnloadSceneAsync(_currentMinigameScene);
+        if (unload == null)
+        {
+            Debug.LogWarning($"{nameof(MinigameManager)}: UnloadSceneAsync returned null; forcing state reset.");
+            _currentMinigameScene = default;
+            _currentMinigameIndex = -1;
+            _state = MiniState.Idle;
+            Closed?.Invoke(prevName);
+            yield break;
+        }
+
+        yield return new WaitUntil(() => unload.isDone);
+
+        _currentMinigameScene = default;
+        _currentMinigameIndex = -1;
+        _state = MiniState.Idle;
+        Closed?.Invoke(prevName);
+    }
+
+    private IEnumerator CoSwap(string nextScene)
+    {
+        yield return CoUnload();
+        yield return CoLoad(nextScene);
+    }
+    #endregion
+
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        // Keep duplicate names out and strip blanks during authoring
+        if (_sceneNames == null) return;
+        for (int i = _sceneNames.Count - 1; i >= 0; i--)
+            if (string.IsNullOrWhiteSpace(_sceneNames[i])) _sceneNames.RemoveAt(i);
+        // distinct pass
+        var set = new HashSet<string>(_sceneNames);
+        if (set.Count != _sceneNames.Count)
+            _sceneNames = new List<string>(set);
+    }
+#endif
 }

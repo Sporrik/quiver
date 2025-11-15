@@ -121,7 +121,7 @@ public class MinigameScreen : MonoBehaviour
         {
             //Debug.Log("Clipped screen to center!");
 
-            _manager.PauseMiniGame(false);
+            _manager.PauseMinigame(false);
 
             if(_manager.MinigameIsRunning())
             {
@@ -140,7 +140,7 @@ public class MinigameScreen : MonoBehaviour
         }
         else
         {
-            _manager.PauseMiniGame(true);
+            _manager.PauseMinigame(true);
             _blackScreen.enabled = true;
 
             if (_minigameCamera != null)
