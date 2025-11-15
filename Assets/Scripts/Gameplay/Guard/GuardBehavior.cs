@@ -56,6 +56,15 @@ namespace Gameplay.AI
         private bool _turnLeft;
         private float _takedownCooldownUntil;
 
+
+        private Animator _animator;
+        // Animation parameter IDs
+        private static readonly int SpeedParam = Animator.StringToHash("Speed");
+        private static readonly int ChasingParam = Animator.StringToHash("IsChasing");
+        private static readonly int SearchingParam = Animator.StringToHash("IsSearching");
+        private static readonly int TakenDownParam = Animator.StringToHash("IsTakenDown");
+
+
         // Helpers
         private void SetWalkSpeed() => _agent.speed = _guardCfg.Movement.WalkSpeed;
         private void SetRunSpeed() => _agent.speed = _guardCfg.Movement.RunSpeed;
@@ -71,6 +80,7 @@ namespace Gameplay.AI
         {
             _barManager.OnBabyCrying += HearingPlayer;
             _agent = GetComponent<NavMeshAgent>();
+            _animator = GetComponent<Animator>();
 
             // Check references
             if (_guardCfg == null) { Debug.LogError($"{name}: GuardConfig missing.", this); enabled = false; return; }
@@ -87,12 +97,20 @@ namespace Gameplay.AI
                 _agent.SetDestination(_waypoints[_waypointIndex].position);
         }
 
-        
 
         private void Update()
         {
             UpdatePerception();
             TickState();
+            TickAnimator();
+        }
+        private void TickAnimator()
+        {
+            if (_animator == null) return;
+
+            _animator.SetFloat(SpeedParam, _agent.speed);
+            _animator.SetBool(ChasingParam, _state == State.Chasing);
+            _animator.SetBool(SearchingParam, _state == State.Searching);
         }
 
         // ---------- Perception ---------
@@ -274,6 +292,9 @@ namespace Gameplay.AI
 
         public void Takedown(Interactor interactor)
         {
+            if (_animator != null)
+                _animator.SetBool(TakenDownParam, true);
+
             _takedownCooldownUntil = Time.time + (_takedown?.CooldownSeconds ?? 0f);
             _agent.isStopped = true;
             _agent.enabled = false;
