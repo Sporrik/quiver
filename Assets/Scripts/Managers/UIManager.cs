@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    [SerializeField] private Image[] _imageMeters;
+    [SerializeField] private RawImage[] _imageMeters;
     [SerializeField] private float[] _floatMeters;
     [SerializeField] private float[] _localScale;
     [SerializeField] private float[] _incrementValues;
@@ -67,7 +67,7 @@ public class UIManager : MonoBehaviour
             _imageMeters[i].rectTransform.localScale = _barIncreaseReversed;
         }
 
-        _imageMeters[4].rectTransform.localScale = new Vector3(_floatMeters[4] * _localScale[4], 0.15f, 1); // custon staminameter
+        _imageMeters[4].rectTransform.localScale = new Vector3(_floatMeters[4] * _localScale[4], 1, 1); // custon staminameter
 
         //Debug.Log(_barIncreaseReversed.x);
 

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -5,21 +6,52 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(PlayerInput))]
 public sealed class PlayerInputRelay : MonoBehaviour, IPlayerInputSource
 {
-    private Vector2 _move;
-    private bool _sprintHeld;
+    public Vector2 Move => IsBlocked ? Vector2.zero : _move;
+    public bool SprintHeld => !IsBlocked && _sprintHeld;
 
     private bool _jumpEdge;
     private bool _interactEdge;
     private bool _takedownEdge;
 
-    public Vector2 Move => _move;
-    public bool SprintHeld => _sprintHeld;
+    private Vector2 _move;
+    private bool _sprintHeld;
+
+    private readonly HashSet<object> _blockTokens = new();
+    public bool IsBlocked => _blockTokens.Count > 0;
+
+    private PlayerInput _playerInput;
+
+    private void Awake()
+    {
+        _playerInput = GetComponent<PlayerInput>();
+    }
 
     private void LateUpdate()
     {
         _jumpEdge = false;
         _interactEdge = false;
         _takedownEdge = false;
+    }
+
+    public void BeginBlock(object token)
+    {
+        if (token == null) return;
+        bool wasBlocked = IsBlocked;
+        _blockTokens.Add(token);
+        if (!wasBlocked && IsBlocked) OnBecameBlocked();
+    }
+
+    public void EndBlock(object token)
+    {
+        if (token == null) return;
+        bool wasBlocked = IsBlocked;
+        _blockTokens.Remove(token);
+    }
+
+    private void OnBecameBlocked()
+    {
+        _move = Vector2.zero;
+        _sprintHeld = false;
     }
 
     // ---- Send Messages ----

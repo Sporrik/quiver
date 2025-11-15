@@ -19,7 +19,7 @@ public class DiaperChangingBehavior : MonoBehaviour
     private bool _isDragging = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    private void Start()
+    private void Awake()
     {
         _animator.speed = _animationSpeed;
     }

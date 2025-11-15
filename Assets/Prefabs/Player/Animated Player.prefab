@@ -564,7 +564,7 @@ MonoBehaviour:
   _interactableMask:
     serializedVersion: 2
     m_Bits: 1024
-  _input: {fileID: 0}
+  _input: {fileID: 2018685814406708871}
 --- !u!114 &5226253694834983525
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -591,19 +591,67 @@ MonoBehaviour:
       m_Calls: []
   m_ActionEvents:
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2018685814406708871}
+        m_TargetAssemblyTypeName: PlayerInputRelay, Assembly-CSharp
+        m_MethodName: OnMove
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 351f2ccd-1f9f-44bf-9bec-d62ac5c5f408
     m_ActionName: 'Player/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]'
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2018685814406708871}
+        m_TargetAssemblyTypeName: PlayerInputRelay, Assembly-CSharp
+        m_MethodName: OnTakedown
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 6c2ab1b8-8984-453a-af3d-a3c78ae1679a
     m_ActionName: 'Player/Attack[/Mouse/leftButton,/Keyboard/enter]'
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2018685814406708871}
+        m_TargetAssemblyTypeName: PlayerInputRelay, Assembly-CSharp
+        m_MethodName: OnInteract
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 852140f2-7766-474d-8707-702459ba45f3
     m_ActionName: 'Player/Interact[/Keyboard/e]'
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2018685814406708871}
+        m_TargetAssemblyTypeName: PlayerInputRelay, Assembly-CSharp
+        m_MethodName: OnSprint
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 641cd816-40e6-41b4-8c3d-04687c349290
     m_ActionName: 'Player/Sprint[/Keyboard/leftShift]'
   - m_PersistentCalls:
@@ -660,27 +708,15 @@ MonoBehaviour:
     m_ActionName: 'MapBuilder/RotateTile[/Keyboard/r]'
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 0e3e21e0-0ada-4458-bd1f-302db228ac0a
-    m_ActionName: 'MapBuilder/MoveCameraW[/Keyboard/w]'
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 38dd0861-363a-4731-be15-53b4c11b5bd7
-    m_ActionName: 'MapBuilder/MoveCameraS[/Keyboard/w]'
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 39b71530-7abf-4285-8cee-c250743f9396
-    m_ActionName: 'MapBuilder/MoveCameraW2[/Keyboard/w]'
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 074fc005-723e-488f-9e4a-5e285662e949
-    m_ActionName: 'MapBuilder/MoveCameraW3[/Keyboard/w]'
-  - m_PersistentCalls:
-      m_Calls: []
     m_ActionId: dafcc71f-ff0f-42bd-b37f-76c8d02ac612
     m_ActionName: 'MapBuilder/DeleteTile[/Keyboard/1]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 36bb8ef1-5164-4f0b-ac0e-91891db4dfbe
+    m_ActionName: 'MapBuilder/SwitchInBound[/Keyboard/4]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: df70fa95-8a34-4494-b137-73ab6b9c7d37
+  m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!143 &7944760130740038130
