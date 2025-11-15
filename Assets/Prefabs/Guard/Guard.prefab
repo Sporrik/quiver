@@ -85,14 +85,22 @@ MonoBehaviour:
   _guardCfg: {fileID: 11400000, guid: d08fef8fb5dd6ae4db1e97f8338dc970, type: 2}
   _takedown: {fileID: 11400000, guid: ca5839645a178d54ab59af43e99a0ef5, type: 2}
   _fovExitLag: 5
-  _nextStateChangeTime: 0
+  _nextStateChangeTime: 1
   _player: {fileID: 0}
   _eyes: {fileID: 3514660740469611149}
-  _waypoints: []
+  _waypoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   _seesPlayer: 0
   _distanceToPlayer: 0
   _alertTimeRemaining: 0
   _hadVisualLastFrame: 0
+  _barManager: {fileID: 0}
   _state: 0
 --- !u!195 &8341088491732717185
 NavMeshAgent:
@@ -352,7 +360,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a3f4d4ba076b93f48a4476ead1477f9c, type: 2}
+  - {fileID: 2100000, guid: 34452c52b9801a1469446a6dd61d392d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

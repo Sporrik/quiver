@@ -26,7 +26,7 @@ public class MinigameScreen : MonoBehaviour
     [SerializeField] private UIManager _uiManager;
 
     private MinigameManager _manager;
-    private Camera _minigameCamera;
+    // TODO add a way to read the win conditions of minigame
 
     private Vector2 _lastMousePos;
     private Vector3 _panelStartPos;
@@ -64,7 +64,7 @@ public class MinigameScreen : MonoBehaviour
 
     private void SelectMiniGame()
     {
-        if (Input.GetKeyUp(KeyCode.Space) && !_manager.MinigameIsRunning())
+        if (Input.GetKeyUp(KeyCode.Space) && !GotClipped())
         {
             _slideIn = true;
         }
@@ -92,7 +92,12 @@ public class MinigameScreen : MonoBehaviour
 
         if (_slideOut)
         {
-            SlideOut();
+            SlideOut(false);
+        }
+
+        if(_manager.WonCurrentMinigame())
+        {
+            SlideOut(true);
         }
     }
 
@@ -120,16 +125,11 @@ public class MinigameScreen : MonoBehaviour
         {
             //Debug.Log("Clipped screen to center!");
 
-            _manager.PauseMiniGame(false);
+            _manager.PauseMinigame(false);
 
             if(_manager.MinigameIsRunning())
             {
                 _blackScreen.enabled = false;
-            }
-
-            if (_minigameCamera != null)
-            {
-                _minigameCamera.enabled = true;
 
                 if (_visualsBars != null)
                 {
@@ -139,17 +139,12 @@ public class MinigameScreen : MonoBehaviour
         }
         else
         {
-            _manager.PauseMiniGame(true);
+            _manager.PauseMinigame(true);
             _blackScreen.enabled = true;
 
-            if (_minigameCamera != null)
+            if (_visualsBars != null)
             {
-                _minigameCamera.enabled = false;
-
-                if (_visualsBars != null)
-                {
-                    _visualsBars.SetActive(true);
-                }
+                _visualsBars.SetActive(true);
             }
         }
 
@@ -157,12 +152,7 @@ public class MinigameScreen : MonoBehaviour
 
     private void DragPanel()
     {
-        if (_manager.MinigameIsRunning())
-        {
-            _minigameCamera = _manager.GetCamera();
-        }
-
-        float xDrag = GetDrag().x;
+       float xDrag = GetDrag().x;
 
         if (Input.GetMouseButton(0))
         {
@@ -242,9 +232,12 @@ public class MinigameScreen : MonoBehaviour
 
     public void SlideIn(string sceneName)
     {
-        if (GotClipped() && !_manager.MinigameIsRunning())
+        if (GotClipped())
         {
-            _manager.LoadMinigame(sceneName);
+            if (!_manager.MinigameIsRunning())
+            {
+                _manager.LoadMinigame(sceneName);
+            }
 
             _slideIn = false;
         }
@@ -259,13 +252,13 @@ public class MinigameScreen : MonoBehaviour
         }
     }
 
-    public void SlideOut()
+    public void SlideOut(bool unloadScene = false)
     {
-        if (_clipPosition.x - _panelWidth / 2 >= _panel.transform.position.x && _manager.MinigameIsRunning())
+        if (_clipPosition.x - _panelWidth / 2 >= _panel.transform.position.x)
         {
             _panel.transform.position = new Vector3(_clipPosition.x - _panelWidth / 2, _panelStartPos.y, _panelStartPos.z);
 
-            ResetMinigame();
+            if(unloadScene) ResetMinigame();
 
             _slideOut = false;
         }
