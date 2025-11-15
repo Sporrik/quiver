@@ -59,7 +59,6 @@ namespace Gameplay.AI
 
         private Animator _animator;
         // Animation parameter IDs
-        private static readonly int SpeedParam = Animator.StringToHash("Speed");
         private static readonly int ChasingParam = Animator.StringToHash("IsChasing");
         private static readonly int SearchingParam = Animator.StringToHash("IsSearching");
         private static readonly int TakenDownParam = Animator.StringToHash("IsTakenDown");
@@ -108,7 +107,6 @@ namespace Gameplay.AI
         {
             if (_animator == null) return;
 
-            _animator.SetFloat(SpeedParam, _agent.speed);
             _animator.SetBool(ChasingParam, _state == State.Chasing);
             _animator.SetBool(SearchingParam, _state == State.Searching);
         }
