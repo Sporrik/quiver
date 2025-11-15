@@ -88,6 +88,7 @@ public sealed class MinigameScreen : MonoBehaviour
         if (!string.IsNullOrEmpty(_pendingSceneName)) _slideIn = true;
     }
 
+    // works fine
     private void SelectMiniGame()
     {
         if (Input.GetKeyUp(KeyCode.Space))
@@ -96,9 +97,8 @@ public sealed class MinigameScreen : MonoBehaviour
             {
                 TryOpenBySpace();
             }
+            else _slideOut = true;
         }
-        else _slideOut = true;
-
 
         if (_slideIn && !string.IsNullOrEmpty(_pendingSceneName)) SlideIn(_pendingSceneName);
         if (_slideOut) SlideOut(false);
@@ -149,6 +149,7 @@ public sealed class MinigameScreen : MonoBehaviour
 
     }
 
+    // dragging works!
     private void DragPanel()
     {
        float xDrag = GetDrag().x;
@@ -202,6 +203,7 @@ public sealed class MinigameScreen : MonoBehaviour
         return RectTransformUtility.RectangleContainsScreenPoint(image.rectTransform, pos);
     }
 
+    // clipping gets registered
     public bool GotClipped()
     {
         _panelStartPos = _panel.transform.position;
@@ -209,6 +211,8 @@ public sealed class MinigameScreen : MonoBehaviour
         if (_clipPosition.x + _panelWidth / 2 <= _panel.transform.position.x)
         {
             _panel.transform.position = new Vector3(_clipPosition.x + _panelWidth / 2, _panelStartPos.y, _panelStartPos.z);
+
+            //Debug.Log("Got clipped!");
 
             return true;
         }
@@ -284,20 +288,33 @@ public sealed class MinigameScreen : MonoBehaviour
         bool poopOk = poop >= _maxProgress, peeOk = pee >= _maxProgress, hungryOk = hungry >= _maxProgress;
         if (!poopOk && !peeOk && !hungryOk) return;
 
-        // Pick the most filled among those >= threshold (tie priority: Poop > Pee > Hungry)
-        if (poopOk && poop >= Mathf.Max(peeOk ? pee : -1f, hungryOk ? hungry : -1f))
-        {
-            _pendingSceneName = _diaperMinigame;
-        }
-        else if (peeOk && pee >= Mathf.Max(hungryOk ? hungry : -1f))
-        {
-            _pendingSceneName = _peeMinigame;
-        }
-        else
-        {
-            _pendingSceneName = _feedingMinigame;
-        }
+
+        if (poop >= _maxProgress) _pendingSceneName = _diaperMinigame;
+
+        else if (pee >= _maxProgress) _pendingSceneName = _peeMinigame;
+
+        else if(hungry >= _maxProgress) _pendingSceneName = _feedingMinigame;
+        
+        //Debug.Log(_pendingSceneName);
 
         _slideIn = true;
+
+
+        // an old fix/redo which may have been a solution for a bug, but we don't know what
+        // it's supposed to change in terms of functionality
+
+        //// Pick the most filled among those >= threshold (tie priority: Poop > Pee > Hungry)
+        //if (poopOk && poop >= Mathf.Max(peeOk ? pee : -1f, hungryOk ? hungry : -1f))
+        //{
+        //    _pendingSceneName = _diaperMinigame;
+        //}
+        //else if (peeOk && pee >= Mathf.Max(hungryOk ? hungry : -1f))
+        //{
+        //    _pendingSceneName = _peeMinigame;
+        //}
+        //else
+        //{
+        //    _pendingSceneName = _feedingMinigame;
+        //}
     }
 }
