@@ -2,11 +2,13 @@ using Gameplay.AI;
 using System;
 using UnityEngine;
 
-namespace Gameplay
+namespace UI
 {
     [DisallowMultipleComponent]
     public sealed class BarManager : MonoBehaviour
     {
+        public enum NeedType { Poop, Hungry, Pee }
+
         #region Inspector
         [Header("Player")]
         [SerializeField] private PlayerController _playerController;
@@ -19,9 +21,15 @@ namespace Gameplay
         [SerializeField, Min(0f)] private float _amountToIncreaseBar = 5f;
         [SerializeField] private bool _singlePlayerOverride = false;
 
-        [Header("Unhappiness Gain")]
-        [SerializeField, Min(0f)] private float _timeToGetAngry = 3f;
-        [SerializeField, Min(0f)] private float _amountToIncreaseHappiness = 5f;
+        [Header("Happiness (probabilistic)")]
+        [Tooltip("Seconds between happiness RNG checks.")]
+        [SerializeField, Min(0.05f)] private float _happinessTickInterval = 1f;
+        [Tooltip("How Much Happiness increases when RNG check succeeds.")]
+        [SerializeField, Min(0f)] private float _happinessIncrement = 3f;
+        [Tooltip("Base success chance per check when needs are empty (0..1).")]
+        [SerializeField, Range(0f, 1f)] private float _happinessBaseChance = 0.05f;
+        [Tooltip("Success chance per check when needs are full (0..1).")]
+        [SerializeField, Range(0f, 1f)] private float _happinessChanceAtFull = 0.5f;
 
         [Header("Cry/Alert")]
         [SerializeField, Min(0f)] private float _cryRange = 12f;
@@ -31,13 +39,20 @@ namespace Gameplay
 
         #region Events
         public event Action<BarManager> OnBabyCrying;
+        public event Action<NeedType> OnNeedFilled;
         #endregion
 
         #region State
         private float _eventTimer;
-        private float _angryTimer;
         private float _cryCooldownTimer;
         private bool _isSinglePlayer;
+
+        private float _happinessTimer;
+
+        private bool _poopCapped;
+        private bool _peeCapped;
+        private bool _hungryCapped;
+
         private readonly Collider[] _guardHits = new Collider[16];
         #endregion
 
@@ -72,7 +87,6 @@ namespace Gameplay
 
             float dt = Time.deltaTime;
             _eventTimer += dt;
-            _angryTimer += dt;
             if (_cryCooldownTimer > 0f) _cryCooldownTimer -= dt;
 
             if (_isSinglePlayer && _eventTimer >= _timeToGetRandomEvent)
@@ -81,22 +95,14 @@ namespace Gameplay
                 RandomBarIncrease();
             }
 
-            bool anyNeedMaxed = _scriptableObject.GetHungry() >= 100f
-                             || _scriptableObject.GetPoop() >= 100f
-                             || _scriptableObject.GetPee() >= 100f;
+            TickHappiness();
+            DebouncedNeedEvents();
 
-            if (anyNeedMaxed && _angryTimer >= _timeToGetAngry)
-            {
-                _angryTimer = 0f;
-                _scriptableObject.IncrementHapiness(_amountToIncreaseHappiness);
-            }
-
-            if (_scriptableObject.GetHapiness() >= 100f && _cryCooldownTimer <= 0f)
+            if (_scriptableObject.GetHappiness() >= 100f && _cryCooldownTimer <= 0f)
             {
                 _cryCooldownTimer = _cryCooldown;
                 OnBabyCrying?.Invoke(this);
                 AlertGuardsInRange();
-
             }
         }
         #endregion
@@ -118,6 +124,60 @@ namespace Gameplay
                 case 2: _scriptableObject.IncrementHungry(_amountToIncreaseBar); break;
                 case 3: _scriptableObject.IncrementPee(_amountToIncreaseBar); break;
                 default: Debug.LogWarning("RandomBarIncrease: unexpected branch."); break;
+            }
+        }
+
+        private void DebouncedNeedEvents()
+        {
+            float poop   = _scriptableObject.GetPoop();
+            float pee    = _scriptableObject.GetPee();
+            float hungry = _scriptableObject.GetHungry();
+
+            if (poop > 100f)
+            {
+                if (!_poopCapped)
+                {
+                    _poopCapped = true;
+                    OnNeedFilled?.Invoke(NeedType.Poop);
+                }
+            }
+            else if (_poopCapped) _poopCapped = false;
+
+            if (pee > 100f)
+            {
+                if (!_peeCapped)
+                {
+                    _peeCapped = true;
+                    OnNeedFilled?.Invoke(NeedType.Pee);
+                }
+            }
+            else if (_peeCapped) _peeCapped = false;
+
+            if (hungry > 100f)
+            {
+                if (!_hungryCapped)
+                {
+                    _hungryCapped = true;
+                    OnNeedFilled?.Invoke(NeedType.Hungry);
+                }
+            }
+            else if (_hungryCapped) _hungryCapped = false;
+        }
+
+        private void TickHappiness()
+        {
+            if (_happinessTimer >= _happinessTickInterval)
+            {
+                _happinessTimer -= _happinessTickInterval;
+
+                float poop01 = _scriptableObject.GetPoop() * 0.01f;
+                float hungry01 = _scriptableObject.GetHungry() * 0.01f;
+                float pee01 = _scriptableObject.GetPee() * 0.01f;
+
+                float needsAvg = (poop01 + hungry01 + pee01) / 3f;
+                float chance = Mathf.Lerp(_happinessBaseChance, _happinessChanceAtFull, needsAvg);
+
+                if (UnityEngine.Random.value < Mathf.Clamp01(chance)) _scriptableObject.IncrementHappiness(_happinessIncrement);
             }
         }
 

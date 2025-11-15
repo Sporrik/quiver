@@ -29,7 +29,7 @@ public class GameManagerTwitch : TwitchMonoBehaviour
     [SerializeField] private GameObject amountOfPeeGameObject;
     [SerializeField] private GameObject amountOfHungerGameObject;
 
-    [SerializeField] private UIScriptableObject _scriptableObject;
+    //[SerializeField] private UIScriptableObject _scriptableObject;
 
     [SerializeField] private float _amountToIncreaseBar;
 
@@ -55,7 +55,7 @@ public class GameManagerTwitch : TwitchMonoBehaviour
     {
        // poopBar.transform.localScale += new Vector3(0.01f, 0, 0);
 
-        _scriptableObject.IncrementPoop(_amountToIncreaseBar);
+        //_scriptableObject.IncrementPoop(_amountToIncreaseBar);
 
     }
 
@@ -64,7 +64,7 @@ public class GameManagerTwitch : TwitchMonoBehaviour
     {
         //peeBar.transform.localScale += new Vector3(0.05f, 0, 0);
 
-        _scriptableObject.IncrementPee(_amountToIncreaseBar);
+        //_scriptableObject.IncrementPee(_amountToIncreaseBar);
     }
 
     [TwitchCommand("hunger_command1", "h_")]
@@ -72,7 +72,7 @@ public class GameManagerTwitch : TwitchMonoBehaviour
     {
        // hungerBar.transform.localScale += new Vector3(0.025f, 0, 0);
 
-        _scriptableObject.IncrementHungry(_amountToIncreaseBar);
+        //_scriptableObject.IncrementHungry(_amountToIncreaseBar);
     }
 
     private void Start()

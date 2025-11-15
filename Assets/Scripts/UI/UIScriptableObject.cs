@@ -1,96 +1,96 @@
 ﻿using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "UIData", menuName = "Scriptable Objects/UIData")]
-
-public class UIScriptableObject : ScriptableObject
+namespace UI
 {
-    [SerializeField] private float _happinessMeter;
-    [SerializeField] private float _poopMeter;
-    [SerializeField] private float _hungryMeter;
-    [SerializeField] private float _peeMeter;
-    [SerializeField] private float _staminaMeter;
-    [SerializeField] private bool _gameModeSinglePlayer;
+    [CreateAssetMenu(fileName = "UIData", menuName = "Scriptable Objects/UIData")]
+    public class UIScriptableObject : ScriptableObject
+    {
+        [Header("Meters (0..100)")]
+        [SerializeField] private float _poopMeter = 0f;
+        [SerializeField] private float _peeMeter = 0f;
+        [SerializeField] private float _hungryMeter = 0f;
+        [SerializeField] private float _happinessMeter = 0f;
+        [SerializeField] private float _staminaMeter = 100f;
 
-    public bool GetGameModeSinglePlayer()
-    {
-        return _gameModeSinglePlayer;
-    }
-    public float GetPoop()
-    {
-        _poopMeter = Mathf.Max(_poopMeter, 0);
-        return Mathf.Min(_poopMeter, 100);
-    }
-    public float GetHapiness()
-    {
-        _happinessMeter = Mathf.Max(_happinessMeter, 0);
-        return Mathf.Min(_happinessMeter, 100);
-    }
-    public float GetHungry()
-    {
-        _hungryMeter = Mathf.Max(_hungryMeter, 0);
-        return Mathf.Min(_hungryMeter, 100);
-    }
-    public float GetPee()
-    {
-        _peeMeter = Mathf.Max(_peeMeter, 0);
-        return Mathf.Min(_peeMeter, 100);
-    }
-    public float GetStamina()
-    {
-        _staminaMeter = Mathf.Max(_staminaMeter, 0);
-        return Mathf.Min(_staminaMeter, 100);
-    }
+        [Header("Mode")]
+        [SerializeField] private bool _gameModeSinglePlayer;
 
-    //setters (changes by Warre)
-    public void IncrementPoop(float incrementValue)
-    {
-        _poopMeter += incrementValue;
-        _poopMeter = Mathf.Min(_poopMeter, 100);
+        // ---------- Events ----------
+        public event Action Changed;                        //any changes
+        public event Action<float> PoopChanged, PeeChanged, HungryChanged, HappinessChanged, StaminaChanged;
 
-    }
-    public void IncrementHapiness(float incrementValue)
-    {
-        _happinessMeter += incrementValue;
-        _happinessMeter = Mathf.Min(_happinessMeter, 100);
-    }
-    public void IncrementHungry(float incrementValue)
-    {
-        _hungryMeter += incrementValue;
-        _hungryMeter = Mathf.Min(_hungryMeter, 100);
-    }
-    public void IncrementPee(float incrementValue)
-    {
-        _peeMeter += incrementValue;
-        _peeMeter = Mathf.Min(_peeMeter, 100);
-    }
-    public void SetStamina(float setValue)
-    {
-        _staminaMeter = setValue;
-    }
-    public void SetSinglePlayer(bool gameMode)
-    {
-        _gameModeSinglePlayer = gameMode;
-    }
+        // ----- Getters (clamped) -----
+        public bool GetGameModeSinglePlayer() => _gameModeSinglePlayer;
 
-    public void ResetPoop()
-    {
-        _poopMeter = 0;
-    }
-    public void ResetHapiness()
-    {
-        _happinessMeter = 0;
-    }
-    public void ResetHungry()
-    {
-        _hungryMeter = 0;
-    }
-    public void ResetPee()
-    {
-        _peeMeter = 0;
-    }
-    public void ResetStamina()
-    {
-        _staminaMeter = 100;
+        public float GetPoop()      => Clamp(_poopMeter);
+        public float GetPee()       => Clamp(_peeMeter);
+        public float GetHungry()    => Clamp(_hungryMeter);
+        public float GetHappiness() => Clamp(_happinessMeter);
+        public float GetStamina()   => Clamp(_staminaMeter);
+
+        // --- Increments / Setters ---
+        public void IncrementPoop(float v)      => SetPoop(_poopMeter + v);
+        public void IncrementPee(float v)       => SetPee(_peeMeter + v);
+        public void IncrementHungry(float v)    => SetHungry(_hungryMeter + v);
+        public void IncrementHappiness(float v) => SetHappiness(_happinessMeter + v);
+        public void SetStamina(float v)         => SetStaminaInternal(v);
+
+        public void SetSinglePlayer(bool gameMode) => _gameModeSinglePlayer = gameMode;
+
+        // ---------- Resets ----------
+        public void ResetPoop()      => SetPoop(0f);
+        public void ResetPee()       => SetPee(0f);
+        public void ResetHungry()    => SetHungry(0f);
+        public void ResetHappiness() => SetHappiness(0f);
+        public void ResetStamina()   => SetStaminaInternal(100f);
+
+        // -------- Internals --------
+        private static float Clamp(float value) => value < 0f ? 0f : (value > 100f ? 100f : value);
+
+        private void SetPoop(float value)
+        {
+            float newValue = Clamp(value);
+            if (Mathf.Approximately(newValue, _poopMeter)) return;
+            _poopMeter = newValue;
+            PoopChanged?.Invoke(_poopMeter);
+            Changed?.Invoke();
+        }
+
+        private void SetPee(float value)
+        {
+            float newValue = Clamp(value);
+            if (Mathf.Approximately(newValue, _peeMeter)) return;
+            _peeMeter = newValue;
+            PeeChanged?.Invoke(_peeMeter);
+            Changed?.Invoke();
+        }
+
+        private void SetHungry(float value)
+        {
+            float newValue = Clamp(value);
+            if (Mathf.Approximately(newValue, _hungryMeter)) return;
+            _hungryMeter = newValue;
+            HungryChanged?.Invoke(_hungryMeter);
+            Changed?.Invoke();
+        }
+
+        private void SetHappiness(float value)
+        {
+            float newValue = Clamp(value);
+            if (Mathf.Approximately(newValue, _happinessMeter)) return;
+            _happinessMeter = newValue;
+            HappinessChanged?.Invoke(_happinessMeter);
+            Changed?.Invoke();
+        }
+
+        private void SetStaminaInternal(float value)
+        {
+            float newValue = Clamp(value);
+            if (Mathf.Approximately(newValue, _staminaMeter)) return;
+            _staminaMeter = newValue;
+            StaminaChanged?.Invoke(_staminaMeter);
+            Changed?.Invoke();
+        }
     }
 }
