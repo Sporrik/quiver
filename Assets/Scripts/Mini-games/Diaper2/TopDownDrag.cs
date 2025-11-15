@@ -7,20 +7,29 @@ public class TopDownDrag : MonoBehaviour
     private Rigidbody rb;
     public bool IsDragging = false;
 
-    public GameObject CurrentlyDraggedObject;
+    [SerializeField] private GameObject CurrentlyDraggedObject;
 
-    public float DragPlaneY = 2f; // Hover height
+    [SerializeField] private float DragPlaneY = 2f; // Hover height
 
     [SerializeField] private Camera mainCamera;
+
+    private float originalY;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         //mainCamera = Camera.main;
+
+        DragPlaneY = transform.position.y + DragPlaneY;
+
+        originalY = transform.position.y;
     }
 
     void OnMouseDown()
     {
+        if(this.isActiveAndEnabled == false)
+            return;
+
         IsDragging = true;
         rb.useGravity = false;
         rb.linearVelocity = Vector3.zero;
@@ -30,6 +39,9 @@ public class TopDownDrag : MonoBehaviour
 
     public void OnMouseUp()
     {
+        if (this.isActiveAndEnabled == false)
+            return;
+
         IsDragging = false;
         rb.useGravity = true;
 
