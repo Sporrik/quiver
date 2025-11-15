@@ -143,7 +143,7 @@ public sealed class MinigameManager : MonoBehaviour
         _currentMinigameScene = SceneManager.GetSceneByName(sceneName);
         if (!_currentMinigameScene.IsValid())
         {
-            Debug.LogError($"[MinigameManager] Loaded scene handle invalid for '{sceneName}'.");
+            Debug.LogError($"{nameof(MinigameManager)} Loaded scene handle invalid for '{sceneName}'.");
             LoadFailed?.Invoke(sceneName);
             _state = MiniState.Idle;
             yield break;
