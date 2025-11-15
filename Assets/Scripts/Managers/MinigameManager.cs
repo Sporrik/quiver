@@ -38,6 +38,8 @@ public sealed class MinigameManager : MonoBehaviour
     public bool IsBusy => _state == MiniState.Loading || _state == MiniState.Unloading;
     #endregion
 
+    private MinigameWinToggle _currentMinigameWinToggle = null;
+
     #region Public API
     public void LoadMinigame(string sceneName)
     {
@@ -90,13 +92,41 @@ public sealed class MinigameManager : MonoBehaviour
 
         if (paused && _state == MiniState.Running)
         {
+            EnableRootObjs(!paused);
+
             _state = MiniState.Paused;
             Paused?.Invoke();
         }
         else if (!paused && _state == MiniState.Paused)
         {
+            EnableRootObjs(!paused);
+
             _state = MiniState.Running;
             Resumed?.Invoke();
+        }
+    }
+
+    private void EnableRootObjs(bool enable)
+    {
+        GameObject[] objs = _currentMinigameScene.GetRootGameObjects();
+
+        foreach (GameObject obj in objs)
+        {
+            Canvas canvas = obj.GetComponentInChildren<Canvas>();
+
+            if (canvas != null)
+            {
+                canvas.enabled = enable;
+                //continue; // assuming nobody puts a camera in a canvas
+            }
+
+            Camera cam = obj.GetComponentInChildren<Camera>();
+
+            if (cam != null)
+            {
+                cam.enabled = enable;
+            }
+
         }
     }
 
@@ -104,23 +134,12 @@ public sealed class MinigameManager : MonoBehaviour
 
     public bool IsMinigamePaused() => _state == MiniState.Paused;
 
-    public Camera GetCamera()
+    public bool WonCurrentMinigame()
     {
-        if (!_currentMinigameScene.IsValid())
-        {
-            Debug.LogWarning($"{nameof(MinigameManager)} GetCamera() called but no minigame is running.");
-            return null;
-        }
+        if (!_currentMinigameScene.IsValid()) return false;
+        if (_currentMinigameWinToggle == null) return false;
 
-        var roots = _currentMinigameScene.GetRootGameObjects();
-        foreach (var root in roots)
-        {
-            var cam = root.GetComponentInChildren<Camera>();
-            if (cam != null) return cam;
-        }
-
-        Debug.Log($"{nameof(MinigameManager)}: No camera found in minigame scene.");
-        return null;
+        return _currentMinigameWinToggle.WonMinigame();
     }
     #endregion
 
@@ -150,12 +169,25 @@ public sealed class MinigameManager : MonoBehaviour
         }
 
         // Offset minigame roots to spawn position
+        // and find the win toggle of minigame
         if (_minigameSpawnPoint != null)
         {
             Vector3 offset = _minigameSpawnPoint.position;
-            foreach (GameObject root in _currentMinigameScene.GetRootGameObjects())
-                root.transform.position += offset;
+
+            foreach (GameObject obj in _currentMinigameScene.GetRootGameObjects())
+            {
+                obj.transform.position += offset;
+
+                MinigameWinToggle winCond = obj.GetComponent<MinigameWinToggle>();
+
+                if (winCond != null)
+                {
+                    _currentMinigameWinToggle = winCond;
+                }
+            }
         }
+
+        
 
         // Finish
         _state = MiniState.Running;
@@ -177,6 +209,7 @@ public sealed class MinigameManager : MonoBehaviour
             _currentMinigameScene = default;
             _currentMinigameIndex = -1;
             _state = MiniState.Idle;
+            _currentMinigameWinToggle = null;
             Closed?.Invoke(prevName);
             yield break;
         }
@@ -186,6 +219,7 @@ public sealed class MinigameManager : MonoBehaviour
         _currentMinigameScene = default;
         _currentMinigameIndex = -1;
         _state = MiniState.Idle;
+        _currentMinigameWinToggle = null;
         Closed?.Invoke(prevName);
     }
 

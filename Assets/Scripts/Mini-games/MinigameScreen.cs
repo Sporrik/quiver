@@ -26,7 +26,6 @@ public class MinigameScreen : MonoBehaviour
     [SerializeField] private UIManager _uiManager;
 
     private MinigameManager _manager;
-    private Camera _minigameCamera;
     // TODO add a way to read the win conditions of minigame
 
     private Vector2 _lastMousePos;
@@ -95,6 +94,11 @@ public class MinigameScreen : MonoBehaviour
         {
             SlideOut(false);
         }
+
+        if(_manager.WonCurrentMinigame())
+        {
+            SlideOut(true);
+        }
     }
 
     private void ResetMinigame()
@@ -126,11 +130,6 @@ public class MinigameScreen : MonoBehaviour
             if(_manager.MinigameIsRunning())
             {
                 _blackScreen.enabled = false;
-            }
-
-            if (_minigameCamera != null)
-            {
-                _minigameCamera.enabled = true;
 
                 if (_visualsBars != null)
                 {
@@ -143,14 +142,9 @@ public class MinigameScreen : MonoBehaviour
             _manager.PauseMinigame(true);
             _blackScreen.enabled = true;
 
-            if (_minigameCamera != null)
+            if (_visualsBars != null)
             {
-                _minigameCamera.enabled = false;
-
-                if (_visualsBars != null)
-                {
-                    _visualsBars.SetActive(true);
-                }
+                _visualsBars.SetActive(true);
             }
         }
 
@@ -158,12 +152,7 @@ public class MinigameScreen : MonoBehaviour
 
     private void DragPanel()
     {
-        if (_manager.MinigameIsRunning())
-        {
-            _minigameCamera = _manager.GetCamera();
-        }
-
-        float xDrag = GetDrag().x;
+       float xDrag = GetDrag().x;
 
         if (Input.GetMouseButton(0))
         {
