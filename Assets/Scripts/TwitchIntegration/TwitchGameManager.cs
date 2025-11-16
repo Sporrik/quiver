@@ -16,19 +16,20 @@ public class TwitchGameManager : TwitchMonoBehaviour
     [SerializeField] private GameObject canvas;
 
     [Header("UI")]
-    [SerializeField] private UIScriptableObject _uiData;
+    [SerializeField] private UIScriptableObject uiData;
 
     [Header("Refresh time")]
     [SerializeField] private float refreshTime = 15f * 60f; //seconds, for minutes times it by 60
 
     [Header("Command Amounts")]
-    [SerializeField] private float _incPoop = 5f;
-    [SerializeField] private float _incPee = 5f;
-    [SerializeField] private float _incHungry = 5f;
+    [SerializeField] private float incPoop = 5f;
+    [SerializeField] private float incPee = 5f;
+    [SerializeField] private float incHungry = 5f;
 
-    private Vector3 _targetPosition;
+    //DON'T REMOVE || dummy var for function call
     private readonly System.Action<bool> _authorized = null;
 
+    //inout field vars
     private string _username;
     private string _channelName;
 
@@ -36,6 +37,7 @@ public class TwitchGameManager : TwitchMonoBehaviour
     private List<string> _userIDsInChat = new List<string>();
     private List<float> _timeUserIDsInChat = new List<float>();
 
+    //Vars for log file creation
     private int _viewerCount;
     private List<int> _viewerCounts = new List<int>();
     private int _highestViewerCount;
@@ -49,57 +51,61 @@ public class TwitchGameManager : TwitchMonoBehaviour
     [TwitchCommand("poop_command", "po")]
     public void FillupPoopBar()
     {
-        _commands.Add("poop_command");
-        if (_uiData == null) { Debug.LogWarning("TwitchManager: UIData not assigned."); return; }
-        _uiData.IncrementPoop(_incPoop);
+        _commands.Add("poop_command"); //DON'T REMOVE || used for statistics in log file
+        Debug.Log("Command poop proc"); //remove if clutter
+        //if (uiData == null) { Debug.LogWarning("TwitchManager: UIData not assigned."); return; }
+        uiData.IncrementPoop(incPoop); //Increment call inside ui script
     }
+
     [TwitchCommand("pee_command", "pe")]
     public void FillupPeeBar()
     {
-        _commands.Add("pee_command");
-        if (_uiData == null) { Debug.LogWarning("TwitchManager: UIData not assigned."); return; }
-        _uiData.IncrementPoop(_incPee);
+        _commands.Add("pee_command"); //DON'T REMOVE || used for statistics in log file
+        Debug.Log("Command pee proc"); //remove if clutter
+        if (uiData == null) { Debug.LogWarning("TwitchManager: UIData not assigned."); return; }
+        uiData.IncrementPoop(incPee); //Increment call inside ui script
     }
     [TwitchCommand("hunger_command", "hunger")]
     public void FillupHungerBar()
     {
-        _commands.Add("hunger_command");
-        if (_uiData == null) { Debug.LogWarning("TwitchManager: UIData not assigned."); return; }
-        _uiData.IncrementPoop(_incHungry);
+        _commands.Add("hunger_command"); //DON'T REMOVE || used for statistics in log file
+        Debug.Log("Command hunger proc"); //remove if clutter
+        if (uiData == null) { Debug.LogWarning("TwitchManager: UIData not assigned."); return; }
+        uiData.IncrementPoop(incHungry); //Increment call inside ui script
     }
     #endregion
 
-    private void OnEnable()
-    {
-        TwitchManager.OnTwitchClientJoinedChat += TwitchChatConnect;
-        TwitchManager.OnTwitchMessageReceived += (user, s) => AddUser(user);
-    }
-
-    private void OnDisable()
-    {
-        TwitchManager.OnTwitchClientJoinedChat -= TwitchChatConnect;
-        TwitchManager.OnTwitchMessageReceived -= (user, s) => AddUser(user);
-    }
     private void Start()
     {
-        LogHelper.Init();
+        LogHelper.Init(); //initialise LogHelper (file creation)
     }
 
     //AUTH
     private void Update()
     {
-        for (int idx = _userIDsInChat.Count - 1; idx >= 0; idx--)
+        TwitchManager.OnTwitchMessageReceived += (user, s) => AddUser(user); //DON'T REMOVE || Has to check every time if a msg is sent || used for active viewer count
+
+        //DON'T REMOVE || calculates current active chatters in chat || uses refresh time as waiting time 
+        if (_userIDsInChat.Count > 0)
         {
-            if (_timeUserIDsInChat[idx] < 0f)
+            for (var idx = 0; idx < _userIDsInChat.Count; idx++)
             {
-                _timeUserIDsInChat.RemoveAt(idx);
-                _userIDsInChat.RemoveAt(idx);
-                if (_viewerCount > 0) _viewerCount--;
+                _timeUserIDsInChat[idx] -= Time.deltaTime;
+
+                if (_timeUserIDsInChat[idx] < 0)
+                {
+                    _timeUserIDsInChat.RemoveAt(idx);
+                    _userIDsInChat.RemoveAt(idx);
+                    if (_viewerCount > 0) _viewerCount--;
+                }
             }
         }
 
+        //DON'T REMOVE || sets highest viewer count
         if (_viewerCount > _highestViewerCount) _highestViewerCount = _viewerCount;
 
+
+        //DON'T REMOVE || used for logging avr viewers in log file
         _accTime += Time.deltaTime;
         if (_accTime >= refreshTime)
         {
@@ -108,8 +114,10 @@ public class TwitchGameManager : TwitchMonoBehaviour
         }
     }
 
+    //DON'T REMOVE || log creation after application close
     private void OnApplicationQuit()
     {
+        Debug.Log("application close");
         //get average viewer count in whole stream with refreshRate
         float avrViewerCount = 0;
         foreach (var viewerCount in _viewerCounts)
@@ -159,11 +167,7 @@ public class TwitchGameManager : TwitchMonoBehaviour
         LogHelper.EndOfApplication();
     }
 
-    private void TwitchChatConnect()
-    {
-        canvas.SetActive(false);
-    }
-
+    //DON'T REMOVE || used for active viewer count
     private void AddUser(TwitchUser user)
     {
         for (var idx = 0; idx < _userIDsInChat.Count; idx++)
@@ -180,9 +184,13 @@ public class TwitchGameManager : TwitchMonoBehaviour
         _viewerCount++;
     }
 
+    //DON'T REMOVE || Separate class for log creation
     static class LogHelper
     {
         private static string _logPath;
+        /// <summary>
+        /// Initialises LogHelper, creates directory if not made already and sets the variable _logPath to "log_yyyy-MM-dd.log"
+        /// </summary>
         public static void Init()
         {
             _logPath = Path.Combine(Application.persistentDataPath, "chatLogs/log_" + $"{DateTime.Now:yyyy-MM-dd}" + ".log");
@@ -193,8 +201,7 @@ public class TwitchGameManager : TwitchMonoBehaviour
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
-                    Debug.Log("test 123");
-
+                    Debug.Log("Directory made");
                 }
             }
             catch (Exception e)
@@ -202,14 +209,16 @@ public class TwitchGameManager : TwitchMonoBehaviour
                 Debug.LogError("Log path setup failed: " + e);
             }
         }
+
+        /// <summary>
+        /// Writes message to log file with time (HH:mm:ss.fff)
+        /// </summary>
         public static void Write(string message)
         {
             try
             {
-                using (var writer = new StreamWriter(_logPath, append: true))
-                {
-                    writer.WriteLine($"{DateTime.Now:HH:mm:ss.fff} - {message}");
-                }
+                using var writer = new StreamWriter(_logPath, append: true);
+                writer.WriteLine($"{DateTime.Now:HH:mm:ss.fff} - {message}");
             }
             catch (Exception e)
             {
@@ -217,14 +226,15 @@ public class TwitchGameManager : TwitchMonoBehaviour
             }
         }
 
+        /// <summary>
+        /// Creates line with text "End of application"
+        /// </summary>
         public static void EndOfApplication()
         {
             try
             {
-                using (var writer = new StreamWriter(_logPath, append: true))
-                {
-                    writer.WriteLine(" - - - - - - End of application - - - - - - ");
-                }
+                using var writer = new StreamWriter(_logPath, append: true);
+                writer.WriteLine(" - - - - - - End of application - - - - - - ");
             }
             catch (Exception e)
             {
@@ -232,6 +242,8 @@ public class TwitchGameManager : TwitchMonoBehaviour
             }
         }
     }
+
+    //DON'T REMOVE || public function calls, read summaries!
 
     /// <summary>
     /// Calls authenticate function with given parameters from textboxes in TwitchGameManager
