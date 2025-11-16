@@ -15,7 +15,7 @@ public sealed class GuardBehaviorEditor : Editor
     private SerializedProperty _waypoints;
     private SerializedProperty _losMask;
 
-    private void OnEnable()
+    private void Awake()
     {
         _guardCfg = serializedObject.FindProperty("_guardCfg");
         _takedown = serializedObject.FindProperty("_takedown");
