@@ -39,8 +39,9 @@ namespace Gameplay.AI
         public event Action<GuardBehavior> OnPlayerSpotted;
         public event Action<GuardBehavior> OnLostPlayer;
         public event Action<GuardBehavior> OnReachedLastKnown;
+        public event Action<GuardBehavior> OnPlayerCaught;
 
-        private enum State { Patrolling, Chasing, Searching }
+        private enum State { Patrolling, Chasing, Searching, Caught }
         [SerializeField] private State _state = State.Patrolling;
 
         private NavMeshAgent _agent;
@@ -49,6 +50,9 @@ namespace Gameplay.AI
         private Vector3 _scanStartForward;
         private bool _turnLeft;
         private float _takedownCooldownUntil;
+
+        private PlayerInputRelay _inputRelay;
+        private readonly object _caughtBlockToken = new object();
 
         private void Awake()
         {
@@ -63,6 +67,7 @@ namespace Gameplay.AI
                 var p = GameObject.FindGameObjectWithTag(_guardCfg.PlayerTag);
                 if (p) _player = p.transform;
                 else Debug.LogWarning($"{name}: No object with tag '{_guardCfg.PlayerTag}' found. Guard will idle", this);
+                _inputRelay = p.GetComponent<PlayerInputRelay>();
             }
 
             _agent.speed = _guardCfg.Movement.WalkSpeed;
@@ -77,6 +82,11 @@ namespace Gameplay.AI
             _hadVisualLastFrame = _seesPlayer;
         }
 
+        private void OnDisable()
+        {
+            if (_inputRelay != null) _inputRelay.EndBlock(_caughtBlockToken);
+        }
+
         // ---------- Helpers ----------
         private void SetWalkSpeed() => _agent.speed = _guardCfg.Movement.WalkSpeed;
 
@@ -88,6 +98,15 @@ namespace Gameplay.AI
             float d = v.magnitude;
             if (d <= Mathf.Epsilon) return false;
             return !Physics.Raycast(from, v / d, out _, d, mask, QueryTriggerInteraction.Ignore);
+        }
+
+        private bool TryCatchHelper()
+        {
+            if (_player == null) return false;
+            if (_distanceToPlayer > CatchRange) return false;
+
+            SetState(State.Caught);
+            return true;
         }
 
         private void OnEnter(State state)
@@ -118,12 +137,36 @@ namespace Gameplay.AI
                     OnLostPlayer?.Invoke(this);
                     _agent.SetDestination(_lastKnownPos);
                     break;
+                case State.Caught:
+                    _agent.updateRotation = false;
+                    _agent.ResetPath();
+                    _agent.isStopped = true;
+                    OnPlayerCaught?.Invoke(this);
+
+                    if (_player != null)
+                    {
+                        Vector3 to = (_player.position - transform.position);
+                        to.y = 0f;
+
+                        if (to.sqrMagnitude > 0.0001f)
+                        {
+                            transform.rotation = Quaternion.LookRotation(to.normalized, Vector3.up);
+                        }
+                    }
+
+                    if (_inputRelay != null) _inputRelay.EndBlock(_caughtBlockToken);
+                    break;
             }
         }
 
         private void OnExit(State state)
         {
-            // For future: stop coroutines, clear temp flags, etc.
+            if (state == State.Caught)
+            {
+                if (_inputRelay != null) _inputRelay.EndBlock(_caughtBlockToken);
+                _agent.isStopped = false;
+                _agent.updateRotation = true;
+            }
         }
 
         // ---------- Perception ---------
@@ -192,13 +235,17 @@ namespace Gameplay.AI
                     break;
 
                 case State.Chasing:
+                    if (TryCatchHelper()) return;
                     if (_seesPlayer) { _lastKnownPos = _player.position; Chase(); }
                     else if (CanChangeState()) { SetState(State.Searching); }
                     break;
 
                 case State.Searching:
+                    if (TryCatchHelper()) return;
                     if (_seesPlayer && CanChangeState()) { SetState(State.Chasing); return; }
                     Search();
+                    break;
+                case State.Caught:
                     break;
             }
         }
@@ -303,6 +350,7 @@ namespace Gameplay.AI
             _agent.isStopped = true;
             _agent.enabled = false;
             enabled = false;
+            Destroy(gameObject);
         }
 
         // ---------- Gizmos ----------
