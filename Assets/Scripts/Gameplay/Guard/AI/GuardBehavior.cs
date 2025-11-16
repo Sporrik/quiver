@@ -17,7 +17,6 @@ namespace Gameplay.AI
         [SerializeField] private TakedownConfig _takedown;
 
         [Header("Stability")]
-        [SerializeField, Range(0f, 30f)] private float _fovExitLag = 5f;
         [SerializeField] private float _nextStateChangeTime;
 
         [Header("Scene")]
@@ -31,7 +30,6 @@ namespace Gameplay.AI
         [SerializeField] private float _alertTimeRemaining;
         [SerializeField] private bool _hadVisualLastFrame;
 
-        public float FovExitLag => _fovExitLag;
         public bool SeesPlayer => _seesPlayer;
         public float DistanceToPlayer => _distanceToPlayer;
 
@@ -64,6 +62,7 @@ namespace Gameplay.AI
             {
                 var p = GameObject.FindGameObjectWithTag(_guardCfg.PlayerTag);
                 if (p) _player = p.transform;
+                else Debug.LogWarning($"{name}: No object with tag '{_guardCfg.PlayerTag}' found. Guard will idle", this);
             }
 
             _agent.speed = _guardCfg.Movement.WalkSpeed;
@@ -88,7 +87,43 @@ namespace Gameplay.AI
             Vector3 v = to - from;
             float d = v.magnitude;
             if (d <= Mathf.Epsilon) return false;
-            return !Physics.Raycast(from, v / d, d, mask);
+            return !Physics.Raycast(from, v / d, out _, d, mask, QueryTriggerInteraction.Ignore);
+        }
+
+        private void OnEnter(State state)
+        {
+            switch (state)
+            {
+                case State.Patrolling:
+                    _agent.updateRotation = true;
+                    SetWalkSpeed();
+                    if (_waypoints.Count > 0)
+                        _agent.SetDestination(_waypoints[_waypointIndex].position);
+                    break;
+
+                case State.Chasing:
+                    _agent.updateRotation = true;
+                    SetRunSpeed();
+                    _alertTimeRemaining = _guardCfg.Search.AlertTime;
+                    OnPlayerSpotted?.Invoke(this);
+                    Chase();
+                    break;
+
+                case State.Searching:
+                    _agent.updateRotation = false;
+                    SetWalkSpeed();
+                    _alertTimeRemaining = Mathf.Max(_alertTimeRemaining, _guardCfg.Search.AlertTime);
+                    _scanStartForward = transform.forward;
+                    _turnLeft = false;
+                    OnLostPlayer?.Invoke(this);
+                    _agent.SetDestination(_lastKnownPos);
+                    break;
+            }
+        }
+
+        private void OnExit(State state)
+        {
+            // For future: stop coroutines, clear temp flags, etc.
         }
 
         // ---------- Perception ---------
@@ -98,7 +133,7 @@ namespace Gameplay.AI
             _seesPlayer = false;
             if (_player == null) return;
 
-            _distanceToPlayer = Vector3.Distance(_player.transform.position, transform.position);
+            _distanceToPlayer = Vector3.Distance(_player.position, transform.position);
 
             float sight = _guardCfg.Perception.SightRange;
 
@@ -132,17 +167,17 @@ namespace Gameplay.AI
             switch (_state)
             {
                 case State.Patrolling:
-                    if (_seesPlayer && CanChangeState()) { EnterChasing(); return; }
+                    if (_seesPlayer && CanChangeState()) { SetState(State.Chasing); return; }
                     Patrol();
                     break;
 
                 case State.Chasing:
                     if (_seesPlayer) { _lastKnownPos = _player.position; Chase(); }
-                    else if (CanChangeState()) { EnterSearching(_lastKnownPos); }
+                    else if (CanChangeState()) { SetState(State.Searching); }
                     break;
 
                 case State.Searching:
-                    if (_seesPlayer && CanChangeState()) { EnterChasing(); return; }
+                    if (_seesPlayer && CanChangeState()) { SetState(State.Chasing); return; }
                     Search();
                     break;
             }
@@ -150,8 +185,11 @@ namespace Gameplay.AI
 
         private void SetState(State next)
         {
+            if (_state == next) return;
+            OnExit(_state);
             _state = next;
-            _nextStateChangeTime = Time.time + (_guardCfg != null ? _guardCfg.Stability.StateCooldownSeconds  : 0f);
+            _nextStateChangeTime = Time.time + (_guardCfg != null ? _guardCfg.Stability.StateCooldownSeconds : 0f);
+            OnEnter(_state);
         }
 
         private void Patrol()
@@ -162,38 +200,22 @@ namespace Gameplay.AI
             if (!target) return;
 
             SetWalkSpeed();
-            _agent.SetDestination(target.position);
 
-            if (_agent.pathPending) return;
-
-            if (_agent.remainingDistance <= _guardCfg.Movement.WaypointArriveDistance)
+            if (!_agent.pathPending && _agent.remainingDistance <= _guardCfg.Movement.WaypointArriveDistance)
+            {
                 _waypointIndex = (_waypointIndex + 1) % _waypoints.Count;
-        }
+                _agent.SetDestination(_waypoints[_waypointIndex].position);
+                return;
+            }
 
-        private void EnterChasing()
-        {
-            SetState(State.Chasing);
-            _alertTimeRemaining = _guardCfg.Search.AlertTime;
-            SetRunSpeed();
-            OnPlayerSpotted?.Invoke(this);
-            Chase();
+            if (!_agent.hasPath) _agent.SetDestination(target.position);
         }
 
         private void Chase()
         {
             if (_player == null) return;
-            _agent.SetDestination(_player.position);
-        }
-
-        private void EnterSearching(Vector3 lastKnown)
-        {
-            SetState(State.Searching);
-            SetWalkSpeed();
-            _alertTimeRemaining = Mathf.Max(_alertTimeRemaining, _guardCfg.Search.AlertTime);
-            _scanStartForward = transform.forward;
-            _turnLeft = false;
-            _agent.SetDestination(lastKnown);
-            OnLostPlayer?.Invoke(this);
+            if (!_agent.hasPath || (_agent.destination - _player.position).sqrMagnitude > 0.25f)
+                _agent.SetDestination(_player.position);
         }
 
         private void Search()
@@ -205,33 +227,28 @@ namespace Gameplay.AI
 
             OnReachedLastKnown?.Invoke(this);
 
-            // Oscillate yaw to scan
+            // manual yaw oscillation
             float delta = _guardCfg.Movement.RotationSpeed * Time.deltaTime * (_turnLeft ? 1f : -1f);
             transform.Rotate(0f, delta, 0f);
-
             if (Vector3.Angle(_scanStartForward, transform.forward) > _guardCfg.Search.ScanMaxTurnAngle)
                 _turnLeft = !_turnLeft;
 
             _alertTimeRemaining -= Time.deltaTime;
             if (_alertTimeRemaining <= 0f)
-            {
-                _state = State.Patrolling;
-                if (_waypoints.Count > 0)
-                    _agent.SetDestination(_waypoints[_waypointIndex].position);
-            }
+                SetState(State.Patrolling);
         }
 
         // ---------- External Alerts ----------
         public void AlertToPosition(Vector3 worldPos)
         {
             _lastKnownPos = worldPos;
-            EnterSearching(worldPos);
-            SetRunSpeed();
+            SetState(State.Searching);
         }
 
         public void OnCryAlert(Vector3 sourcePosition, float radius)
         {
-            AlertToPosition(sourcePosition);
+            _lastKnownPos = sourcePosition;
+            SetState(State.Searching);
             _alertTimeRemaining = Mathf.Max(_alertTimeRemaining, _guardCfg.Search.AlertTime);
         }
 
@@ -295,7 +312,7 @@ namespace Gameplay.AI
             const int steps = 36;
             float half = angle * 0.5f;
 
-            forward = forward.normalized; // in case this hasn't happend yet
+            forward = forward.normalized; // in case this hasn't happened yet
 
             Vector3 prev = origin + Quaternion.AngleAxis(-half, Vector3.up) * forward * radius;
             for (int i = 1; i <= steps; i++)
