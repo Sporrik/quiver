@@ -4,32 +4,27 @@ using UnityEngine.UI;
 namespace UI
 {
     [DisallowMultipleComponent]
+    [RequireComponent(typeof(Image))]
     public sealed class UIMeter : MonoBehaviour
     {
-        [Header("Binding")]
-        [SerializeField] private UIScriptableObject _uiData;
+        [Tooltip("Auto: infer type from GameObject name (poop/pee/hungry/happiness/stamina).")]
         [SerializeField] private MeterType _meterType;
-
-        [Header("Target")]
-        [SerializeField] private Image _image;
+        
         [SerializeField] private bool _invert = true;
-    
-        private void Reset()
-        {
-            _image = GetComponent<Image>();
-        }
+
+        private UIScriptableObject _uiData;
+        private Image _image;
     
         private void Awake()
         {
-            if (_uiData = null) Debug.LogError($"{nameof(UIMeter)}: UIScriptableObject not assigned.", this);
             if (_image == null) _image = GetComponent<Image>();
-            if (_image = null) Debug.LogError($"{nameof(UIMeter)}: Image  not assigned.", this);
-
             if (_image != null && _image.type != Image.Type.Filled)
-            {
                 _image.type = Image.Type.Filled;
-                Debug.LogWarning($"{nameof(UIMeter)}: Image.type was not 'Filled'. Auto-set to Filled.", this);
-            }
+
+            _uiData = UIMeterDataProvider.Shared;
+            if (_uiData == null)
+                Debug.LogError($"{nameof(UIMeter)} on '{name}': No UIData found. " +
+                               "Add UIMeterDataProvider in scene.", this);
         }
 
         private void OnEnable()
@@ -43,6 +38,9 @@ namespace UI
                 case MeterType.Hungry:    _uiData.HungryChanged    += OnValue; break;
                 case MeterType.Happiness: _uiData.HappinessChanged += OnValue; break;
                 case MeterType.Stamina:   _uiData.StaminaChanged   += OnValue; break;
+                default:
+                    _meterType = InferTypeFromName(gameObject.name);
+                    goto case MeterType.Poop;
             }
 
             OnValue(ReadNow());
@@ -80,6 +78,19 @@ namespace UI
             if (_image == null) return;
             float v01 = Mathf.Clamp01(value01_100 * 0.01f);
             _image.fillAmount = _invert ? (1f - v01) : v01;
+        }
+
+        private static MeterType InferTypeFromName(string goName)
+        {
+            string n = goName.ToLowerInvariant();
+            if (n.Contains("poop"))         return MeterType.Poop;
+            if (n.Contains("pee"))          return MeterType.Pee;
+            if (n.Contains("hungry") ||
+                n.Contains("hunger"))       return MeterType.Hungry;
+            if (n.Contains("happiness") ||
+                n.Contains("happy"))        return MeterType.Happiness;
+            if (n.Contains("stamina"))      return MeterType.Stamina;
+            return MeterType.Poop;
         }
     }
 }
