@@ -28034,11 +28034,11 @@ MonoBehaviour:
   channelNameInput: {fileID: 1038211757}
   userNameInput: {fileID: 1023480748}
   canvas: {fileID: 1140897545}
-  _uiData: {fileID: 11400000, guid: 377fbeaf0c2d98543837ee90c8854047, type: 2}
+  uiData: {fileID: 0}
   refreshTime: 900
-  _incPoop: 5
-  _incPee: 5
-  _incHungry: 5
+  incPoop: 5
+  incPee: 5
+  incHungry: 5
 --- !u!1001 &1397526861
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -42192,6 +42192,10 @@ PrefabInstance:
     - target: {fileID: 1971511690550696794, guid: 5caf5bb964e6f904c8d4350217215474, type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1998455964428203746, guid: 5caf5bb964e6f904c8d4350217215474, type: 3}
+      propertyPath: _range
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 2057491284713678832, guid: 5caf5bb964e6f904c8d4350217215474, type: 3}
       propertyPath: m_Layer

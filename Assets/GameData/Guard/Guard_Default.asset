@@ -22,6 +22,9 @@ MonoBehaviour:
     _sightSprintMulti: 1.4
     _sightAlertMulti: 1.4
     _searchingNoticeRange: 2
+    _closeSightRadius: 2
+    _closeSightIgnoreFoV: 1
+    _closeSightIgnoreLoS: 0
   _movement:
     _walkSpeed: 4
     _runSpeed: 7
@@ -37,4 +40,4 @@ MonoBehaviour:
     _drawGizmos: 1
   _stability:
     _stateCooldownSeconds: 0.35
-    _fovExitLag: 5
+    _fovExitLag: 30

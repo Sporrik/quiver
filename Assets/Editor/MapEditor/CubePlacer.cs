@@ -1,12 +1,7 @@
-using System;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditorInternal;
 using UnityEngine;
-using UnityEngine.Analytics;
 using UnityEngine.InputSystem;
-using UnityEngine.ProBuilder.MeshOperations;
-using UnityEngine.ProBuilder.Shapes;
 
 public class CubePlacer : MonoBehaviour
 {
