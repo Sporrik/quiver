@@ -25,12 +25,18 @@ namespace Gameplay.GuardCfg
             private float _sightAlertMulti = 1.2f;
             [SerializeField, Min(0f), Tooltip("Forgiving notice radius outside of FOV, only while Searching")]
             private float _searchingNoticeRange;
+            [SerializeField, Min(0f)] private float _closeSightRadius = 1.2f;
+            [SerializeField] private bool _closeSightIgnoreFoV = true;         //see outside cone
+            [SerializeField] private bool _closeSightIgnoreLoS = false;
 
             public float SightRange => _sightRange;
             public float SightAngle => _sightAngle;
             public float SightSprintMulti => _sightSprintMulti;
             public float SightAlertMulti => _sightAlertMulti;
             public float SearchingNoticeRange => _searchingNoticeRange;
+            public float CloseSightRadius => _closeSightRadius;
+            public bool CloseSightIgnoreFoV => _closeSightIgnoreFoV;
+            public bool CloseSightIgnoreLoS => _closeSightIgnoreLoS;
         }
 
         [Serializable]

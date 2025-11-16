@@ -145,6 +145,26 @@ namespace Gameplay.AI
             // Early-out by distance
             if (_distanceToPlayer > sight) return;
 
+            // Close-range vision check
+            if (_distanceToPlayer <= _guardCfg.Perception.CloseSightRadius)
+            {
+                bool okLoS = _guardCfg.Perception.CloseSightIgnoreLoS
+                    || !Physics.Raycast(_eyes.position,
+                    (_player.position - _eyes.position).normalized,
+                    _distanceToPlayer,
+                    _guardCfg.LoSMask,
+                    QueryTriggerInteraction.Ignore);
+
+                if (okLoS)
+                {
+                    if (_guardCfg.Perception.CloseSightIgnoreFoV)
+                    {
+                        _seesPlayer = true;
+                        return;
+                    }
+                }
+            }
+
             // Angle check from eyes
             Vector3 fromEyes = _player.position - _eyes.position;
             Vector3 dirFromEyes = fromEyes.normalized;
@@ -286,7 +306,7 @@ namespace Gameplay.AI
         }
 
         // ---------- Gizmos ----------
-#if     UNITY_EDITOR
+#if UNITY_EDITOR
         private void OnDrawGizmosSelected()
         {
             if (_guardCfg == null || !_guardCfg.Debug.DrawGizmos) return;
@@ -299,6 +319,10 @@ namespace Gameplay.AI
             // attack range
             Gizmos.color = Color.cyan;
             Gizmos.DrawWireSphere(transform.position, _guardCfg.Combat.AttackRange);
+
+            // close sight radius
+            Gizmos.color = new Color(1f, 0.5f, 0f, 0.25f);
+            Gizmos.DrawWireSphere(transform.position, _guardCfg.Perception.CloseSightRadius);
 
             if (_state == State.Searching)
             {
@@ -325,6 +349,6 @@ namespace Gameplay.AI
             Gizmos.DrawLine(origin, origin + Quaternion.AngleAxis(-half, Vector3.up) * forward * radius);
             Gizmos.DrawLine(origin, origin + Quaternion.AngleAxis(half, Vector3.up) * forward * radius);
         }
-    #endif
+#endif
     }
 }

@@ -80,10 +80,10 @@ namespace UI
         // -------- helpers --------
         private static float Clamp(float value) => value < 0f ? 0f : (value > 100f ? 100f : value);
 
-        private void SetPoop(float value) { if (SetPoopSilent(value)) Changed?.Invoke(); }
-        private void SetPee(float value) { if (SetPeeSilent(value)) Changed?.Invoke(); }
-        private void SetHungry(float value) { if (SetHungrySilent(value)) Changed?.Invoke(); }
-        private void SetHappiness(float value) { if (SetHappinessSilent(value)) Changed?.Invoke(); }
+        private void SetPoop(float value)            { if (SetPoopSilent(value)) Changed?.Invoke(); }
+        private void SetPee(float value)             { if (SetPeeSilent(value)) Changed?.Invoke(); }
+        private void SetHungry(float value)          { if (SetHungrySilent(value)) Changed?.Invoke(); }
+        private void SetHappiness(float value)       { if (SetHappinessSilent(value)) Changed?.Invoke(); }
         private void SetStaminaInternal(float value) { if (SetStaminaSilent(value)) Changed?.Invoke(); }
 
 
