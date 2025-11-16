@@ -3,10 +3,10 @@ using UnityEngine;
 
 public class PeeOffset : MonoBehaviour
 {
-    public Transform PeeOrigin;
-    public Transform PeeTarget;
-    public ParticleSystem piss;
-    public Transform ParticleParent;
+    [SerializeField] private Transform PeeOrigin;
+    [SerializeField] private Transform PeeTarget;
+    [SerializeField] private ParticleSystem piss;
+    [SerializeField] private Transform ParticleParent;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -23,7 +23,9 @@ public class PeeOffset : MonoBehaviour
                 gameObject.transform.position.y,
                 PeeTarget.transform.transform.position.z
             );
-       
-        piss.startSpeed = (PeeOrigin.transform.position - gameObject.transform.position).magnitude * 3.25f;
+
+        float speed = (PeeOrigin.transform.position - transform.position).magnitude * 3.25f;
+        var main = piss.main;
+        main.startSpeed = speed;
     }
 }

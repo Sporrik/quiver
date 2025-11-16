@@ -1,96 +1,140 @@
 ﻿using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "UIData", menuName = "Scriptable Objects/UIData")]
-
-public class UIScriptableObject : ScriptableObject
+namespace UI
 {
-    [SerializeField] private float _happinessMeter;
-    [SerializeField] private float _poopMeter;
-    [SerializeField] private float _hungryMeter;
-    [SerializeField] private float _peeMeter;
-    [SerializeField] private float _staminaMeter;
-    [SerializeField] private bool _gameModeSinglePlayer;
+    [CreateAssetMenu(fileName = "UIData", menuName = "Scriptable Objects/UIData")]
+    public class UIScriptableObject : ScriptableObject
+    {
+        [Serializable]
+        public struct Defaults
+        {
+            [Range(0, 100)] public float Poop;
+            [Range(0, 100)] public float Pee;
+            [Range(0, 100)] public float Hungry;
+            [Range(0, 100)] public float Happiness;
+            [Range(0, 100)] public float Stamina;
+        }
 
-    public bool GetGameModeSinglePlayer()
-    {
-        return _gameModeSinglePlayer;
-    }
-    public float GetPoop()
-    {
-        _poopMeter = Mathf.Max(_poopMeter, 0);
-        return Mathf.Min(_poopMeter, 100);
-    }
-    public float GetHapiness()
-    {
-        _happinessMeter = Mathf.Max(_happinessMeter, 0);
-        return Mathf.Min(_happinessMeter, 100);
-    }
-    public float GetHungry()
-    {
-        _hungryMeter = Mathf.Max(_hungryMeter, 0);
-        return Mathf.Min(_hungryMeter, 100);
-    }
-    public float GetPee()
-    {
-        _peeMeter = Mathf.Max(_peeMeter, 0);
-        return Mathf.Min(_peeMeter, 100);
-    }
-    public float GetStamina()
-    {
-        _staminaMeter = Mathf.Max(_staminaMeter, 0);
-        return Mathf.Min(_staminaMeter, 100);
-    }
+        [Header("Defaults")]
+        [SerializeField]
+        private Defaults _defaults = new Defaults
+        {
+            Poop = 0f,
+            Pee = 0f,
+            Hungry = 0f,
+            Happiness = 0f,
+            Stamina = 100f,
 
-    //setters (changes by Warre)
-    public void IncrementPoop(float incrementValue)
-    {
-        _poopMeter += incrementValue;
-        _poopMeter = Mathf.Min(_poopMeter, 100);
+        };
 
-    }
-    public void IncrementHapiness(float incrementValue)
-    {
-        _happinessMeter += incrementValue;
-        _happinessMeter = Mathf.Min(_happinessMeter, 100);
-    }
-    public void IncrementHungry(float incrementValue)
-    {
-        _hungryMeter += incrementValue;
-        _hungryMeter = Mathf.Min(_hungryMeter, 100);
-    }
-    public void IncrementPee(float incrementValue)
-    {
-        _peeMeter += incrementValue;
-        _peeMeter = Mathf.Min(_peeMeter, 100);
-    }
-    public void SetStamina(float setValue)
-    {
-        _staminaMeter = setValue;
-    }
-    public void SetSinglePlayer(bool gameMode)
-    {
-        _gameModeSinglePlayer = gameMode;
-    }
+        [Header("Mode")]
+        [SerializeField] private bool _gameModeSinglePlayer;
 
-    public void ResetPoop()
-    {
-        _poopMeter = 0;
-    }
-    public void ResetHapiness()
-    {
-        _happinessMeter = 0;
-    }
-    public void ResetHungry()
-    {
-        _hungryMeter = 0;
-    }
-    public void ResetPee()
-    {
-        _peeMeter = 0;
-    }
-    public void ResetStamina()
-    {
-        _staminaMeter = 100;
+        // ------- Live Values -------
+        private float _poop;
+        private float _pee;
+        private float _hungry;
+        private float _happiness;
+        private float _stamina;
+
+        // ---------- Events ----------
+        public event Action Changed;                        //any changes
+        public event Action<float> PoopChanged, PeeChanged, HungryChanged, HappinessChanged, StaminaChanged;
+
+        // ---- Getters (clamped) ----
+        public bool GetGameModeSinglePlayer() => _gameModeSinglePlayer;
+
+        public float GetPoop() => Clamp(_poop);
+        public float GetPee() => Clamp(_pee);
+        public float GetHungry() => Clamp(_hungry);
+        public float GetHappiness() => Clamp(_happiness);
+        public float GetStamina() => Clamp(_stamina);
+
+        // --- Increments / Setters ---
+        public void IncrementPoop(float v) => SetPoop(_poop + v);
+        public void IncrementPee(float v) => SetPee(_pee + v);
+        public void IncrementHungry(float v) => SetHungry(_hungry + v);
+        public void IncrementHappiness(float v) => SetHappiness(_happiness + v);
+        public void SetStamina(float v) => SetStaminaInternal(v);
+
+        public void SetSinglePlayer(bool gameMode) => _gameModeSinglePlayer = gameMode;
+
+        // ---------- Resets ----------
+        public void ResetPoop() => SetPoop(0f);
+        public void ResetPee() => SetPee(0f);
+        public void ResetHungry() => SetHungry(0f);
+        public void ResetHappiness() => SetHappiness(0f);
+        public void ResetStamina() => SetStaminaInternal(100f);
+
+        public void ResetAllToDefaults()
+        {
+            bool any = false;
+            any |= SetPoopSilent(_defaults.Poop);
+            any |= SetPeeSilent(_defaults.Pee);
+            any |= SetHungrySilent(_defaults.Hungry);
+            any |= SetHappinessSilent(_defaults.Happiness);
+            any |= SetStaminaSilent(_defaults.Stamina);
+        }
+
+        // -------- helpers --------
+        private static float Clamp(float value) => value < 0f ? 0f : (value > 100f ? 100f : value);
+
+        private void SetPoop(float value) { if (SetPoopSilent(value)) Changed?.Invoke(); }
+        private void SetPee(float value) { if (SetPeeSilent(value)) Changed?.Invoke(); }
+        private void SetHungry(float value) { if (SetHungrySilent(value)) Changed?.Invoke(); }
+        private void SetHappiness(float value) { if (SetHappinessSilent(value)) Changed?.Invoke(); }
+        private void SetStaminaInternal(float value) { if (SetStaminaSilent(value)) Changed?.Invoke(); }
+
+
+        private bool SetPoopSilent(float value)
+        {
+            float newValue = Clamp(value);
+            if (Mathf.Approximately(newValue, _poop)) return false;
+            _poop = newValue;
+            PoopChanged?.Invoke(_poop);
+            return true;
+        }
+
+        private bool SetPeeSilent(float value)
+        {
+            float newValue = Clamp(value);
+            if (Mathf.Approximately(newValue, _pee)) return false;
+            _pee = newValue;
+            PeeChanged?.Invoke(_pee);
+            return true;
+        }
+
+        private bool SetHungrySilent(float value)
+        {
+            float newValue = Clamp(value);
+            if (Mathf.Approximately(newValue, _hungry)) return false;
+            _hungry = newValue;
+            HungryChanged?.Invoke(_hungry);
+            return true;
+        }
+
+        private bool SetHappinessSilent(float value)
+        {
+            float newValue = Clamp(value);
+            if (Mathf.Approximately(newValue, _happiness)) return false;
+            _happiness = newValue;
+            HappinessChanged?.Invoke(_happiness);
+            return true;
+        }
+
+        private bool SetStaminaSilent(float value)
+        {
+            float newValue = Clamp(value);
+            if (Mathf.Approximately(newValue, _stamina)) return false;
+            _stamina = newValue;
+            StaminaChanged?.Invoke(_stamina);
+            return true;
+        }
+#if UNITY_EDITOR
+        [ContextMenu("Apply Defaults Now (Editor)")]
+        private void EditorApplyDefaults() => ResetAllToDefaults();
+#endif
     }
 }
+

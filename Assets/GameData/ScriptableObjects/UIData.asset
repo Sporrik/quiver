@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f062b5029b5ee244f8685d288a8fdfed, type: 3}
   m_Name: UIData
   m_EditorClassIdentifier: 
-  _happinessMeter: 0
-  _poopMeter: 0
-  _hungryMeter: 0
-  _peeMeter: 0
-  _staminaMeter: 100
-  _gameMode: 0
+  _defaults:
+    Poop: 0
+    Pee: 0
+    Hungry: 0
+    Happiness: 0
+    Stamina: 100
+  _gameModeSinglePlayer: 1
