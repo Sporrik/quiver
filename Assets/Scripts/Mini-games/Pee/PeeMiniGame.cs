@@ -14,6 +14,9 @@ public class PeeMiniGame : MonoBehaviour
     [SerializeField] private int PeeRange = 30;
     [SerializeField] private float Speed = 75f;
     public bool TaskComplete = false;
+    [Header("Win condition:")]
+    [SerializeField] private MinigameWinToggle _winCondition = null;
+    [SerializeField] private float _winTriggerDelay = 1f;
 
     private int _currentRange;
     private float _currentSpeed;
@@ -77,8 +80,19 @@ public class PeeMiniGame : MonoBehaviour
 
         if (CurrentPeeAmount >= TargetPeeAmount)
         {
-            Debug.Log("Pee Mini-game Complete!");
+            //Debug.Log("Pee Mini-game Complete!");
             TaskComplete = true;
+        }
+
+        // needed in order to trigger the closing of the minigame
+        if(TaskComplete)
+        {
+            if(_winTriggerDelay <= 0)
+            {
+                _winCondition.WinMinigame();
+            }
+
+            _winTriggerDelay -= Time.deltaTime;
         }
     }
 }

@@ -293,7 +293,7 @@ public sealed class MinigameScreen : MonoBehaviour
 
         else if (pee >= _maxProgress) _pendingSceneName = _peeMinigame;
 
-        else if(hungry >= _maxProgress) _pendingSceneName = _feedingMinigame;
+        //else if(hungry >= _maxProgress) _pendingSceneName = _feedingMinigame;     //=> not implemented yet so it causes errors now
         
         //Debug.Log(_pendingSceneName);
 
