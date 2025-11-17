@@ -15,7 +15,7 @@ public class LevelManager : MonoBehaviour
     private static bool _loadFirstLevel = false;
 
     private bool _gameOver;
-    private float _timeUntilRestart;
+    [SerializeField] private float _timeUntilRestart = 2.5f;
 
     private GameObject _player;
 
@@ -110,7 +110,7 @@ public class LevelManager : MonoBehaviour
     private void TriggerGameOver()
     {
         _gameOver = true;
-        _timeUntilRestart = 5f;
+        //_timeUntilRestart = 5f;
         _gameOverPanel.SetActive(true);
     }
 

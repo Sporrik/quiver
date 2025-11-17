@@ -8150,6 +8150,10 @@ PrefabInstance:
       value: -0.000025431
       objectReference: {fileID: 0}
     - target: {fileID: 6184660358001102280, guid: 9bedda03c24337841b23c14377eb82cc, type: 3}
+      propertyPath: _timeUntilRestart
+      value: 1.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 6184660358001102280, guid: 9bedda03c24337841b23c14377eb82cc, type: 3}
       propertyPath: _levelNames.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -39986,7 +39990,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Q om neer te halen
+  m_text: A om neer te halen
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
