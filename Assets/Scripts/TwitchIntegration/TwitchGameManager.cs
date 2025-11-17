@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Xml;
 using TMPro;
 using TwitchIntegration;
 using UI;
@@ -8,6 +9,7 @@ using UnityEngine;
 
 public class TwitchGameManager : TwitchMonoBehaviour
 {
+
     [Header("Authorization")]
     [SerializeField] private TMP_InputField channelNameInput;
     [SerializeField] private TMP_InputField userNameInput;
@@ -46,7 +48,8 @@ public class TwitchGameManager : TwitchMonoBehaviour
 
 
     #region TwitchCommands
-    [TwitchCommand("poop_command", "poo")]
+
+    [TwitchCommand("poop_command", "poo", "poO", "pOo", "pOO", "Poo", "PoO", "POo", "POO")]
     public void FillupPoopBar()
     {
         _commands.Add("poop_command"); //DON'T REMOVE || used for statistics in log file
@@ -55,7 +58,7 @@ public class TwitchGameManager : TwitchMonoBehaviour
         uiData.IncrementPoop(incPoop); //Increment call inside ui script
     }
 
-    [TwitchCommand("wee_command", "wee")]
+    [TwitchCommand("wee_command", "wee", "weE", "wEe", "wEE", "Wee", "WeE", "WEe", "WEE")]
     public void FillupPeeBar()
     {
         _commands.Add("wee_command"); //DON'T REMOVE || used for statistics in log file
@@ -63,7 +66,9 @@ public class TwitchGameManager : TwitchMonoBehaviour
         if (uiData == null) { Debug.LogWarning("TwitchManager: UIData not assigned."); return; }
         uiData.IncrementPee(incPee); //Increment call inside ui script
     }
-    [TwitchCommand("hunger_command", "hunger")]
+    [TwitchCommand("hunger_command", "hunger", "hungeR", "hungEr", "hungER", "hunGer", "hunGeR", "hunGEr", "hunGER", "huNger", "huNgeR", "huNgEr",
+        "huNgER", "huNGer", "huNGeR", "huNGEr", "huNGER", "hUnger", "hUngeR", "hUngEr", "hUngER", "hUnGer", "hUnGeR", "hUnGEr", "hUnGER", "Hunger", "HungeR",
+        "HungEr", "HungER", "HunGer", "HunGeR", "HunGEr", "HunGER")]
     public void FillupHungerBar()
     {
         _commands.Add("hunger_command"); //DON'T REMOVE || used for statistics in log file
@@ -75,7 +80,7 @@ public class TwitchGameManager : TwitchMonoBehaviour
 
     private void Start()
     {
-        LogHelper.Init(); //initialise LogHelper (file creation)
+        DontDestroyOnLoad(gameObject);
     }
 
     //AUTH
@@ -117,6 +122,7 @@ public class TwitchGameManager : TwitchMonoBehaviour
             Application.Quit();
         }
     }
+
 
     //DON'T REMOVE || log creation after application close
     private void OnApplicationQuit()
@@ -181,63 +187,7 @@ public class TwitchGameManager : TwitchMonoBehaviour
     }
 
     //DON'T REMOVE || Separate class for log creation
-    static class LogHelper
-    {
-        private static string _logPath;
-        /// <summary>
-        /// Initialises LogHelper, creates directory if not made already and sets the variable _logPath to "log_yyyy-MM-dd.log"
-        /// </summary>
-        public static void Init()
-        {
-            _logPath = Path.Combine(Application.persistentDataPath, "chatLogs/log_" + $"{DateTime.Now:yyyy-MM-dd}" + ".log");
-            try
-            {
-                // Ensure directory exists
-                var dir = Path.GetDirectoryName(_logPath);
-                if (!Directory.Exists(dir))
-                {
-                    Directory.CreateDirectory(dir);
-                    Debug.Log("Directory made");
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.LogError("Log path setup failed: " + e);
-            }
-        }
 
-        /// <summary>
-        /// Writes message to log file with time (HH:mm:ss.fff)
-        /// </summary>
-        public static void Write(string message)
-        {
-            try
-            {
-                using var writer = new StreamWriter(_logPath, append: true);
-                writer.WriteLine($"{DateTime.Now:HH:mm:ss.fff} - {message}");
-            }
-            catch (Exception e)
-            {
-                Debug.LogError("Failed to write log: " + e);
-            }
-        }
-
-        /// <summary>
-        /// Creates line with text "End of application"
-        /// </summary>
-        public static void EndOfApplication()
-        {
-            try
-            {
-                using var writer = new StreamWriter(_logPath, append: true);
-                writer.WriteLine(" - - - - - - End of application - - - - - - ");
-            }
-            catch (Exception e)
-            {
-                Debug.LogError("Failed to write log: " + e);
-            }
-        }
-    }
 
     //DON'T REMOVE || public function calls, read summaries!
 
@@ -263,3 +213,6 @@ public class TwitchGameManager : TwitchMonoBehaviour
         return _viewerCount;
     }
 }
+
+
+
