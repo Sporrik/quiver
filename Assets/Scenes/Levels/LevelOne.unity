@@ -7808,6 +7808,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5355228854704401264, guid: 9bedda03c24337841b23c14377eb82cc, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 3.7779973
+      objectReference: {fileID: 0}
+    - target: {fileID: 5355228854704401264, guid: 9bedda03c24337841b23c14377eb82cc, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 3.7779973
+      objectReference: {fileID: 0}
+    - target: {fileID: 5355228854704401264, guid: 9bedda03c24337841b23c14377eb82cc, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 3.7779973
+      objectReference: {fileID: 0}
+    - target: {fileID: 5355228854704401264, guid: 9bedda03c24337841b23c14377eb82cc, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.000025431
+      objectReference: {fileID: 0}
     - target: {fileID: 6184660358001102280, guid: 9bedda03c24337841b23c14377eb82cc, type: 3}
       propertyPath: _levelNames.Array.size
       value: 1
@@ -7815,6 +7831,10 @@ PrefabInstance:
     - target: {fileID: 6184660358001102280, guid: 9bedda03c24337841b23c14377eb82cc, type: 3}
       propertyPath: '_levelNames.Array.data[0]'
       value: LevelOne
+      objectReference: {fileID: 0}
+    - target: {fileID: 7035906617413364234, guid: 9bedda03c24337841b23c14377eb82cc, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -23493,7 +23513,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1140897546
 RectTransform:
   m_ObjectHideFlags: 0
@@ -35447,7 +35467,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1750621094
 Transform:
   m_ObjectHideFlags: 0

@@ -110,6 +110,12 @@ public class TwitchGameManager : TwitchMonoBehaviour
             _viewerCounts.Add(_viewerCount);
             _accTime = 0f;
         }
+
+        //MAKESHIFT SOLUTION
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
     }
 
     //DON'T REMOVE || log creation after application close
@@ -128,8 +134,6 @@ public class TwitchGameManager : TwitchMonoBehaviour
         int PoopUsed = 0;
         int PeeUsed = 0;
         int HungerUsed = 0;
-        int HappinessUsed = 0;
-        int StaminaUsed = 0;
 
         float avrCommandsPerSec = 0;
         float avrCommandsPerMin = 0;
@@ -138,8 +142,6 @@ public class TwitchGameManager : TwitchMonoBehaviour
             if (command == "poop_command") PoopUsed++;
             if (command == "pee_command") PeeUsed++;
             if (command == "hunger_command") HungerUsed++;
-            if (command == "happiness_command") HappinessUsed++;
-            if (command == "stamina_command") StaminaUsed++;
             avrCommandsPerSec++;
             avrCommandsPerMin++;
         }
@@ -156,10 +158,6 @@ public class TwitchGameManager : TwitchMonoBehaviour
         LogHelper.Write("poop_command : " + PoopUsed);
         LogHelper.Write("pee_command : " + PeeUsed);
         LogHelper.Write("hunger_command : " + HungerUsed);
-        LogHelper.Write("happiness_command : " + HappinessUsed);
-        LogHelper.Write("stamina_command : " + StaminaUsed);
-
-
 
         //places a divider between each application end (to separate multiple playings per day)
         LogHelper.EndOfApplication();
