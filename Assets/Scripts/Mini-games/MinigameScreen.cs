@@ -43,12 +43,12 @@ public sealed class MinigameScreen : MonoBehaviour
     private void OnEnable()
     {
         if (_barManager == null) { Debug.LogError($"{nameof(MinigameScreen)}: BarManager not set.", this); return; }
-        _barManager.OnNeedFilled += HandleNeedFilled;
+        //_barManager.OnNeedFilled += HandleNeedFilled;
     }
 
     private void OnDisable()
     {
-        if (_barManager != null) _barManager.OnNeedFilled -= HandleNeedFilled;
+        //if (_barManager != null) _barManager.OnNeedFilled -= HandleNeedFilled;
     }
 
     void Start()
@@ -70,7 +70,7 @@ public sealed class MinigameScreen : MonoBehaviour
     {
         SelectMiniGame();
 
-        DragPanel();
+        //DragPanel();
 
         ToggleScreen();
     }
