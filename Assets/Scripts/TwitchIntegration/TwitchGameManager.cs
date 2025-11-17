@@ -78,11 +78,6 @@ public class TwitchGameManager : TwitchMonoBehaviour
     }
     #endregion
 
-    private void Start()
-    {
-        DontDestroyOnLoad(gameObject);
-    }
-
     //AUTH
     private void Update()
     {
