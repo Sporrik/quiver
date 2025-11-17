@@ -208,7 +208,7 @@ namespace UI
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.cyan;
-            Gizmos.DrawWireSphere(transform.position, _cryRange);
+            Gizmos.DrawWireSphere(_playerController.transform.position, _cryRange);
         }
 #endif
     }
