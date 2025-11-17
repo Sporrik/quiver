@@ -170,9 +170,9 @@ namespace UI
             {
                 _happinessTimer -= _happinessTickInterval;
 
-                float poop01 = _scriptableObject.GetPoop() * 0.01f;
+                float poop01   = _scriptableObject.GetPoop() * 0.01f;
                 float hungry01 = _scriptableObject.GetHungry() * 0.01f;
-                float pee01 = _scriptableObject.GetPee() * 0.01f;
+                float pee01    = _scriptableObject.GetPee() * 0.01f;
 
                 float needsAvg = (poop01 + hungry01 + pee01) / 3f;
                 float chance = Mathf.Lerp(_happinessBaseChance, _happinessChanceAtFull, needsAvg);
