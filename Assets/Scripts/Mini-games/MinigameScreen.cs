@@ -70,7 +70,7 @@ public sealed class MinigameScreen : MonoBehaviour
     {
         SelectMiniGame();
 
-        DragPanel();
+        //DragPanel();
 
         ToggleScreen();
     }
