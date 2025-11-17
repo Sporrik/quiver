@@ -17,8 +17,10 @@ public sealed class MinigameInputGate : MonoBehaviour
             return;
         }
 
-        _minigameManager.Opened += HandleOpened;
-        _minigameManager.Closed += HandleClosed;
+        _minigameManager.Opened  += HandleOpened;
+        _minigameManager.Closed  += HandleClosed;
+        _minigameManager.Paused  += HandleOpened;
+        _minigameManager.Resumed += HandleClosed;
 
         if (_minigameManager.MinigameIsRunning()) HandleOpened("_");
     }
@@ -46,6 +48,20 @@ public sealed class MinigameInputGate : MonoBehaviour
     }
 
     private void HandleClosed(string _)
+    {
+        if (!_blocked) return;
+        _inputRelay.EndBlock(this);
+        _blocked = false;
+    }
+
+    private void HandleOpened()
+    {
+        if (_blocked) return;
+        _inputRelay.BeginBlock(this);
+        _blocked = true;
+    }
+
+    private void HandleClosed()
     {
         if (!_blocked) return;
         _inputRelay.EndBlock(this);
