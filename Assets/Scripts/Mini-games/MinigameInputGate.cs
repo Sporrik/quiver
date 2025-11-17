@@ -18,9 +18,10 @@ public sealed class MinigameInputGate : MonoBehaviour
         }
 
         _minigameManager.Opened  += HandleOpened;
+        _minigameManager.Resumed += HandleOpened;
         _minigameManager.Closed  += HandleClosed;
-        _minigameManager.Paused  += HandleOpened;
-        _minigameManager.Resumed += HandleClosed;
+        _minigameManager.Paused  += HandleClosed;
+        
 
         if (_minigameManager.MinigameIsRunning()) HandleOpened("_");
     }

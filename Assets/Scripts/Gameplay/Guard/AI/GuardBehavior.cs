@@ -325,6 +325,7 @@ namespace Gameplay.AI
             if (_takedown == null) return false;
             if (Time.time < _takedownCooldownUntil) return false;
             if (!enabled || !_agent.enabled) return false;
+            if (_state != State.Patrolling) return false;
 
             if (_seesPlayer && _state == State.Chasing) return false;
 
