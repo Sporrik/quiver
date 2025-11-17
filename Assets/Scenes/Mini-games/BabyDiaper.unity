@@ -2138,7 +2138,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 514358582}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
   m_Name: 
@@ -2648,7 +2648,6 @@ GameObject:
   m_Component:
   - component: {fileID: 882338400}
   - component: {fileID: 882338403}
-  - component: {fileID: 882338402}
   - component: {fileID: 882338401}
   m_Layer: 0
   m_Name: Minigame Camera
@@ -2716,14 +2715,6 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
---- !u!81 &882338402
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 882338399}
-  m_Enabled: 0
 --- !u!20 &882338403
 Camera:
   m_ObjectHideFlags: 0
