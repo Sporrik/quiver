@@ -34,17 +34,17 @@ public class TwitchGameManager : TwitchMonoBehaviour
     private string _channelName;
 
     //Vars for chatters per [refreshTime]
-    private List<string> _userIDsInChat = new List<string>();
-    private List<float> _timeUserIDsInChat = new List<float>();
+    private static List<string> _userIDsInChat = new List<string>();
+    private static List<float> _timeUserIDsInChat = new List<float>();
 
     //Vars for log file creation
-    private int _viewerCount;
-    private List<int> _viewerCounts = new List<int>();
-    private int _highestViewerCount;
-    private int _averageViewerCount;
+    private static int _viewerCount;
+    private static List<int> _viewerCounts = new List<int>();
+    private static int _highestViewerCount;
+    private static int _averageViewerCount;
     private float _accTime;
 
-    private List<string> _commands = new List<string>();
+    private static List<string> _commands = new List<string>();
 
 
     #region TwitchCommands
