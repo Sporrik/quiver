@@ -40,6 +40,8 @@ public sealed class MinigameScreen : MonoBehaviour
 
     private float _panelWidth;
 
+    private float _halfWidth;
+
     private void OnEnable()
     {
         if (_barManager == null) { Debug.LogError($"{nameof(MinigameScreen)}: BarManager not set.", this); return; }
@@ -68,6 +70,8 @@ public sealed class MinigameScreen : MonoBehaviour
 
         _panelStartPos = _panel.transform.position;
         _panel.transform.position = new Vector3(_clipPosition.x - _panelWidth / 2, _panelStartPos.y, _panelStartPos.z);
+
+        _halfWidth = _panelWidth / 2;
     }
 
     void Update()
@@ -100,15 +104,8 @@ public sealed class MinigameScreen : MonoBehaviour
             if (!GotClipped())
             {
                 TryOpenBySpace();
-                // just making sure
-                _slideOut = false;
             }
-            else
-            {
-                // again, just making sure
-                _slideOut = true;
-                _slideIn = false;
-            }
+            else _slideOut = true;
         }
 
         if (_slideIn && !string.IsNullOrEmpty(_pendingSceneName)) SlideIn(_pendingSceneName);
@@ -118,6 +115,8 @@ public sealed class MinigameScreen : MonoBehaviour
 
     private void ResetMinigame()
     {
+        Debug.Log("resetting minigame!");
+
         string sceneName = _manager.QuitMinigame();
         if (_uiData == null) return;
 
@@ -126,7 +125,6 @@ public sealed class MinigameScreen : MonoBehaviour
         else if (sceneName == _feedingMinigame) _uiData.ResetHungry();
 
         _pendingSceneName = null;
-        _slideIn = false;
     }
 
     private void ToggleScreen()
@@ -137,33 +135,127 @@ public sealed class MinigameScreen : MonoBehaviour
 
             _manager.PauseMinigame(false);
 
-            if(_manager.MinigameIsRunning())
-            {
-                _blackScreen.enabled = false;
+            if (!_manager.MinigameIsRunning()) return;
+            
+            _blackScreen.enabled = false;
 
-                if (_visualsBars != null)
-                {
-                    _visualsBars.SetActive(false);
-                }
+            if (_visualsBars != null)
+            {
+                _visualsBars.SetActive(false);
             }
+            
         }
         else
         {
             _manager.PauseMinigame(true);
             _blackScreen.enabled = true;
 
-            if (_visualsBars != null)
-            {
-                _visualsBars.SetActive(true);
-            }
+            if (_visualsBars != null) _visualsBars.SetActive(true);
         }
 
     }
 
-    // dragging works!
+    // clipping gets registered
+    public bool GotClipped()
+    {
+        //_panelStartPos = _panel.transform.position;
+
+        if (_clipPosition.x + _halfWidth <= _panel.transform.position.x)
+        {
+            _panel.transform.position = new Vector3(_clipPosition.x + _halfWidth, _panelStartPos.y, _panelStartPos.z);
+
+            return true;
+        }
+        else
+        {
+            _border.transform.localScale = Vector3.one;
+        }
+
+        float progress = Mathf.Max(_panel.transform.position.x, 0) / _halfWidth;
+
+        float scale = _borderScaleOnFullscreen * progress;
+
+        scale = Mathf.Max(scale, 1);
+
+        _border.transform.localScale = new Vector3(scale, scale, scale);
+        _blackScreen.transform.localScale = new Vector3(scale, scale, scale);
+
+        return false;
+    }
+
+    public void SlideIn(string sceneName)
+    {
+        if (GotClipped())
+        {
+            Debug.Log("slid in!");
+
+            if (!_manager.MinigameIsRunning())
+            {
+                _manager.LoadMinigame(sceneName);
+            }
+
+            _slideIn = false;
+        }
+
+        _panel.transform.position = new Vector3
+            (
+            _panel.transform.position.x + _slideSpeed * Time.deltaTime,
+            _panelStartPos.y,
+            _panelStartPos.z
+            );
+    }
+
+    public void SlideOut(bool unloadScene = false)
+    {
+        if (_clipPosition.x - _halfWidth >= _panel.transform.position.x)
+        {
+            Debug.Log("slid out!");
+
+            if (unloadScene) ResetMinigame();
+
+            _panel.transform.position = new Vector3(_clipPosition.x - _halfWidth, _panelStartPos.y, _panelStartPos.z);
+
+            _slideOut = false;
+
+            return;
+        }
+
+        _panel.transform.position = new Vector3
+            (
+            _panel.transform.position.x - _slideSpeed * Time.deltaTime,
+            _panelStartPos.y,
+            _panelStartPos.z
+            );
+    }
+
+    private void TryOpenBySpace()
+    {
+        if (_uiData == null) return;
+
+        if(!_manager.MinigameIsRunning())
+        {
+            float poop = _uiData.GetPoop();
+            float pee = _uiData.GetPee();
+            float hungry = _uiData.GetHungry();
+
+            // Check threshold
+            bool poopOk = poop >= _maxProgress, peeOk = pee >= _maxProgress, hungryOk = hungry >= _maxProgress;
+            if (!poopOk && !peeOk && !hungryOk) return;
+
+
+            if (poop >= _maxProgress) _pendingSceneName = _diaperMinigame;
+
+            else if (pee >= _maxProgress) _pendingSceneName = _peeMinigame;
+        }
+
+        _slideIn = true;
+    }
+
+    // these functions work, but aren't used at the moment
+    // we're keeping them in case we have a change of mind
     private void DragPanel()
     {
-       float xDrag = GetDrag().x;
+        float xDrag = GetDrag().x;
 
         if (Input.GetMouseButton(0))
         {
@@ -212,118 +304,5 @@ public sealed class MinigameScreen : MonoBehaviour
     private bool IsInsideImage(RawImage image, Vector2 pos)
     {
         return RectTransformUtility.RectangleContainsScreenPoint(image.rectTransform, pos);
-    }
-
-    // clipping gets registered
-    public bool GotClipped()
-    {
-        _panelStartPos = _panel.transform.position;
-
-        if (_clipPosition.x + _panelWidth / 2 <= _panel.transform.position.x)
-        {
-            _panel.transform.position = new Vector3(_clipPosition.x + _panelWidth / 2, _panelStartPos.y, _panelStartPos.z);
-
-            //Debug.Log("Got clipped!");
-
-            return true;
-        }
-        else
-        {
-            _border.transform.localScale = Vector3.one;
-        }
-
-        float progress = Mathf.Max(_panel.transform.position.x, 0) / (_panelWidth / 2);
-
-        float scale = _borderScaleOnFullscreen * progress;
-
-        scale = Mathf.Max(scale, 1);
-
-        _border.transform.localScale = new Vector3(scale, scale, scale);
-        _blackScreen.transform.localScale = new Vector3(scale, scale, scale);
-
-        return false;
-    }
-
-    public void SlideIn(string sceneName)
-    {
-        if (GotClipped())
-        {
-            if (!_manager.MinigameIsRunning())
-            {
-                _manager.LoadMinigame(sceneName);
-            }
-
-            _slideIn = false;
-        }
-        else if (!GotClipped())
-        {
-            _panel.transform.position = Vector3.MoveTowards
-            (
-                _panel.transform.position,
-                new Vector3(_clipPosition.x + _panelWidth / 2, _panelStartPos.y, _panelStartPos.z),
-                _slideSpeed * Time.deltaTime
-            );
-        }
-    }
-
-    public void SlideOut(bool unloadScene = false)
-    {
-        if (_clipPosition.x - _panelWidth / 2 >= _panel.transform.position.x)
-        {
-            _panel.transform.position = new Vector3(_clipPosition.x - _panelWidth / 2, _panelStartPos.y, _panelStartPos.z);
-
-            if(unloadScene) ResetMinigame();
-
-            _slideOut = false;
-        }
-        else if (_clipPosition.x - _panelWidth / 2 < _panel.transform.position.x)
-        {
-            _panel.transform.position = Vector3.MoveTowards
-            (
-                _panel.transform.position,
-                new Vector3(_clipPosition.x - _panelWidth / 2, _panelStartPos.y, _panelStartPos.z),
-                _slideSpeed * Time.deltaTime
-            );
-        }
-    }
-
-    private void TryOpenBySpace()
-    {
-        if (_uiData == null) return;
-
-        if(!_manager.MinigameIsRunning())
-        {
-            float poop = _uiData.GetPoop();
-            float pee = _uiData.GetPee();
-            float hungry = _uiData.GetHungry();
-
-            // Check threshold
-            bool poopOk = poop >= _maxProgress, peeOk = pee >= _maxProgress, hungryOk = hungry >= _maxProgress;
-            if (!poopOk && !peeOk && !hungryOk) return;
-
-
-            if (poop >= _maxProgress) _pendingSceneName = _diaperMinigame;
-
-            else if (pee >= _maxProgress) _pendingSceneName = _peeMinigame;
-        }
-
-        _slideIn = true;
-
-        // an old fix/redo which may have been a solution for a bug, but we don't know what
-        // it's supposed to change in terms of functionality
-
-        //// Pick the most filled among those >= threshold (tie priority: Poop > Pee > Hungry)
-        //if (poopOk && poop >= Mathf.Max(peeOk ? pee : -1f, hungryOk ? hungry : -1f))
-        //{
-        //    _pendingSceneName = _diaperMinigame;
-        //}
-        //else if (peeOk && pee >= Mathf.Max(hungryOk ? hungry : -1f))
-        //{
-        //    _pendingSceneName = _peeMinigame;
-        //}
-        //else
-        //{
-        //    _pendingSceneName = _feedingMinigame;
-        //}
     }
 }
