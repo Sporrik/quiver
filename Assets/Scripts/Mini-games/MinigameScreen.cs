@@ -61,7 +61,11 @@ public sealed class MinigameScreen : MonoBehaviour
             _visualsBars.SetActive(true);
         }
 
-        _panelWidth = _panel.GetComponent<RectTransform>().rect.width;
+        RectTransform rectangle = _panel.GetComponent<RectTransform>();
+        rectangle.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Screen.width);
+
+        _panelWidth = rectangle.rect.width;
+
         _panelStartPos = _panel.transform.position;
         _panel.transform.position = new Vector3(_clipPosition.x - _panelWidth / 2, _panelStartPos.y, _panelStartPos.z);
     }
