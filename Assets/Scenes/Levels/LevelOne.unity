@@ -11384,10 +11384,10 @@ MonoBehaviour:
   _playerController: {fileID: 557317126}
   _scriptableObject: {fileID: 11400000, guid: 377fbeaf0c2d98543837ee90c8854047, type: 2}
   _timeToGetRandomEvent: 1
-  _amountToIncreaseBar: 5
+  _amountToIncreaseBar: 3
   _singlePlayerOverride: 1
-  _happinessTickInterval: 1
-  _happinessIncrement: 5
+  _happinessTickInterval: 0.05
+  _happinessIncrement: 0
   _happinessBaseChance: 0.01
   _happinessChanceAtFull: 0.5
   _cryRange: 10
@@ -43307,15 +43307,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3949508179338775089, guid: 5caf5bb964e6f904c8d4350217215474, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3949508179338775089, guid: 5caf5bb964e6f904c8d4350217215474, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3949508179338775089, guid: 5caf5bb964e6f904c8d4350217215474, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3949508179338775089, guid: 5caf5bb964e6f904c8d4350217215474, type: 3}
       propertyPath: m_LocalPosition.x
