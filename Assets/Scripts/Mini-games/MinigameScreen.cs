@@ -308,22 +308,5 @@ public sealed class MinigameScreen : MonoBehaviour
         }
 
         _slideIn = true;
-
-        // an old fix/redo which may have been a solution for a bug, but we don't know what
-        // it's supposed to change in terms of functionality
-
-        //// Pick the most filled among those >= threshold (tie priority: Poop > Pee > Hungry)
-        //if (poopOk && poop >= Mathf.Max(peeOk ? pee : -1f, hungryOk ? hungry : -1f))
-        //{
-        //    _pendingSceneName = _diaperMinigame;
-        //}
-        //else if (peeOk && pee >= Mathf.Max(hungryOk ? hungry : -1f))
-        //{
-        //    _pendingSceneName = _peeMinigame;
-        //}
-        //else
-        //{
-        //    _pendingSceneName = _feedingMinigame;
-        //}
     }
 }
