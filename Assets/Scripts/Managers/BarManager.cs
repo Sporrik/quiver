@@ -87,6 +87,8 @@ namespace UI
 
             float dt = Time.deltaTime;
             _eventTimer += dt;
+            _happinessTimer += dt;
+
             if (_cryCooldownTimer > 0f) _cryCooldownTimer -= dt;
 
             if (_isSinglePlayer && _eventTimer >= _timeToGetRandomEvent)
@@ -183,7 +185,7 @@ namespace UI
 
         private void AlertGuardsInRange()
         {
-            int count = Physics.OverlapSphereNonAlloc(transform.position,
+            int count = Physics.OverlapSphereNonAlloc(_playerController.transform.position,
                                                       _cryRange,
                                                       _guardHits,
                                                       _guardMask,
