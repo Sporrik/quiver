@@ -100,8 +100,15 @@ public sealed class MinigameScreen : MonoBehaviour
             if (!GotClipped())
             {
                 TryOpenBySpace();
+                // just making sure
+                _slideOut = false;
             }
-            else _slideOut = true;
+            else
+            {
+                // again, just making sure
+                _slideOut = true;
+                _slideIn = false;
+            }
         }
 
         if (_slideIn && !string.IsNullOrEmpty(_pendingSceneName)) SlideIn(_pendingSceneName);
@@ -284,25 +291,23 @@ public sealed class MinigameScreen : MonoBehaviour
     {
         if (_uiData == null) return;
 
-        float poop = _uiData.GetPoop();
-        float pee = _uiData.GetPee();
-        float hungry = _uiData.GetHungry();
+        if(!_manager.MinigameIsRunning())
+        {
+            float poop = _uiData.GetPoop();
+            float pee = _uiData.GetPee();
+            float hungry = _uiData.GetHungry();
 
-        // Check threshold
-        bool poopOk = poop >= _maxProgress, peeOk = pee >= _maxProgress, hungryOk = hungry >= _maxProgress;
-        if (!poopOk && !peeOk && !hungryOk) return;
+            // Check threshold
+            bool poopOk = poop >= _maxProgress, peeOk = pee >= _maxProgress, hungryOk = hungry >= _maxProgress;
+            if (!poopOk && !peeOk && !hungryOk) return;
 
 
-        if (poop >= _maxProgress) _pendingSceneName = _diaperMinigame;
+            if (poop >= _maxProgress) _pendingSceneName = _diaperMinigame;
 
-        else if (pee >= _maxProgress) _pendingSceneName = _peeMinigame;
-
-        //else if(hungry >= _maxProgress) _pendingSceneName = _feedingMinigame;     //=> not implemented yet so it causes errors now
-        
-        //Debug.Log(_pendingSceneName);
+            else if (pee >= _maxProgress) _pendingSceneName = _peeMinigame;
+        }
 
         _slideIn = true;
-
 
         // an old fix/redo which may have been a solution for a bug, but we don't know what
         // it's supposed to change in terms of functionality
