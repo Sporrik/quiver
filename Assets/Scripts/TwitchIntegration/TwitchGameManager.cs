@@ -46,22 +46,22 @@ public class TwitchGameManager : TwitchMonoBehaviour
 
 
     #region TwitchCommands
-    [TwitchCommand("poop_command", "po")]
+    [TwitchCommand("poop_command", "poo")]
     public void FillupPoopBar()
     {
         _commands.Add("poop_command"); //DON'T REMOVE || used for statistics in log file
         Debug.Log("Command poop proc"); //remove if clutter
-        //if (uiData == null) { Debug.LogWarning("TwitchManager: UIData not assigned."); return; }
+        if (uiData == null) { Debug.LogWarning("TwitchManager: UIData not assigned."); return; }
         uiData.IncrementPoop(incPoop); //Increment call inside ui script
     }
 
-    [TwitchCommand("pee_command", "pe")]
+    [TwitchCommand("wee_command", "wee")]
     public void FillupPeeBar()
     {
-        _commands.Add("pee_command"); //DON'T REMOVE || used for statistics in log file
-        Debug.Log("Command pee proc"); //remove if clutter
+        _commands.Add("wee_command"); //DON'T REMOVE || used for statistics in log file
+        Debug.Log("Command wee proc"); //remove if clutter
         if (uiData == null) { Debug.LogWarning("TwitchManager: UIData not assigned."); return; }
-        uiData.IncrementPoop(incPee); //Increment call inside ui script
+        uiData.IncrementPee(incPee); //Increment call inside ui script
     }
     [TwitchCommand("hunger_command", "hunger")]
     public void FillupHungerBar()
@@ -69,7 +69,7 @@ public class TwitchGameManager : TwitchMonoBehaviour
         _commands.Add("hunger_command"); //DON'T REMOVE || used for statistics in log file
         Debug.Log("Command hunger proc"); //remove if clutter
         if (uiData == null) { Debug.LogWarning("TwitchManager: UIData not assigned."); return; }
-        uiData.IncrementPoop(incHungry); //Increment call inside ui script
+        uiData.IncrementHungry(incHungry); //Increment call inside ui script
     }
     #endregion
 
