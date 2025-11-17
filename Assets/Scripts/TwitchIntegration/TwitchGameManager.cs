@@ -140,7 +140,7 @@ public class TwitchGameManager : TwitchMonoBehaviour
         foreach (var command in _commands)
         {
             if (command == "poop_command") PoopUsed++;
-            if (command == "pee_command") PeeUsed++;
+            if (command == "wee_command") PeeUsed++;
             if (command == "hunger_command") HungerUsed++;
             avrCommandsPerSec++;
             avrCommandsPerMin++;
