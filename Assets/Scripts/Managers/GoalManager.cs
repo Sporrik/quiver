@@ -3,7 +3,7 @@ using UnityEngine;
 public class GoalManager : MonoBehaviour
 {
 
-    [SerializeField] GameObject[] Goals;
+    [SerializeField] public GameObject[] Goals;
     [SerializeField] GameObject _winFeedback;
     public int _goalScore = 0;
 
