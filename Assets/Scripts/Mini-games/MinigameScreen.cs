@@ -101,11 +101,11 @@ public sealed class MinigameScreen : MonoBehaviour
     {
         if (Input.GetKeyUp(KeyCode.Space))
         {
-            if (!GotClipped())
+            if (!GotClipped() && !_slideOut)
             {
                 TryOpenBySpace();
             }
-            else _slideOut = true;
+            else if(!_slideIn) _slideOut = true;
         }
 
         if (_slideIn && !string.IsNullOrEmpty(_pendingSceneName)) SlideIn(_pendingSceneName);
