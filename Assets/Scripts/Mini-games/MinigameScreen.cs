@@ -108,9 +108,16 @@ public sealed class MinigameScreen : MonoBehaviour
             else if(!_slideIn) _slideOut = true;
         }
 
+        // ensuring the screen doesn't get pushed in two directions at once
+        // (which causes it to freeze in place)
+        if (_manager.WonCurrentMinigame())
+        {
+            SlideOut(true);
+            return;
+        }
+
         if (_slideIn && !string.IsNullOrEmpty(_pendingSceneName)) SlideIn(_pendingSceneName);
         if (_slideOut) SlideOut(false);
-        if (_manager.WonCurrentMinigame()) SlideOut(true);
     }
 
     private void ResetMinigame()
