@@ -101,16 +101,23 @@ public sealed class MinigameScreen : MonoBehaviour
     {
         if (Input.GetKeyUp(KeyCode.Space))
         {
-            if (!GotClipped())
+            if (!GotClipped() && !_slideOut)
             {
                 TryOpenBySpace();
             }
-            else _slideOut = true;
+            else if(!_slideIn) _slideOut = true;
+        }
+
+        // ensuring the screen doesn't get pushed in two directions at once
+        // (which causes it to freeze in place)
+        if (_manager.WonCurrentMinigame())
+        {
+            SlideOut(true);
+            return;
         }
 
         if (_slideIn && !string.IsNullOrEmpty(_pendingSceneName)) SlideIn(_pendingSceneName);
         if (_slideOut) SlideOut(false);
-        if (_manager.WonCurrentMinigame()) SlideOut(true);
     }
 
     private void ResetMinigame()
