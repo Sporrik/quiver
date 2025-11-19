@@ -8,6 +8,8 @@ public class DragBaby : MonoBehaviour
     [SerializeField] private Camera _camera;
     private bool isDragging = false;
     private Vector3 targetPosition;
+    [SerializeField] private GameObject _leftArrow;
+    [SerializeField] private GameObject _rightArrow;
 
     void Update()
     {
@@ -30,6 +32,9 @@ public class DragBaby : MonoBehaviour
         // Start dragging
         isDragging = true;
         Debug.Log("Started Dragging");
+
+        _leftArrow.SetActive(false);
+        _rightArrow.SetActive(false);
     }
 
     void OnMouseUp()
@@ -38,6 +43,9 @@ public class DragBaby : MonoBehaviour
         isDragging = false;
         GetComponent<MoveToObject>().MoveTo(0);
         Debug.Log("Stopped Dragging");
+
+        _leftArrow.SetActive(true);
+        _rightArrow.SetActive(true);
     }
 
     private Vector3 GetMouseWorldPosition()
