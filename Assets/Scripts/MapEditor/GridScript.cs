@@ -5,7 +5,6 @@ using UnityEngine;
 public class GridScript : MonoBehaviour
 {
     [SerializeField] private float size = 1.0f;
-    [SerializeField] private float yChangeTest;
 
     public Vector3 GetNearestPointOnGrid(Vector3 position)
     {

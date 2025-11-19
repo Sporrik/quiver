@@ -194,8 +194,7 @@ public class CubePlacer : MonoBehaviour
             var prefabObject = Instantiate(_blueprintObject);
 
             prefabObject.transform.position = finalPosition;
-            prefabObject.transform.SetParent(transform); ;
-
+            prefabObject.transform.SetParent(transform);
         }
     }
 
