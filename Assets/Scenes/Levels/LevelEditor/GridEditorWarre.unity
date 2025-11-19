@@ -329,7 +329,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 200286242}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73fc48e2be12caa489b35d79c2a86a68, type: 3}
+  m_Script: {fileID: 11500000, guid: d22920255b7538342b66c4c6f4b5248b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   tileListObject: {fileID: 1247155485}
@@ -374,7 +374,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 210839009}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7495512829d056644b354bfd21d961c9, type: 3}
+  m_Script: {fileID: 11500000, guid: 26ab06ae36d60b541b03a0f563a09120, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   size: 1
@@ -641,7 +641,7 @@ GameObject:
   - component: {fileID: 703648305}
   - component: {fileID: 703648304}
   - component: {fileID: 703648303}
-  - component: {fileID: 703648302}
+  - component: {fileID: 703648306}
   m_Layer: 5
   m_Name: ConvertToFBXButton
   m_TagString: Untagged
@@ -669,19 +669,6 @@ RectTransform:
   m_AnchoredPosition: {x: -213, y: 1023}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &703648302
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 703648300}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73fc48e2be12caa489b35d79c2a86a68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tileListObject: {fileID: 1247155485}
 --- !u!114 &703648303
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -726,7 +713,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 703648302}
+      - m_Target: {fileID: 703648306}
         m_TargetAssemblyTypeName: SaveData, Assembly-CSharp
         m_MethodName: SaveToFBX
         m_Mode: 1
@@ -776,6 +763,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 703648300}
   m_CullTransparentMesh: 1
+--- !u!114 &703648306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 703648300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d22920255b7538342b66c4c6f4b5248b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tileListObject: {fileID: 1247155485}
 --- !u!4 &733201080 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5285051043696142849, guid: 725b14aee278da54ebb6ca9ccd82ae2c, type: 3}
@@ -1527,11 +1527,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1241605389}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 883734f3b17e561478fa8910ee325820, type: 3}
+  m_Script: {fileID: 11500000, guid: 63b1ae8d6e4754841ba9194bc7d61cd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   CameraSpeed: 1
-  CameraRotationSpeed: 50
+  CameraRotationSpeed: 100
 --- !u!1 &1247155485
 GameObject:
   m_ObjectHideFlags: 0
@@ -1541,7 +1541,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1247155487}
-  - component: {fileID: 1247155486}
+  - component: {fileID: 1247155488}
   m_Layer: 0
   m_Name: CubePlacer
   m_TagString: Untagged
@@ -1549,22 +1549,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1247155486
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1247155485}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2d5a895a767b8d4e97aa72ed8fb43c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prefabsObject: {fileID: 2111908390}
-  deletionObject: {fileID: 127045565}
-  loadScriptObject: {fileID: 2020673058}
-  tileTextGameObject: {fileID: 1550429255}
 --- !u!4 &1247155487
 Transform:
   m_ObjectHideFlags: 0
@@ -1580,6 +1564,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1247155488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1247155485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1166b5921e86864782fc574ab243b3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabsObject: {fileID: 2111908390}
+  deletionObject: {fileID: 127045565}
+  loadScriptObject: {fileID: 2020673058}
+  tileTextGameObject: {fileID: 1550429255}
 --- !u!1 &1550429255
 GameObject:
   m_ObjectHideFlags: 0
@@ -2552,7 +2552,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2020673058}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a0be2135c541fe44a024b0fafc02786, type: 3}
+  m_Script: {fileID: 11500000, guid: 0f56869e098027749acde26eb6818381, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &2036442301
