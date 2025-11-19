@@ -14,6 +14,11 @@ public class DiaperChangingBehavior : MonoBehaviour
     [Header("Camera:")]
     [SerializeField] private Camera _camera;
 
+    [Header("UI:")]
+    [SerializeField] private GameObject _leftArrow;
+    [SerializeField] private GameObject _rightArrow;
+    [SerializeField] private GameObject _frontArrow;
+
 
     private Vector3 _lastMousePosition;
     private bool _isDragging = false;
