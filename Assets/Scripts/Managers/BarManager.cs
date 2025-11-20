@@ -185,6 +185,7 @@ namespace UI
 
         private void AlertGuardsInRange()
         {
+            Debug.Log("ALERT");
             int count = Physics.OverlapSphereNonAlloc(_playerController.transform.position,
                                                       _cryRange,
                                                       _guardHits,

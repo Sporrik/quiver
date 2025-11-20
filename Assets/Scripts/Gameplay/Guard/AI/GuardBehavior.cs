@@ -62,7 +62,7 @@ namespace Gameplay.AI
         private void Awake()
         {
             _agent = GetComponent<NavMeshAgent>();
-            _animator = _player.GetComponentInChildren<Animator>();
+            _animator = GetComponent<Animator>();
 
             // Check references
             if (_guardCfg == null) { Debug.LogError($"{name}: GuardConfig missing.", this); enabled = false; return; }
