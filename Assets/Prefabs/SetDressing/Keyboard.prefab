@@ -54,10 +54,39 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: a3b802dd0273db447bc60dee5ee6cdac, type: 2}
     - target: {fileID: 919132149155446097, guid: ac1c3fa2d3390d149803a1bae2869ced, type: 3}
       propertyPath: m_Name
-      value: Keyboard_WIP
+      value: Keyboard
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ac1c3fa2d3390d149803a1bae2869ced, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -3840223970188823508}
   m_SourcePrefab: {fileID: 100100000, guid: ac1c3fa2d3390d149803a1bae2869ced, type: 3}
+--- !u!1 &3383676873463956497 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: ac1c3fa2d3390d149803a1bae2869ced, type: 3}
+  m_PrefabInstance: {fileID: 2464689324047415616}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &-3840223970188823508
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3383676873463956497}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.4321622, y: 0.060206383, z: 0.1860291}
+  m_Center: {x: 0, y: 0.030103192, z: 0}
