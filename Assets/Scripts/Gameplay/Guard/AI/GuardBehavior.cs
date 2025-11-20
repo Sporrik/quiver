@@ -85,8 +85,8 @@ namespace Gameplay.AI
         {
             UpdatePerception();
             TickState();
-            _hadVisualLastFrame = _seesPlayer;
             TickAnimator();
+            _hadVisualLastFrame = _seesPlayer;
 
         }
 
@@ -314,17 +314,10 @@ namespace Gameplay.AI
         }
 
         // ---------- External Alerts ----------
-        public void AlertToPosition(Vector3 worldPos)
-        {
-            _lastKnownPos = worldPos;
-            SetState(State.Searching);
-        }
-
-        public void OnCryAlert(Vector3 sourcePosition, float radius)
+        public void OnCryAlert(Vector3 sourcePosition)
         {
             _lastKnownPos = sourcePosition;
-            SetState(State.Searching);
-            _alertTimeRemaining = Mathf.Max(_alertTimeRemaining, _guardCfg.Search.AlertTime);
+            SetState(State.Chasing);
         }
 
         // ---------- ITakedownTarget ----------

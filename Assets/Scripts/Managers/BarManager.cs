@@ -199,7 +199,7 @@ namespace UI
 
                 if (c.TryGetComponent<IGuardAlertable>(out var alertable))
                 {
-                    alertable.OnCryAlert(transform.position, _cryRange);
+                    alertable.OnCryAlert(_playerController.transform.position);
                 }
             }
         }
