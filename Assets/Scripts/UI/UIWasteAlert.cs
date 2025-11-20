@@ -5,35 +5,28 @@ public class UIWasteAlert : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private MinigameManager _manager;
-    [SerializeField] private RectTransform poopBar;
-    [SerializeField] private RectTransform peeBar;
 
-    [Header("UI Components")]
-    [SerializeField] private GameObject alertMessage;   // your original UI message
-    [SerializeField] private GameObject arrowUI;        // one arrow reused for both bars
+    [Header("Arrow Objects (children of bars)")]
+    [SerializeField] private GameObject poopArrow;
+    [SerializeField] private GameObject peeArrow;
 
-    [Header("Arrow Offset From Bar Edge")]
-    [SerializeField] private float arrowOffsetX = 20f;
-    [SerializeField] private float arrowOffsetY = 0f;
+    [Header("UI Message")]
+    [SerializeField] private GameObject alertMessage;
 
     [Header("Display Settings")]
     [SerializeField] private float visibleDuration = 3f;
     [SerializeField] private float fadeDuration = 1f;
-    [SerializeField] private float arrowBopAmount = 10f;
-    [SerializeField] private float arrowBopSpeed = 3f;
 
     private UIScriptableObject _uiData;
 
     private CanvasGroup _messageGroup;
-    private CanvasGroup _arrowGroup;
+    private CanvasGroup _activeArrowGroup;
 
-    private bool _hasShown = false;     // prevents future displays
+    private bool _alertShown = false;  
     private bool _isFading = false;
-    private float _hideTime;
 
-    private RectTransform _arrowRect;
-    private bool _arrowActive = false;
-    private bool _alertTriggered = false;
+    private float _fadeStartTime;
+    private GameObject _activeArrow;
 
     private void Awake()
     {
@@ -49,17 +42,13 @@ public class UIWasteAlert : MonoBehaviour
         if (_manager == null)
             _manager = Object.FindFirstObjectByType<MinigameManager>();
 
-        // Prepare canvas groups
         _messageGroup = alertMessage.GetComponent<CanvasGroup>();
-        if (_messageGroup == null) _messageGroup = alertMessage.AddComponent<CanvasGroup>();
-
-        _arrowGroup = arrowUI.GetComponent<CanvasGroup>();
-        if (_arrowGroup == null) _arrowGroup = arrowUI.AddComponent<CanvasGroup>();
-
-        _arrowRect = arrowUI.GetComponent<RectTransform>();
+        if (_messageGroup == null)
+            _messageGroup = alertMessage.AddComponent<CanvasGroup>();
 
         alertMessage.SetActive(false);
-        arrowUI.SetActive(false);
+        poopArrow.SetActive(false);
+        peeArrow.SetActive(false);
     }
 
     private void OnEnable()
@@ -76,95 +65,78 @@ public class UIWasteAlert : MonoBehaviour
 
     private void Update()
     {
-        if (!_arrowActive) return;
+        if (!_isFading) return;
 
-        // If minigame starts, hide immediately
-        if (_manager != null && _manager.MinigameIsRunning())
-        {
-            StartFadeOut();
-            return;
-        }
+        float t = (Time.time - _fadeStartTime) / fadeDuration;
 
-        // Bop arrow left-right
-        float offset = Mathf.Sin(Time.time * arrowBopSpeed) * arrowBopAmount;
-        _arrowRect.anchoredPosition += new Vector2(offset * Time.deltaTime, 0);
+        _messageGroup.alpha = Mathf.Lerp(1f, 0f, t);
+        if (_activeArrowGroup != null)
+            _activeArrowGroup.alpha = Mathf.Lerp(1f, 0f, t);
 
-        // Check if time to fade out
-        if (!_isFading && Time.time >= _hideTime)
-            StartFadeOut();
-
-        // Perform fade out
-        if (_isFading)
-        {
-            float t = (Time.time - _hideStartTime) / fadeDuration;
-
-            _messageGroup.alpha = Mathf.Lerp(1f, 0f, t);
-            _arrowGroup.alpha = Mathf.Lerp(1f, 0f, t);
-
-            if (t >= 1f)
-                FinishFadeOut();
-        }
-    }
-
-    private float _hideStartTime;
-
-    private void StartFadeOut()
-    {
-        _isFading = true;
-        _hideStartTime = Time.time;
-    }
-
-    private void FinishFadeOut()
-    {
-        alertMessage.SetActive(false);
-        arrowUI.SetActive(false);
-
-        _arrowActive = false;
-        _isFading = false;
-
-        // Mark as permanently done
-        _hasShown = true;
+        if (t >= 1f)
+            FinishFadeOut();
     }
 
     private void OnValueChanged(float value)
     {
-        if (_hasShown) return;
+        // If ANY alert has ever shown, stop permanently
+        if (_alertShown) return;
+
+        // If minigame running: do not show alerts
         if (_manager != null && _manager.MinigameIsRunning()) return;
 
         bool poopFull = _uiData.GetPoop() >= 100f;
         bool peeFull = _uiData.GetPee() >= 100f;
 
-        if (poopFull || peeFull)
-            ShowAlert(poopFull ? poopBar : peeBar);
+        if (poopFull)
+        {
+            ShowAlert(poopArrow);
+            _alertShown = true; 
+        }
+        else if (peeFull)
+        {
+            ShowAlert(peeArrow);
+            _alertShown = true;
+        }
     }
 
-    private void ShowAlert(RectTransform targetBar)
+    private void ShowAlert(GameObject arrow)
     {
-        if (_hasShown) return;
+        if (_isFading) return;
 
-        // If alert already triggered once (arrow & message shown), do NOT reposition the arrow
-        if (_alertTriggered)
-            return;
+        _activeArrow = arrow;
+        _activeArrow.SetActive(true);
 
-        _alertTriggered = true;
+        _activeArrowGroup = _activeArrow.GetComponent<CanvasGroup>();
+        if (_activeArrowGroup == null)
+            _activeArrowGroup = _activeArrow.AddComponent<CanvasGroup>();
 
-        // Position arrow next to bar
-        arrowUI.SetActive(true);
+        _activeArrowGroup.alpha = 1f;
+
         alertMessage.SetActive(true);
-
-        float barHalfWidth = targetBar.rect.width * 0.5f;
-
-        _arrowRect.anchoredPosition =
-            targetBar.anchoredPosition +
-            new Vector2(barHalfWidth + arrowOffsetX, arrowOffsetY);
-
-        // Reset alpha
         _messageGroup.alpha = 1f;
-        _arrowGroup.alpha = 1f;
 
-        _arrowActive = true;
+        // Trigger fade automatically
+        Invoke(nameof(StartFadeOut), visibleDuration);
+    }
 
-        _hideTime = Time.time + visibleDuration;
+    private void StartFadeOut()
+    {
+        _isFading = true;
+        _fadeStartTime = Time.time;
+    }
+
+    private void FinishFadeOut()
+    {
+        _isFading = false;
+
+        alertMessage.SetActive(false);
+
+        if (_activeArrow != null)
+            _activeArrow.SetActive(false);
+
+        _activeArrow = null;
+        _activeArrowGroup = null;
     }
 }
 
