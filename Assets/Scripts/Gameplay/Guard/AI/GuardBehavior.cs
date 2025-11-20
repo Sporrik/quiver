@@ -54,9 +54,15 @@ namespace Gameplay.AI
         private PlayerInputRelay _inputRelay;
         private readonly object _caughtBlockToken = new object();
 
+        //stuff for animations
+        private Animator _animator;
+        private static readonly int ChaseState = Animator.StringToHash("IsChasing");
+        private static readonly int SearchingState = Animator.StringToHash("IsSearching");
+
         private void Awake()
         {
             _agent = GetComponent<NavMeshAgent>();
+            _animator = _player.GetComponentInChildren<Animator>();
 
             // Check references
             if (_guardCfg == null) { Debug.LogError($"{name}: GuardConfig missing.", this); enabled = false; return; }
@@ -80,6 +86,8 @@ namespace Gameplay.AI
             UpdatePerception();
             TickState();
             _hadVisualLastFrame = _seesPlayer;
+            TickAnimator();
+
         }
 
         private void OnDisable()
@@ -352,6 +360,14 @@ namespace Gameplay.AI
             _agent.enabled = false;
             enabled = false;
             Destroy(gameObject);
+        }
+
+        private void TickAnimator()
+        {
+            if (_animator == null) return;
+
+            _animator.SetBool(ChaseState, _state == State.Chasing);
+            _animator.SetBool(SearchingState, _state == State.Searching);
         }
 
         // ---------- Gizmos ----------
