@@ -9473,9 +9473,9 @@ MonoBehaviour:
   _timeToGetRandomEvent: 1
   _amountToIncreaseBar: 3
   _singlePlayerOverride: 0
-  _happinessTickInterval: 0.05
+  _happinessTickInterval: 0.2
   _happinessIncrement: 1
-  _happinessBaseChance: 0.01
+  _happinessBaseChance: 0
   _happinessChanceAtFull: 0.5
   _cryRange: 50
   _guardMask:
@@ -9495,7 +9495,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _uiData: {fileID: 11400000, guid: 377fbeaf0c2d98543837ee90c8854047, type: 2}
-  _resetOnSceneLoad: 0
+  _resetOnSceneLoad: 1
   _oncePerProcess: 0
 --- !u!114 &501072588
 MonoBehaviour:
