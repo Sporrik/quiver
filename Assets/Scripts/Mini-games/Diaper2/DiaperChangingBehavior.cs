@@ -14,6 +14,11 @@ public class DiaperChangingBehavior : MonoBehaviour
     [Header("Camera:")]
     [SerializeField] private Camera _camera;
 
+    [Header("UI:")]
+    [SerializeField] private GameObject _leftArrow;
+    [SerializeField] private GameObject _rightArrow;
+    [SerializeField] private GameObject _frontArrow;
+
 
     private Vector3 _lastMousePosition;
     private bool _isDragging = false;
@@ -56,6 +61,8 @@ public class DiaperChangingBehavior : MonoBehaviour
                 _animator.SetBool("frontIsWorn", false);
                 _isDragging = false;
             }
+            if (_isDragging)
+                _frontArrow.SetActive(true);
         }
 
         if (target == _leftStrap)
@@ -71,6 +78,8 @@ public class DiaperChangingBehavior : MonoBehaviour
                 _animator.SetBool("leftIsWorn", true);
                 _isDragging = false;
             }
+            if (_isDragging)
+                _leftArrow.SetActive(true);
         }
 
         if (target == _rightStrap)
@@ -86,6 +95,9 @@ public class DiaperChangingBehavior : MonoBehaviour
                 _animator.SetBool("rightIsWorn", false);
                 _isDragging = false;
             }
+
+            if(_isDragging)
+                _rightArrow.SetActive(true);
         }
     }
 
@@ -100,6 +112,9 @@ public class DiaperChangingBehavior : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             _isDragging = false;
+            _rightArrow.SetActive(false);
+            _leftArrow.SetActive(false);
+            _frontArrow.SetActive(false);
         }
 
         if (_isDragging)

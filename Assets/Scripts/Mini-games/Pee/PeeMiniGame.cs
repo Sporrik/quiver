@@ -66,7 +66,7 @@ public class PeeMiniGame : MonoBehaviour
 
         if (angle == 0f)
         {
-            _currentRange = Random.Range(1, PeeRange);
+            _currentRange = Random.Range(10, PeeRange);
         }
 
         if (angle > _currentRange)

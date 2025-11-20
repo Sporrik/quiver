@@ -123,6 +123,7 @@ public class PoopManager : MonoBehaviour
         // Enable closing the clean diaper
         if (CleanDiaperEquipped && hasShownCleanDiaperTip == false)
         {
+            CleanDiaper.GetComponent<BoxCollider>().enabled = false;
             CleanDiaper.GetComponent<DiaperChangingBehavior>().enabled = true;
             SetActiveTip(_UITips[4]);
             hasShownCleanDiaperTip = true;
