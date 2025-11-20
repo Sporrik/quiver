@@ -135,7 +135,7 @@ namespace UI
             float pee    = _scriptableObject.GetPee();
             float hungry = _scriptableObject.GetHungry();
 
-            if (poop > 100f)
+            if (poop >= 100f)
             {
                 if (!_poopCapped)
                 {
@@ -145,7 +145,7 @@ namespace UI
             }
             else if (_poopCapped) _poopCapped = false;
 
-            if (pee > 100f)
+            if (pee >= 100f)
             {
                 if (!_peeCapped)
                 {
@@ -155,7 +155,7 @@ namespace UI
             }
             else if (_peeCapped) _peeCapped = false;
 
-            if (hungry > 100f)
+            if (hungry >= 100f)
             {
                 if (!_hungryCapped)
                 {
@@ -168,19 +168,17 @@ namespace UI
 
         private void TickHappiness()
         {
-            if (_happinessTimer >= _happinessTickInterval)
-            {
-                _happinessTimer -= _happinessTickInterval;
+            if (_happinessTimer < _happinessTickInterval) return;
+            
+            _happinessTimer -= _happinessTickInterval;
 
-                float poop01   = _scriptableObject.GetPoop() * 0.01f;
-                float hungry01 = _scriptableObject.GetHungry() * 0.01f;
-                float pee01    = _scriptableObject.GetPee() * 0.01f;
+            float increment = (_poopCapped ? 1 : 0) + (_peeCapped ? 1 : 0) + (_hungryCapped ? 1 : 0);
 
-                float needsAvg = (poop01 + hungry01 + pee01) / 3f;
-                float chance = Mathf.Lerp(_happinessBaseChance, _happinessChanceAtFull, needsAvg);
+            Debug.Log(increment);
+            Debug.Log(_poopCapped);
 
-                if (UnityEngine.Random.value < Mathf.Clamp01(chance)) _scriptableObject.IncrementHappiness(_happinessIncrement);
-            }
+            _scriptableObject.IncrementHappiness(increment);
+            
         }
 
         private void AlertGuardsInRange()
