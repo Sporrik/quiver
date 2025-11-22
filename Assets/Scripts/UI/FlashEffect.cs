@@ -6,7 +6,8 @@ public class FlashEffect : MonoBehaviour
 {
 
     public float FlashSpeed; //set this in the editor
-    public RawImage Bar; //maybe this has to become an array of images?
+    public Image Bar; 
+    public RawImage BarOutline;
     public Color red => Color.red;
     public Color white => Color.white;
 
@@ -18,6 +19,7 @@ public class FlashEffect : MonoBehaviour
     void Update()
     {
         Bar.color = LerpRed();
+        BarOutline.color = LerpRed();
     }
 
     public Color LerpRed()
