@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class FlashEffect : MonoBehaviour
 {
-    public bool FlashIsOn;
+    public bool isTurnedOn;
     public float FlashSpeed; //set this in the editor
     public Image Bar; 
     public RawImage BarOutline;
@@ -18,7 +18,7 @@ public class FlashEffect : MonoBehaviour
 
     void Update()
     {
-        if (FlashIsOn)
+        if (isTurnedOn)
         {
             Bar.color = LerpRed();
             BarOutline.color = LerpRed();

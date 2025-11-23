@@ -3628,6 +3628,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6765684153959661525, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
   m_PrefabInstance: {fileID: 152793983}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &152793987 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1274694428153703874, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
+  m_PrefabInstance: {fileID: 152793983}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &158424700
 GameObject:
   m_ObjectHideFlags: 0
@@ -9468,6 +9473,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4771e0ba88aea647838dade0e57b83c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FlashingBar: {fileID: 152793987}
   _playerController: {fileID: 557317126}
   _scriptableObject: {fileID: 11400000, guid: 377fbeaf0c2d98543837ee90c8854047, type: 2}
   _timeToGetRandomEvent: 1
