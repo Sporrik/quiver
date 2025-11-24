@@ -17,6 +17,12 @@ public class MinigameCursor : MonoBehaviour
     private Vector2 _position;
     private Vector2 _offset;
 
+    private bool _isUsed = false;
+    private float _countDown;
+
+    private bool _didClick;
+    private bool _didMove;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Start()
     {
@@ -31,19 +37,41 @@ public class MinigameCursor : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        MoveCursor();
-        Click();
+        const float timeUntilSleep = 5f;
+
+        _didClick = Click();
+        _didMove = MoveCursor();
+
+        if(_didMove || _didClick)
+        {
+            _isUsed = true;
+            _countDown = timeUntilSleep;
+        }
+        else
+        {
+            _countDown -= Time.deltaTime;
+        }
+
+        if(_countDown <= 0)
+        {
+            _isUsed = false;
+        }
     }
 
-    private void MoveCursor()
+    private bool MoveCursor()
     {
         if (_move == null)
         {
             Debug.Log("nope, not happening!");
-            return;
+            return false;
         }
 
         Vector2 added = _move.ReadValue<Vector2>();
+
+        if (added.x == 0 || added.y == 0)
+        {
+            return false;
+        }
 
         _position += added * Time.deltaTime * _speed;
 
@@ -54,17 +82,49 @@ public class MinigameCursor : MonoBehaviour
         else if (_position.y < 0) _position.y = 0;
 
         _cursor.rectTransform.anchoredPosition = _position - _offset;
+
+        return true;
     }
 
-    private void Click()
+    private bool Click()
     {
         if (_click.IsPressed())
         {
             _cursor.color = Color.green;
+            return true;
         }
-        else
-        {
-            _cursor.color = Color.red;
-        }
+
+        _cursor.color = Color.red;
+
+        return false;        
+    }
+
+    private void OnMouseDown()
+    {
+        // disable when using mouse again
+        _isUsed = false;
+        _countDown = 0;
+    }
+
+    private void OnMouseUp()
+    {
+        // disable when using mouse again
+        _isUsed = false;
+        _countDown = 0;
+    }
+
+    public bool IsUsed()
+    {
+        return _isUsed;
+    }
+
+    public bool IsPressed()
+    {
+        return _didClick;
+    }
+
+    public Vector2 GetPosition()
+    {
+        return _position;
     }
 }

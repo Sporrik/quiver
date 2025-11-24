@@ -19,6 +19,7 @@ namespace Gameplay.AI
             [Min(0f)] public float waitSeconds = 0f;
         }
 
+        #region Inspector
         [Header("Config")]
         [SerializeField] private GuardConfig _guardCfg;
         [SerializeField] private TakedownConfig _takedown;
@@ -36,7 +37,9 @@ namespace Gameplay.AI
         [SerializeField] private float _distanceToPlayer;
         [SerializeField] private float _alertTimeRemaining;
         [SerializeField] private bool _hadVisualLastFrame;
+        #endregion
 
+        #region Getters/Events
         public bool SeesPlayer => _seesPlayer;
         public float DistanceToPlayer => _distanceToPlayer;
 
@@ -47,7 +50,9 @@ namespace Gameplay.AI
         public event Action<GuardBehavior> OnLostPlayer;
         public event Action<GuardBehavior> OnReachedLastKnown;
         public event Action<GuardBehavior> OnPlayerCaught;
+        #endregion
 
+        #region Private vars
         private enum State { Patrolling, Chasing, Searching, Caught, Dead }
         [SerializeField] private State _state = State.Patrolling;
 
@@ -70,11 +75,13 @@ namespace Gameplay.AI
         private static readonly int ChaseState = Animator.StringToHash("IsChasing");
         private static readonly int SearchingState = Animator.StringToHash("IsSearching");
         private static readonly int DeathState = Animator.StringToHash("IsDead");
+        #endregion
 
+        #region Lifecycle
         private void Awake()
         {
             _agent = GetComponent<NavMeshAgent>();
-            _animator = GetComponent<Animator>();
+            _animator = GetComponentInChildren<Animator>();
 
             // Check references
             if (_guardCfg == null) { Debug.LogError($"{name}: GuardConfig missing.", this); enabled = false; return; }
@@ -106,8 +113,9 @@ namespace Gameplay.AI
         {
             if (_inputRelay != null) _inputRelay.EndBlock(_caughtBlockToken);
         }
+        #endregion
 
-        // ---------- Helpers ----------
+        #region Helpers
         private void SetWalkSpeed() => _agent.speed = _guardCfg.Movement.WalkSpeed;
 
         private void SetRunSpeed() => _agent.speed = _guardCfg.Movement.RunSpeed;
@@ -226,8 +234,9 @@ namespace Gameplay.AI
                 _agent.updateRotation = true;
             }
         }
+        #endregion
 
-        // ---------- Perception ---------
+        #region Perception
         private void UpdatePerception()
         {
             bool hadPrev = _hadVisualLastFrame;
@@ -289,8 +298,9 @@ namespace Gameplay.AI
             if (HasLineOfSight(_eyes.position, _player.position, _guardCfg.LoSMask))
                 _seesPlayer = true;
         }
+        #endregion
 
-        // ---------- FSM ----------
+        #region State Machine
         private bool CanChangeState() => Time.time >= _nextStateChangeTime;     // potential to quick switching state (no reset?)
 
         private void TickState()
@@ -403,16 +413,18 @@ namespace Gameplay.AI
             if (_alertTimeRemaining <= 0f)
                 SetState(State.Patrolling);
         }
+        #endregion
 
-        // ---------- External Alerts ----------
+        #region External Alerts
         public void OnCryAlert(Vector3 sourcePosition)
         {
             _lastKnownPos = sourcePosition;
             _nextShoutTime = Time.time + _guardCfg.SocialAggro.ShoutTime;
             SetState(State.Chasing);
         }
+        #endregion
 
-        // ---------- ITakedownTarget ----------
+        #region ITakedownTarget
         public bool CanTakedown(Interactor interactor)
         {
             if (_takedown == null) return false;
@@ -452,6 +464,7 @@ namespace Gameplay.AI
             _animator.SetBool(SearchingState, _state == State.Searching);
             _animator.SetBool(DeathState, _state == State.Dead);
         }
+        #endregion
 
         // ---------- Gizmos ----------
 #if UNITY_EDITOR
