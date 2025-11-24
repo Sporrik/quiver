@@ -13,6 +13,7 @@ namespace UI
         
         [SerializeField] private bool _invert = true;
 
+        private bool _resetWorld = true;
 
         [Header("Animation")]
         [SerializeField] private float _delayAddSeconds = 2f;
@@ -82,22 +83,27 @@ namespace UI
 
         private void OnValue(float value01_100)
         {
+
+
+
             if (_image == null) return;
 
-            if (_uiData.GetGameModeSinglePlayer() == false) // if twitch enabled animate delay in adding value
+            if (_uiData.GetGameModeSinglePlayer() == false && !_resetWorld) // if twitch enabled animate delay in adding value
             {
-                coroutine = (IEnumerator)WaitAndPrint(value01_100);
-                StartCoroutine(coroutine);
+                StartCoroutine(WaitAndPrint(value01_100));
             }
             else
             {
+                _resetWorld = false;
                 float v01 = Mathf.Clamp01(value01_100 * 0.01f);
                 _image.fillAmount = _invert ? (1f - v01) : v01;
             }
         }
-        private IEnumerable WaitAndPrint(float value01_100)
+        private IEnumerator WaitAndPrint(float value01_100)
         {
+            Debug.Log("Add1");
             yield return new WaitForSeconds(_delayAddSeconds);
+
             float v01 = Mathf.Clamp01(value01_100 * 0.01f);
             _image.fillAmount = _invert ? (1f - v01) : v01;
         }

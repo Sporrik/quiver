@@ -186,7 +186,7 @@ namespace UI
                 float progress = progressTimer / 2;
                 
 
-                Debug.Log("progress" + progress);
+               // Debug.Log("progress" + progress);
 
                 text.text = list[0];   // set name
 
