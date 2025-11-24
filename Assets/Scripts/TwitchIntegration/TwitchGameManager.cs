@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using TwitchIntegration;
@@ -105,6 +106,11 @@ public class TwitchGameManager : TwitchMonoBehaviour
     }
     #endregion
 
+    private void Start()
+    {
+        babyBrabbleTextUI.text = " ";
+        chatUserNameTextUI.text = " ";
+    }
 
     private void Update()
     {
