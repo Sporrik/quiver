@@ -2,21 +2,27 @@ using NUnit.Framework;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 
 public class SandwhichSpawner : MonoBehaviour
 {
     [SerializeField] private float _speed = 5f;
     [SerializeField] private int _spawnChance = 75;   // Chance to spawn an item in a sandwhich spawnpoint
     [SerializeField] private int _badSpawnChance = 50; // Chance that item spawned is bad
+    [SerializeField] private int _goodItemValue = 5;
+    [SerializeField] private int _badItemValue = 20;
 
     [SerializeField] private GameObject _sandwhichPrefab1;
     [SerializeField] private GameObject _sandwhichPrefab2;
     [SerializeField] private GameObject _sandwhichPrefab3;
     [SerializeField] private GameObject _sandwhichStart;
+    [SerializeField] private TextMeshProUGUI _counter;
 
 
     [SerializeField] private List<GameObject> _badItems;
     [SerializeField] private List<GameObject> _goodItems;
+
+    private int _percentage;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -94,5 +100,27 @@ public class SandwhichSpawner : MonoBehaviour
             int roll = Random.Range(0, _goodItems.Count);
             Instantiate(_goodItems[roll], spawnPoint.position, spawnPoint.rotation, parent.transform);
         }
+    }
+
+    public void EatItem(bool isBadItem)
+    {
+        if (!isBadItem)
+        {
+            _percentage += _goodItemValue;
+            if (_percentage > 100)
+            {
+                _percentage = 100;
+            }
+        }
+        else
+        {
+            _percentage -= _badItemValue;
+            if (_percentage < 0)
+            {
+                _percentage = 0;
+            }
+        }
+
+        _counter.text = _percentage.ToString() + "%";
     }
 }
