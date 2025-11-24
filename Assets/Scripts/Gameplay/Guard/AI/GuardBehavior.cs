@@ -4,9 +4,6 @@ using UnityEngine;
 using UnityEngine.AI;
 using Gameplay.Interaction;
 using Gameplay.GuardCfg;
-using UnityEngine.Rendering.Universal;
-using UnityEngine.InputSystem.XR;
-using UnityEditor.Rendering;
 
 
 namespace Gameplay.AI
@@ -51,7 +48,7 @@ namespace Gameplay.AI
         public event Action<GuardBehavior> OnReachedLastKnown;
         public event Action<GuardBehavior> OnPlayerCaught;
 
-        private enum State { Patrolling, Chasing, Searching, Caught }
+        private enum State { Patrolling, Chasing, Searching, Caught, Dead }
         [SerializeField] private State _state = State.Patrolling;
 
         private NavMeshAgent _agent;
@@ -72,6 +69,7 @@ namespace Gameplay.AI
         private Animator _animator;
         private static readonly int ChaseState = Animator.StringToHash("IsChasing");
         private static readonly int SearchingState = Animator.StringToHash("IsSearching");
+        private static readonly int DeathState = Animator.StringToHash("IsDead");
 
         private void Awake()
         {
@@ -211,6 +209,10 @@ namespace Gameplay.AI
                     }
 
                     if (_inputRelay != null) _inputRelay.EndBlock(_caughtBlockToken);
+                    break;
+                case State.Dead:
+                    _agent.isStopped = true;
+                    _agent.enabled = false;
                     break;
             }
         }
@@ -439,9 +441,7 @@ namespace Gameplay.AI
         public void Takedown(Interactor interactor)
         {
             _takedownCooldownUntil = Time.time + (_takedown?.CooldownSeconds ?? 0f);
-            _agent.isStopped = true;
-            _agent.enabled = false;
-            enabled = false;
+            SetState(State.Dead);
         }
 
         private void TickAnimator()
@@ -450,6 +450,7 @@ namespace Gameplay.AI
 
             _animator.SetBool(ChaseState, _state == State.Chasing);
             _animator.SetBool(SearchingState, _state == State.Searching);
+            _animator.SetBool(DeathState, _state == State.Dead);
         }
 
         // ---------- Gizmos ----------
