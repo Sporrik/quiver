@@ -29,7 +29,7 @@ public class TwitchGameManager : TwitchMonoBehaviour
     //DON'T REMOVE || dummy var for function call
     private readonly System.Action<bool> _authorized = null;
 
-    //inout field vars
+    //input field vars
     private string _username;
     private string _channelName;
 
@@ -46,42 +46,65 @@ public class TwitchGameManager : TwitchMonoBehaviour
 
     private static List<string> _commands = new List<string>();
 
+    //twitch user vars
+    private TwitchUser _userPoop = new TwitchUser();
+    private TwitchUser _userPee = new TwitchUser();
+    private TwitchUser _userHunger = new TwitchUser();
+    private TwitchUser _userEmpty;
+
+    private float _accTimeUser = 0;
+    private float _maxWaitTimeUser = 0.5f;
+
 
     #region TwitchCommands
 
     [TwitchCommand("poop_command", "poo", "poO", "pOo", "pOO", "Poo", "PoO", "POo", "POO")]
-    public void FillupPoopBar()
+    public void FillupPoopBar(TwitchUser user)
     {
         _commands.Add("poop_command"); //DON'T REMOVE || used for statistics in log file
         Debug.Log("Command poop proc"); //remove if clutter
         if (uiData == null) { Debug.LogWarning("TwitchManager: UIData not assigned."); return; }
         uiData.IncrementPoop(incPoop); //Increment call inside ui script
+        _userPoop = user;
     }
 
     [TwitchCommand("wee_command", "wee", "weE", "wEe", "wEE", "Wee", "WeE", "WEe", "WEE")]
-    public void FillupPeeBar()
+    public void FillupPeeBar(TwitchUser user)
     {
         _commands.Add("wee_command"); //DON'T REMOVE || used for statistics in log file
         Debug.Log("Command wee proc"); //remove if clutter
         if (uiData == null) { Debug.LogWarning("TwitchManager: UIData not assigned."); return; }
         uiData.IncrementPee(incPee); //Increment call inside ui script
+        _userPee = user;
     }
     [TwitchCommand("hunger_command", "hunger", "hungeR", "hungEr", "hungER", "hunGer", "hunGeR", "hunGEr", "hunGER", "huNger", "huNgeR", "huNgEr",
         "huNgER", "huNGer", "huNGeR", "huNGEr", "huNGER", "hUnger", "hUngeR", "hUngEr", "hUngER", "hUnGer", "hUnGeR", "hUnGEr", "hUnGER", "Hunger", "HungeR",
         "HungEr", "HungER", "HunGer", "HunGeR", "HunGEr", "HunGER")]
-    public void FillupHungerBar()
+    public void FillupHungerBar(TwitchUser user)
     {
         _commands.Add("hunger_command"); //DON'T REMOVE || used for statistics in log file
         Debug.Log("Command hunger proc"); //remove if clutter
         if (uiData == null) { Debug.LogWarning("TwitchManager: UIData not assigned."); return; }
         uiData.IncrementHungry(incHungry); //Increment call inside ui script
+        _userHunger = user;
     }
     #endregion
 
     //AUTH
     private void Update()
     {
-        TwitchManager.OnTwitchMessageReceived += (user, s) => AddUser(user); //DON'T REMOVE || Has to check every time if a msg is sent || used for active viewer count
+        //DON'T REMOVE || Has to check every time if a msg is sent || used for active viewer count
+        TwitchManager.OnTwitchMessageReceived += (user, s) => AddUser(user); 
+        
+        //DON'T REMOVE || empties out the twitchUser's for UI 
+        _accTimeUser += Time.deltaTime;
+
+        if (_accTimeUser >= _maxWaitTimeUser)
+        {
+            _userHunger = _userEmpty;
+            _userPee = _userEmpty;
+            _userPoop = _userEmpty;
+        }
 
         //DON'T REMOVE || calculates current active chatters in chat || uses refresh time as waiting time 
         if (_userIDsInChat.Count > 0)
@@ -119,7 +142,7 @@ public class TwitchGameManager : TwitchMonoBehaviour
     }
 
 
-    //DON'T REMOVE || log creation after application close
+    //DON'T REMOVE || log creation after application.quit
     private void OnApplicationQuit()
     {
         Debug.Log("application close");
@@ -181,9 +204,6 @@ public class TwitchGameManager : TwitchMonoBehaviour
         _viewerCount++;
     }
 
-    //DON'T REMOVE || Separate class for log creation
-
-
     //DON'T REMOVE || public function calls, read summaries!
 
     /// <summary>
@@ -207,6 +227,31 @@ public class TwitchGameManager : TwitchMonoBehaviour
     {
         return _viewerCount;
     }
+
+    /// <summary>
+    /// Gets the most recent username of the person who set the most recent poop command
+    /// </summary>
+    public string GetUserNamePoopCommand()
+    {
+        return _userPoop.displayname;
+    }
+
+    /// <summary>
+    /// Gets the most recent username of the person who set the most recent pee command
+    /// </summary>
+    public string GetUserNamePeeCommand()
+    {
+        return _userPee.displayname;
+    }
+
+    /// <summary>
+    /// Gets the most recent username of the person who set the most recent hunger command
+    /// </summary>
+    public string GetUserNameHungerCommand()
+    {
+        return _userHunger.displayname;
+    }
+
 }
 
 
