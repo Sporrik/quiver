@@ -1,7 +1,9 @@
 using Gameplay.AI;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using TMPro;
+using TMPro.SpriteAssetUtilities;
 using UnityEngine;
 
 namespace UI
@@ -40,13 +42,33 @@ namespace UI
         [SerializeField] private LayerMask _guardMask;
         [SerializeField, Min(0f)] private float _cryCooldown = 2f;
 
+
+
         [Header("AnimationTwitch")]
-        [SerializeField] private string _currentTwitchName;
+
+        [SerializeField] private float _progressTimerPee;
+        [SerializeField] private float _progressTimerPoo;
+        [SerializeField] private float _progressTimerHunger;
+
+
+
+
+        [SerializeField] private TextMeshProUGUI _currentTwitchTextPoo;
         [SerializeField] private TextMeshProUGUI _currentTwitchTextPee;
-        [SerializeField] private TextMeshProUGUI _currentTwitchTextWee;
         [SerializeField] private TextMeshProUGUI _currentTwitchTextHunger;
 
+        [SerializeField] private Vector3 _startPosition;
+        [SerializeField] private Vector3 _endPositionPee;
+        [SerializeField] private Vector3 _endPositionPoo;
+        [SerializeField] private Vector3 _endPositionHunger;
 
+
+        List<string> _pooNamesList = new List<string> { };
+        List<string> _hungerNamesList = new List<string> { };
+        List<string> _peeNamesList = new List<string> { };
+
+        private const float NAMEDELAY = 0.5f;
+        [SerializeField] private float _addNameDelay;
 
 
 
@@ -106,8 +128,8 @@ namespace UI
 
         private void Update()
         {
-
-            //_gameManager
+            GetNamesTwitch(); // gets and animates the names
+            
 
             if (_scriptableObject == null) return;
 
@@ -131,6 +153,58 @@ namespace UI
                 _cryCooldownTimer = _cryCooldown;
                 OnBabyCrying?.Invoke(this);
                 AlertGuardsInRange();
+            }
+        }
+
+
+        #endregion
+
+        #region TwitchNameAnimation
+        private void GetNamesTwitch()
+        {
+
+            _addNameDelay += Time.deltaTime;
+
+            AddToList(_gameManager.GetUserNameHungerCommand(), _hungerNamesList);
+            AddToList(_gameManager.GetUserNamePeeCommand(), _peeNamesList);
+            AddToList(_gameManager.GetUserNamePoopCommand(), _pooNamesList);
+
+            _progressTimerPee = AnimateText(_endPositionPee, _peeNamesList, _progressTimerPee, _currentTwitchTextPee);
+            _progressTimerPoo = AnimateText(_endPositionPoo, _pooNamesList, _progressTimerPoo, _currentTwitchTextPoo);
+            _progressTimerHunger = AnimateText(_endPositionHunger, _hungerNamesList, _progressTimerHunger, _currentTwitchTextHunger);
+        }
+
+        private float AnimateText(Vector3 endPosition, List<string> list, float progressTimer, TextMeshProUGUI text)
+        {
+            if (list.Count != 0)
+            {
+                progressTimer += Time.deltaTime;
+                float progress = progressTimer / 2;
+                
+
+                Debug.Log("progress" + progress);
+
+                text.text = list[0];   // set name
+                text.rectTransform.position = Vector3.Slerp(_startPosition, endPosition, progress); // move UI
+
+
+                if (progressTimer > 2) // RESET UI
+                {
+                    progressTimer = 0;
+                    list.RemoveAt(0);  // animation done
+                }
+                return progressTimer;
+            }
+            return 0;
+
+        }
+
+        private void AddToList(string name, List<string> list)
+        {
+            if (name != null && _addNameDelay > NAMEDELAY) // 0.5 delay to send name in the twitch script
+            {
+                _addNameDelay = 0;
+                list.Add(name);
             }
         }
         #endregion
