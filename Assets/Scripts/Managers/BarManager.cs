@@ -50,6 +50,10 @@ namespace UI
         [SerializeField] private float _progressTimerPoo;
         [SerializeField] private float _progressTimerHunger;
 
+        [SerializeField] private Color colorStart;
+        [SerializeField] private Color ColorEnd;
+
+
 
 
 
@@ -185,6 +189,9 @@ namespace UI
                 Debug.Log("progress" + progress);
 
                 text.text = list[0];   // set name
+
+
+                text.color = Color.Lerp(colorStart, ColorEnd, progress);
                 text.rectTransform.position = Vector3.Slerp(_startPosition, endPosition, progress); // move UI
 
 

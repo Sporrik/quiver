@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +12,12 @@ namespace UI
         [SerializeField] private MeterType _meterType;
         
         [SerializeField] private bool _invert = true;
+
+
+        [Header("Animation")]
+        [SerializeField] private float _delayAddSeconds = 2f;
+        private IEnumerator coroutine;
+
 
         private UIScriptableObject _uiData;
         private Image _image;
@@ -76,9 +83,25 @@ namespace UI
         private void OnValue(float value01_100)
         {
             if (_image == null) return;
+
+            if (_uiData.GetGameModeSinglePlayer() == false) // if twitch enabled animate delay in adding value
+            {
+                coroutine = (IEnumerator)WaitAndPrint(value01_100);
+                StartCoroutine(coroutine);
+            }
+            else
+            {
+                float v01 = Mathf.Clamp01(value01_100 * 0.01f);
+                _image.fillAmount = _invert ? (1f - v01) : v01;
+            }
+        }
+        private IEnumerable WaitAndPrint(float value01_100)
+        {
+            yield return new WaitForSeconds(_delayAddSeconds);
             float v01 = Mathf.Clamp01(value01_100 * 0.01f);
             _image.fillAmount = _invert ? (1f - v01) : v01;
         }
+
 
         private static MeterType InferTypeFromName(string goName)
         {
