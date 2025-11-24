@@ -166,6 +166,7 @@ namespace UI
         #region TwitchNameAnimation
         private void GetNamesTwitch()
         {
+           // _gameManager.GetViewerCount();
 
             _addNameDelay += Time.deltaTime;
 
