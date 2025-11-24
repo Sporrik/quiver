@@ -1,5 +1,7 @@
 using Gameplay.AI;
+using NUnit.Framework;
 using System;
+using TMPro;
 using UnityEngine;
 
 namespace UI
@@ -27,14 +29,28 @@ namespace UI
         [Tooltip("How Much Happiness increases when RNG check succeeds.")]
         [SerializeField, Min(0f)] private float _happinessIncrement = 3f;
         [Tooltip("Base success chance per check when needs are empty (0..1).")]
-        [SerializeField, Range(0f, 1f)] private float _happinessBaseChance = 0.05f;
+        [SerializeField, UnityEngine.Range(0f, 1f)] private float _happinessBaseChance = 0.05f;
         [Tooltip("Success chance per check when needs are full (0..1).")]
-        [SerializeField, Range(0f, 1f)] private float _happinessChanceAtFull = 0.5f;
+        [SerializeField, UnityEngine.Range(0f, 1f)] private float _happinessChanceAtFull = 0.5f;
 
         [Header("Cry/Alert")]
         [SerializeField, Min(0f)] private float _cryRange = 12f;
         [SerializeField] private LayerMask _guardMask;
         [SerializeField, Min(0f)] private float _cryCooldown = 2f;
+
+        [Header("AnimationTwitch")]
+        [SerializeField] private string _currentTwitchName;
+        [SerializeField] private TextMeshProUGUI _currentTwitchTextPee;
+        [SerializeField] private TextMeshProUGUI _currentTwitchTextWee;
+        [SerializeField] private TextMeshProUGUI _currentTwitchTextHunger;
+
+
+
+
+
+        [SerializeField] private TwitchGameManager _gameManager;
+
+
         #endregion
 
         #region Events
@@ -83,6 +99,9 @@ namespace UI
 
         private void Update()
         {
+
+            //_gameManager
+
             if (_scriptableObject == null) return;
 
             float dt = Time.deltaTime;
