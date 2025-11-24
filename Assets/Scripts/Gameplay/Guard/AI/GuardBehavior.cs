@@ -12,6 +12,13 @@ namespace Gameplay.AI
     [RequireComponent(typeof(NavMeshAgent))]
     public sealed class GuardBehavior : MonoBehaviour, ITakedownTarget, IAwareness, IGuardAlertable
     {
+        [Serializable]
+        public class Waypoint
+        {
+            public Transform waypoint;
+            [Min(0f)] public float waitSeconds = 0f;
+        }
+
         [Header("Config")]
         [SerializeField] private GuardConfig _guardCfg;
         [SerializeField] private TakedownConfig _takedown;
@@ -22,7 +29,7 @@ namespace Gameplay.AI
         [Header("Scene")]
         [SerializeField] private Transform _player;
         [SerializeField] private Transform _eyes;
-        [SerializeField] private List<Transform> _waypoints = new();
+        [SerializeField] private List<Waypoint> _waypoints = new();
 
         [Header("Runtime - Read Only")]
         [SerializeField] private bool _seesPlayer;
@@ -46,6 +53,8 @@ namespace Gameplay.AI
 
         private NavMeshAgent _agent;
         private int _waypointIndex;
+        private bool _isWaiting;
+        private float _resumeAt;
         private Vector3 _lastKnownPos;
         private Vector3 _scanStartForward;
         private bool _turnLeft;
@@ -78,7 +87,7 @@ namespace Gameplay.AI
 
             _agent.speed = _guardCfg.Movement.WalkSpeed;
             if (_waypoints.Count > 0)
-                _agent.SetDestination(_waypoints[_waypointIndex].position);
+                _agent.SetDestination(_waypoints[_waypointIndex].waypoint.position);
         }
 
         private void Update()
@@ -125,7 +134,7 @@ namespace Gameplay.AI
                     _agent.updateRotation = true;
                     SetWalkSpeed();
                     if (_waypoints.Count > 0)
-                        _agent.SetDestination(_waypoints[_waypointIndex].position);
+                        _agent.SetDestination(_waypoints[_waypointIndex].waypoint.position);
                     break;
 
                 case State.Chasing:
@@ -187,10 +196,20 @@ namespace Gameplay.AI
             _distanceToPlayer = Vector3.Distance(_player.position, transform.position);
 
             float sight = _guardCfg.Perception.SightRange;
+            float radius = _guardCfg.Perception.CloseSightRadius;
 
-            if (_state == State.Searching)
+            // Apply multipliers based on states
+            if (_state == State.Chasing || _state == State.Searching)
             {
                 sight *= _guardCfg.Perception.SightAlertMulti;
+                radius *= _guardCfg.Perception.SightAlertMulti;
+
+            }
+
+            if (_player.GetComponent<PlayerController>().IsSprinting)
+            {
+                sight *= _guardCfg.Perception.SightSprintMulti;
+                radius *= _guardCfg.Perception.SightSprintMulti;
             }
 
             // Early-out by distance
@@ -271,19 +290,50 @@ namespace Gameplay.AI
         {
             if (_waypoints.Count == 0) return;
 
-            Transform target = _waypoints[_waypointIndex];
-            if (!target) return;
+            Waypoint wp = _waypoints[_waypointIndex];
+            if (wp == null || !wp.waypoint) return;
 
             SetWalkSpeed();
 
-            if (!_agent.pathPending && _agent.remainingDistance <= _guardCfg.Movement.WaypointArriveDistance)
+            if (_isWaiting)
             {
-                _waypointIndex = (_waypointIndex + 1) % _waypoints.Count;
-                _agent.SetDestination(_waypoints[_waypointIndex].position);
+                if (Time.time < _resumeAt) { _agent.isStopped = true; return; }
+                _isWaiting = false;
+                _agent.isStopped = false;
+                AdvanceToNextWaypoint();
                 return;
             }
 
-            if (!_agent.hasPath) _agent.SetDestination(target.position);
+            if (!_agent.pathPending && _agent.remainingDistance <= _guardCfg.Movement.WaypointArriveDistance)
+            {
+                if (wp.waitSeconds > 0f)
+                {
+                    _isWaiting = true;
+                    _resumeAt = Time.time + wp.waitSeconds;
+                    _agent.isStopped = true;
+                    return;
+                }
+
+                AdvanceToNextWaypoint();
+                return;
+            }
+
+            if (!_agent.hasPath || _agent.isPathStale)
+            {
+                _agent.isStopped = false;
+                _agent.SetDestination(wp.waypoint.position);
+            }
+        }
+
+        private void AdvanceToNextWaypoint()
+        {
+            _waypointIndex = (_waypointIndex + 1) % _waypoints.Count;
+            var nextWP = _waypoints[_waypointIndex];
+            if (nextWP != null && nextWP.waypoint)
+            {
+                _agent.isStopped = false;
+                _agent.SetDestination(nextWP.waypoint.position);
+            }
         }
 
         private void Chase()
@@ -352,7 +402,6 @@ namespace Gameplay.AI
             _agent.isStopped = true;
             _agent.enabled = false;
             enabled = false;
-            Destroy(gameObject);
         }
 
         private void TickAnimator()
