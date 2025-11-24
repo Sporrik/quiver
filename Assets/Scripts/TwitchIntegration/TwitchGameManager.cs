@@ -1,11 +1,9 @@
-using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Xml;
 using TMPro;
 using TwitchIntegration;
 using UI;
 using UnityEngine;
+using Random = System.Random;
 
 public class TwitchGameManager : TwitchMonoBehaviour
 {
@@ -17,6 +15,7 @@ public class TwitchGameManager : TwitchMonoBehaviour
 
     [Header("UI")]
     [SerializeField] private UIScriptableObject uiData;
+    [SerializeField] private TextMeshProUGUI babyBrabbleTextUI;
 
     [Header("Refresh time")]
     [SerializeField] private float refreshTime = 15f * 60f; //seconds, for minutes times it by 60
@@ -55,6 +54,12 @@ public class TwitchGameManager : TwitchMonoBehaviour
     private float _accTimeUser = 0;
     private float _maxWaitTimeUser = 0.5f;
 
+    //baby brabble
+    private TwitchUser _userBrabble = new TwitchUser();
+    private string _stringBrabble;
+    private float _accTimeBrabble;
+    private Random _randomBrabble = new Random();
+    private float _maxWaitTimeBrabble = 0;
 
     #region TwitchCommands
 
@@ -94,8 +99,13 @@ public class TwitchGameManager : TwitchMonoBehaviour
     private void Update()
     {
         //DON'T REMOVE || Has to check every time if a msg is sent || used for active viewer count
-        TwitchManager.OnTwitchMessageReceived += (user, s) => AddUser(user); 
-        
+        TwitchManager.OnTwitchMessageReceived += (user, s) =>
+        {
+            AddUser(user);
+            _userBrabble = user;
+            _stringBrabble = s;
+        };
+
         //DON'T REMOVE || empties out the twitchUser's for UI 
         _accTimeUser += Time.deltaTime;
 
@@ -104,6 +114,26 @@ public class TwitchGameManager : TwitchMonoBehaviour
             _userHunger = _userEmpty;
             _userPee = _userEmpty;
             _userPoop = _userEmpty;
+        }
+
+        //DON'T REMOVE || Brabble logic
+        _accTimeBrabble += Time.deltaTime;
+
+        if (_accTimeBrabble >= _maxWaitTimeBrabble)
+        {
+            if (_stringBrabble.Substring(0, 1) != "!")
+            {
+                if (_stringBrabble.Contains("PRIVMSG"))
+                {
+                    _stringBrabble = ParseRawIrcMessage(_stringBrabble);
+                }
+
+                _stringBrabble = _userBrabble.displayname + ": " + _stringBrabble;
+                babyBrabbleTextUI.text = _stringBrabble;
+            }
+
+            _accTimeBrabble = 0;
+            _maxWaitTimeBrabble = _randomBrabble.Next(60, 120); //random interval between 60sec and 120sec
         }
 
         //DON'T REMOVE || calculates current active chatters in chat || uses refresh time as waiting time 
@@ -204,8 +234,21 @@ public class TwitchGameManager : TwitchMonoBehaviour
         _viewerCount++;
     }
 
-    //DON'T REMOVE || public function calls, read summaries!
+    //Parses over string and removes unnecessary stuff from the string
+    private string ParseRawIrcMessage(string ircLine)
+    {
+        // Example input: hynatos!hynatos@hynatos.tmi.twitch.tv PRIVMSG #amazonubereats :What a loser
+        var exclamationIdx = ircLine.IndexOf('!');
+        var spaceAfterUsernameIdx = ircLine.IndexOf(' ', exclamationIdx);
+        var colonIdx = ircLine.IndexOf(':', spaceAfterUsernameIdx);
 
+        string user = exclamationIdx > 0 ? ircLine.Substring(0, exclamationIdx) : "Unknown";
+        string message = colonIdx > 0 ? ircLine.Substring(colonIdx + 1) : "";
+
+        return $"{message}";
+    }
+
+    //=============== DON'T REMOVE || public function calls, read summaries! ===============
     /// <summary>
     /// Calls authenticate function with given parameters from textboxes in TwitchGameManager
     /// </summary>

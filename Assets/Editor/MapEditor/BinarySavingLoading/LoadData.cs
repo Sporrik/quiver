@@ -6,8 +6,6 @@ using UnityEngine;
 using SimpleFileBrowser;
 
 
-//TODO:  Be able to select/insert the file you want to load 
-//TODO:  Unload a map
 public class LoadData : MonoBehaviour
 {
     private TileDataListWrapper _tilesInJson = null;
