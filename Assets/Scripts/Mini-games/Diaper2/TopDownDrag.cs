@@ -13,12 +13,16 @@ public class TopDownDrag : MonoBehaviour
 
     [SerializeField] private Camera mainCamera;
 
+    private float originalY;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         //mainCamera = Camera.main;
 
         DragPlaneY = transform.position.y + DragPlaneY;
+
+        originalY = transform.position.y;
     }
 
     void OnMouseDown()
