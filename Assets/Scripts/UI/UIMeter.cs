@@ -15,9 +15,10 @@ namespace UI
 
         private bool _resetWorld = true;
 
+        [Header("DifficultyValue")]
+        [SerializeField] private float _balance = 1f;
         [Header("Animation")]
         [SerializeField] private float _delayAddSeconds = 2f;
-
         private TwitchGameManager _twitchGameManager;
 
 
@@ -84,7 +85,7 @@ namespace UI
 
         private void OnValue(float value01_100)
         {
-            value01_100 /= _twitchGameManager.GetViewerCount();
+            value01_100 = (value01_100*_balance/_twitchGameManager.GetViewerCount());
             Debug.Log(value01_100);
 
             if (_image == null) return;
