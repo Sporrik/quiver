@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.AI;
 using Gameplay.Interaction;
 using Gameplay.GuardCfg;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.InputSystem.XR;
+using UnityEditor.Rendering;
 
 
 namespace Gameplay.AI
@@ -59,11 +62,13 @@ namespace Gameplay.AI
         private Vector3 _scanStartForward;
         private bool _turnLeft;
         private float _takedownCooldownUntil;
+        private float _nextShoutTime;
+        private static readonly Collider[] _overlapCache = new Collider[10];
 
         private PlayerInputRelay _inputRelay;
         private readonly object _caughtBlockToken = new object();
 
-        //stuff for animations
+        // Stuff for animations
         private Animator _animator;
         private static readonly int ChaseState = Animator.StringToHash("IsChasing");
         private static readonly int SearchingState = Animator.StringToHash("IsSearching");
@@ -126,6 +131,39 @@ namespace Gameplay.AI
             return true;
         }
 
+        private void AlertNearbyGuards(Vector3 playerPos)
+        {
+            if (Time.time < _nextShoutTime) return;
+            _nextShoutTime = Time.time + _guardCfg.SocialAggro.ShoutTime;
+
+            int hits = Physics.OverlapSphereNonAlloc(
+                        transform.position,
+                        _guardCfg.SocialAggro.ShoutRadius,
+                        _overlapCache,
+                        _guardCfg.SocialAggro.AllyLayerMask,
+                        QueryTriggerInteraction.Ignore);
+
+            for (int i = 0; i < hits; i++)
+            {
+                var overlap = _overlapCache[i];
+                if (!overlap) continue;
+
+                var guardScript = overlap.GetComponent<GuardBehavior>();
+                if (guardScript == null || guardScript == this) continue;
+                if (!guardScript.enabled || !guardScript.isActiveAndEnabled) continue;
+
+                var myEyes = _eyes ? _eyes.position : transform.position + Vector3.up * 1.6f;
+                var theirEyes = guardScript._eyes ? guardScript._eyes.position : guardScript.transform.position + Vector3.up * 1.6f;
+                if (!HasLineOfSight(myEyes, theirEyes, _guardCfg.LoSMask)) continue;
+
+                if (!guardScript.IsAware)
+                {
+                    guardScript.OnCryAlert(playerPos);
+                    guardScript._nextShoutTime = Time.time + _guardCfg.SocialAggro.ShoutTime;
+                }
+            }
+        }
+
         private void OnEnter(State state)
         {
             switch (state)
@@ -138,6 +176,7 @@ namespace Gameplay.AI
                     break;
 
                 case State.Chasing:
+                    AlertNearbyGuards(_player.position);
                     _agent.updateRotation = true;
                     SetRunSpeed();
                     _alertTimeRemaining = _guardCfg.Search.AlertTime;
@@ -367,6 +406,7 @@ namespace Gameplay.AI
         public void OnCryAlert(Vector3 sourcePosition)
         {
             _lastKnownPos = sourcePosition;
+            _nextShoutTime = Time.time + _guardCfg.SocialAggro.ShoutTime;
             SetState(State.Chasing);
         }
 
@@ -430,6 +470,10 @@ namespace Gameplay.AI
             // close sight radius
             Gizmos.color = new Color(1f, 0.5f, 0f, 0.25f);
             Gizmos.DrawWireSphere(transform.position, _guardCfg.Perception.CloseSightRadius);
+
+            // social aggro
+            Gizmos.color = new Color(1f, 0f, 0f, 0.15f);
+            Gizmos.DrawWireSphere(transform.position, _guardCfg.SocialAggro.ShoutRadius);
 
             if (_state == State.Searching)
             {
