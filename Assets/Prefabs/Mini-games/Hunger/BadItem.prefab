@@ -163,13 +163,14 @@ GameObject:
   m_Component:
   - component: {fileID: 1393685384457892424}
   - component: {fileID: 6464908919723182892}
+  - component: {fileID: 4548970734007780618}
   m_Layer: 0
   m_Name: blue X
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1393685384457892424
 Transform:
   m_ObjectHideFlags: 0
@@ -240,3 +241,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &4548970734007780618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7369101160615581087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55e8ca955e62ac841aef220893332680, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _startSize: {x: 0.001, y: 0.001, z: 0.001}
+  _maxSize: {x: 0.55, y: 0.55, z: 0.55}
+  _finalSize: {x: 0.5, y: 0.5, z: 0.5}
+  _speed: 8

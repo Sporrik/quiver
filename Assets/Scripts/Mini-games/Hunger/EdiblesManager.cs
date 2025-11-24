@@ -150,6 +150,9 @@ public class EdiblesManager : MonoBehaviour
         }
         else
             return;
+
+        item.ControlSprite.gameObject.SetActive(true);
+
     }
     public void ClearInputIndex(int index)
     {
