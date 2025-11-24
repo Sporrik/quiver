@@ -11,6 +11,7 @@ public class SandwhichSpawner : MonoBehaviour
     [SerializeField] private int _badSpawnChance = 50; // Chance that item spawned is bad
     [SerializeField] private int _goodItemValue = 5;
     [SerializeField] private int _badItemValue = 20;
+    public bool IsCompleted = false;
 
     [SerializeField] private GameObject _sandwhichPrefab1;
     [SerializeField] private GameObject _sandwhichPrefab2;
@@ -107,9 +108,11 @@ public class SandwhichSpawner : MonoBehaviour
         if (!isBadItem)
         {
             _percentage += _goodItemValue;
-            if (_percentage > 100)
+            if (_percentage >= 100)
             {
                 _percentage = 100;
+                IsCompleted = true;
+                Debug.Log("Hunger minigame completed!");
             }
         }
         else

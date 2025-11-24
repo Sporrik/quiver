@@ -11,6 +11,7 @@ public class EdiblesManager : MonoBehaviour
     [SerializeField] private List<EdibleItem> _closestItems = new List<EdibleItem>(4);
     public List<InputAction> PlayerActions = new List<InputAction>(4);
     private PlayerInput _playerInput;
+    private bool _usingController = false;
 
     private EdibleItem _index1;
     private EdibleItem _index2;
@@ -21,6 +22,11 @@ public class EdiblesManager : MonoBehaviour
     [SerializeField] Sprite _triangle;
     [SerializeField] Sprite _circle;
     [SerializeField] Sprite _square;
+
+    [SerializeField] Sprite _right;
+    [SerializeField] Sprite _left;
+    [SerializeField] Sprite _up;
+    [SerializeField] Sprite _down;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -36,7 +42,23 @@ public class EdiblesManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-            
+        if (_playerInput != null)
+        {
+            string currentScheme = _playerInput.currentControlScheme;
+
+            if (currentScheme == "Keyboard&Mouse")
+            {
+                _usingController = false;
+            }
+            else if (currentScheme == "Gamepad")
+            {
+                _usingController = true;
+            }
+            else
+            {
+                Debug.Log($"User is using an unknown control scheme: {currentScheme}");
+            }
+        }
     }
 
     public void EatItem(EdibleItem item)
@@ -90,25 +112,41 @@ public class EdiblesManager : MonoBehaviour
         {
             item.InputIndex = 1;
             _index1 = item;
-            item.ControlSprite.sprite = _triangle;
+
+            if (_usingController)
+                item.ControlSprite.sprite = _triangle;
+            if (!_usingController)
+                item.ControlSprite.sprite = _up;
         }
         else if (_index2 == null)
         {
             item.InputIndex = 2;
             _index2 = item;
-            item.ControlSprite.sprite = _square;
+
+            if (_usingController)
+                item.ControlSprite.sprite = _square;
+            if (!_usingController)
+                item.ControlSprite.sprite = _right;
         }
         else if (_index3 == null)
         {
             item.InputIndex = 3;
             _index3 = item;
-            item.ControlSprite.sprite = _cross;
+
+            if (_usingController)
+                item.ControlSprite.sprite = _cross;
+            if (!_usingController)
+                item.ControlSprite.sprite = _down;
         }
         else if (_index4 == null)
         {
             item.InputIndex = 4;
             _index4 = item;
-            item.ControlSprite.sprite = _circle;
+
+            if (_usingController)
+                item.ControlSprite.sprite = _circle;
+            if (!_usingController)
+                item.ControlSprite.sprite = _left;
         }
         else
             return;

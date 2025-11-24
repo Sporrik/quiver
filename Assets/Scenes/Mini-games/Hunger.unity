@@ -255,7 +255,7 @@ GameObject:
   - component: {fileID: 44313981}
   - component: {fileID: 44313986}
   m_Layer: 0
-  m_Name: SandwhichSpawner
+  m_Name: HungerManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -276,8 +276,9 @@ MonoBehaviour:
   _speed: 0.4
   _spawnChance: 40
   _badSpawnChance: 40
-  _goodItemValue: 10
-  _badItemValue: 30
+  _goodItemValue: 5
+  _badItemValue: 25
+  IsCompleted: 0
   _sandwhichPrefab1: {fileID: 1877881886351255760, guid: 3a3529375bbe8e341803bb42454b1e4e, type: 3}
   _sandwhichPrefab2: {fileID: 6752757747363541548, guid: 1ded81a647f04fe4eb9f074e78137c63, type: 3}
   _sandwhichPrefab3: {fileID: 4329266167405251772, guid: 8bd4cbe71d9c4f744ad8cf9f4c96a07d, type: 3}
@@ -395,6 +396,10 @@ MonoBehaviour:
   _triangle: {fileID: 21300000, guid: dc6ad8e1aee90c1488696f527250698c, type: 3}
   _circle: {fileID: 21300000, guid: 461b6da85ff89694882d5ce8d76f1e13, type: 3}
   _square: {fileID: 21300000, guid: 1c795ffe3a959964188ac251492d98a0, type: 3}
+  _right: {fileID: 21300000, guid: 8276c492a60d1a448aefec45495c84cc, type: 3}
+  _left: {fileID: 21300000, guid: b9287e85b1fd49142b86c98df40d5614, type: 3}
+  _up: {fileID: 21300000, guid: 596f2fc96213537459fea409c0c8d919, type: 3}
+  _down: {fileID: 21300000, guid: c5316ecbf7ecc5448ae1f2fad9e3a41f, type: 3}
 --- !u!1 &514358582
 GameObject:
   m_ObjectHideFlags: 0
