@@ -10,10 +10,7 @@ using UnityEditor.Formats.Fbx.Exporter;
 public class TileDataListWrapper
 {
     public List<TileDataStruct> tiles;
-
 }
-
-//TODO:  chose to save to json or fbx or both
 
 public class SaveData : MonoBehaviour
 {
