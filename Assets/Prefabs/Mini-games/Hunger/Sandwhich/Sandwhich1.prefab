@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1617822935826306687}
   - component: {fileID: 476951131594079716}
   - component: {fileID: 6696186677373821082}
+  - component: {fileID: -6898815914235704055}
   m_Layer: 0
   m_Name: Sandwhich1
   m_TagString: Sandwhich
@@ -139,6 +140,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-6898815914235704055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1877881886351255760}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc8fe70fbcc791d4d9acb0c7c792e5a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Speed: 5
 --- !u!1 &4068167039370474241
 GameObject:
   m_ObjectHideFlags: 0
