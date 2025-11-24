@@ -3524,10 +3524,18 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1422546785472211885, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
+      propertyPath: _twitchGameManager
+      value: 
+      objectReference: {fileID: 1396096293}
     - target: {fileID: 1741921902025583307, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1760501324618128282, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
+      propertyPath: _twitchGameManager
+      value: 
+      objectReference: {fileID: 1396096293}
     - target: {fileID: 2671837925891784190, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -3636,6 +3644,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4456463928909723436, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
+      propertyPath: _twitchGameManager
+      value: 
+      objectReference: {fileID: 1396096293}
     - target: {fileID: 5744809109491372425, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.94
@@ -3648,6 +3660,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1.0824741
       objectReference: {fileID: 0}
+    - target: {fileID: 5804038257449373401, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
+      propertyPath: _twitchGameManager
+      value: 
+      objectReference: {fileID: 1396096293}
     - target: {fileID: 5809044457217070351, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.92
@@ -3668,6 +3684,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6512435589418638680, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
+      propertyPath: _twitchGameManager
+      value: 
+      objectReference: {fileID: 1396096293}
     - target: {fileID: 7172414154472520288, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.9700001
@@ -3729,7 +3749,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 8859954548469103447, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 3025353731871684774, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
       insertIndex: 2
@@ -9787,6 +9808,8 @@ MonoBehaviour:
   _progressTimerPee: 0
   _progressTimerPoo: 0
   _progressTimerHunger: 0
+  colorStart: {r: 0.8742138, g: 0.8512608, b: 0.7779953, a: 0}
+  ColorEnd: {r: 0.9568628, g: 0.78823537, b: 0.1764706, a: 1}
   _currentTwitchTextPoo: {fileID: 484393301}
   _currentTwitchTextPee: {fileID: 1329372353}
   _currentTwitchTextHunger: {fileID: 1734366902}

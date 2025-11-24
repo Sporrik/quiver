@@ -17,9 +17,10 @@ namespace UI
 
         [Header("DifficultyValue")]
         [SerializeField] private float _balance = 1f;
+
         [Header("Animation")]
         [SerializeField] private float _delayAddSeconds = 2f;
-        private TwitchGameManager _twitchGameManager;
+        [SerializeField] private TwitchGameManager _twitchGameManager;
 
 
         private UIScriptableObject _uiData;
@@ -85,14 +86,20 @@ namespace UI
 
         private void OnValue(float value01_100)
         {
-            value01_100 = (value01_100*_balance/_twitchGameManager.GetViewerCount());
             Debug.Log(value01_100);
 
             if (_image == null) return;
 
             if (_uiData.GetGameModeSinglePlayer() == false && !_resetWorld) // if twitch enabled animate delay in adding value
             {
-                StartCoroutine(WaitAndPrint(value01_100));
+                float balanced01_100 = value01_100;
+
+                if (_twitchGameManager.GetViewerCount() != 0)
+                     balanced01_100 = (value01_100*_balance/_twitchGameManager.GetViewerCount());
+
+
+                Debug.Log($"value: {value01_100} balanced: {balanced01_100} with {_twitchGameManager.GetViewerCount()} vieuwers");
+                StartCoroutine(WaitAndPrint(balanced01_100));
             }
             else
             {
