@@ -169,27 +169,34 @@ namespace UI
             AddToList(_gameManager.GetUserNamePeeCommand(), _peeNamesList);
             AddToList(_gameManager.GetUserNamePoopCommand(), _pooNamesList);
 
-            AnimateText(_endPositionPee, _peeNamesList, _progressTimerPee, _currentTwitchTextPee);
-            AnimateText(_endPositionPoo, _pooNamesList, _progressTimerPoo, _currentTwitchTextPoo);
-            AnimateText(_endPositionHunger, _hungerNamesList, _progressTimerHunger, _currentTwitchTextHunger);
+            _progressTimerPee = AnimateText(_endPositionPee, _peeNamesList, _progressTimerPee, _currentTwitchTextPee);
+            _progressTimerPoo = AnimateText(_endPositionPoo, _pooNamesList, _progressTimerPoo, _currentTwitchTextPoo);
+            _progressTimerHunger = AnimateText(_endPositionHunger, _hungerNamesList, _progressTimerHunger, _currentTwitchTextHunger);
         }
 
-        private void AnimateText(Vector3 endPosition, List<string> list, float progressTimer, TextMeshProUGUI text)
+        private float AnimateText(Vector3 endPosition, List<string> list, float progressTimer, TextMeshProUGUI text)
         {
-            if (list[0] != null)
+            if (list.Count != 0)
             {
-                float progress = progressTimer / 2;
-                text.text = list[0];   // set name
-                text.transform.position = Vector3.Slerp(_startPosition, endPosition, progress); // move UI
-
                 progressTimer += Time.deltaTime;
+                float progress = progressTimer / 2;
+                
+
+                Debug.Log("progress" + progress);
+
+                text.text = list[0];   // set name
+                text.rectTransform.position = Vector3.Slerp(_startPosition, endPosition, progress); // move UI
+
+
                 if (progressTimer > 2) // RESET UI
                 {
                     progressTimer = 0;
                     list.RemoveAt(0);  // animation done
                 }
-
+                return progressTimer;
             }
+            return 0;
+
         }
 
         private void AddToList(string name, List<string> list)
