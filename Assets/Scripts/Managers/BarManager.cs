@@ -10,6 +10,8 @@ namespace UI
     public sealed class BarManager : MonoBehaviour
     {
         public enum NeedType { Poop, Hungry, Pee }
+        public GameObject FlashingBar;
+        private FlashEffect flashBarScript;
 
         #region Inspector
         [Header("Player")]
@@ -95,6 +97,11 @@ namespace UI
             {
                 _playerController.OnStaminaChanged -= HandleStaminaChanged;
             }
+        }
+
+        private void Start()
+        {
+            flashBarScript = FlashingBar.GetComponent<FlashEffect>();
         }
 
         private void Update()
@@ -216,6 +223,11 @@ namespace UI
                 if (c.TryGetComponent<IGuardAlertable>(out var alertable))
                 {
                     alertable.OnCryAlert(_playerController.transform.position);
+                    flashBarScript.isTurnedOn = true;
+                }
+                else
+                {
+                    flashBarScript.isTurnedOn = false;
                 }
             }
         }

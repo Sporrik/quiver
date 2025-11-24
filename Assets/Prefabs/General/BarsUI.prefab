@@ -1381,6 +1381,7 @@ GameObject:
   - component: {fileID: 2707013713776826613}
   - component: {fileID: 3669033693063929335}
   - component: {fileID: 8379937079859772140}
+  - component: {fileID: 8890719916500460399}
   m_Layer: 5
   m_Name: happinessbackground
   m_TagString: Untagged
@@ -1445,6 +1446,22 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
+--- !u!114 &8890719916500460399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7998631158709241809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05a0f3b3e8ea11c4d87ec0f8c228251e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FlashSpeed: 13
+  Bar: {fileID: 5896694685523394215}
+  BarOutline: {fileID: 1863191036966870478}
+  BarBackground: {fileID: 8379937079859772140}
 --- !u!1 &8066043929569958029
 GameObject:
   m_ObjectHideFlags: 0

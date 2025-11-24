@@ -4,10 +4,11 @@ using UnityEngine.UI;
 
 public class FlashEffect : MonoBehaviour
 {
-
+    public bool isTurnedOn;
     public float FlashSpeed; //set this in the editor
-    public RawImage Bar; //maybe this has to become an array of images?
-    public Color red => Color.red;
+    public Image Bar; 
+    public RawImage BarOutline;
+    public Color red => new Color(1,.6f,.2f,1);
     public Color white => Color.white;
 
     void Start()
@@ -17,7 +18,16 @@ public class FlashEffect : MonoBehaviour
 
     void Update()
     {
-        Bar.color = LerpRed();
+        if (isTurnedOn)
+        {
+            Bar.color = LerpRed();
+            BarOutline.color = LerpRed();
+        }
+        else
+        {
+            Bar.color = Color.white;
+            BarOutline.color = Color.white;
+        }
     }
 
     public Color LerpRed()
