@@ -12,8 +12,11 @@ namespace UI
     public sealed class BarManager : MonoBehaviour
     {
         public enum NeedType { Poop, Hungry, Pee }
+
         public GameObject FlashingBar;
+        public GameObject PulseOverlay;
         private FlashEffect flashBarScript;
+        private ScreenPulse pulseScreenScript;
 
         #region Inspector
         [Header("Player")]
@@ -124,6 +127,8 @@ namespace UI
         private void Start()
         {
             flashBarScript = FlashingBar.GetComponent<FlashEffect>();
+            pulseScreenScript = PulseOverlay.GetComponent<ScreenPulse>();
+
         }
 
         private void Update()
@@ -298,10 +303,12 @@ namespace UI
                 {
                     alertable.OnCryAlert(_playerController.transform.position);
                     flashBarScript.isTurnedOn = true;
+                    pulseScreenScript.isTurnedOn = true;
                 }
                 else
                 {
                     flashBarScript.isTurnedOn = false;
+                    pulseScreenScript.isTurnedOn = false;
                 }
             }
         }

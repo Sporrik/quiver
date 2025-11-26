@@ -20,7 +20,9 @@ public class MinigameCursor : MonoBehaviour
     private bool _isUsed = false;
     private float _countDown;
 
-    private bool _didClick;
+    private bool _isDown;
+    private bool _wasDown;
+
     private bool _didMove;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -39,10 +41,13 @@ public class MinigameCursor : MonoBehaviour
     {
         const float timeUntilSleep = 5f;
 
-        _didClick = Click();
+        _wasDown = _isDown;
+
+        _isDown = Click();
         _didMove = MoveCursor();
 
-        if(_didMove || _didClick)
+        // disable cursor when not used
+        if (_didMove || _isDown)
         {
             _isUsed = true;
             _countDown = timeUntilSleep;
@@ -56,6 +61,16 @@ public class MinigameCursor : MonoBehaviour
         {
             _isUsed = false;
         }
+
+        // hide cursor when disabled
+        if(_isUsed)
+        {
+            _cursor.enabled = true;
+        }
+        else
+        {
+            _cursor.enabled = false;
+        }
     }
 
     private bool MoveCursor()
@@ -68,7 +83,7 @@ public class MinigameCursor : MonoBehaviour
 
         Vector2 added = _move.ReadValue<Vector2>();
 
-        if (added.x == 0 || added.y == 0)
+        if (added.sqrMagnitude == 0f)
         {
             return false;
         }
@@ -120,11 +135,21 @@ public class MinigameCursor : MonoBehaviour
 
     public bool IsPressed()
     {
-        return _didClick;
+        return _isDown;
     }
 
     public Vector2 GetPosition()
     {
         return _position;
+    }
+
+    public bool OnDownEvent()
+    {
+        return _isDown && !_wasDown;
+    }
+
+    public bool OnUpEvent()
+    {
+        return !_isDown && _wasDown;
     }
 }
