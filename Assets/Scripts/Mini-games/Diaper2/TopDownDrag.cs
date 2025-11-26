@@ -13,7 +13,7 @@ public class TopDownDrag : MonoBehaviour
 
     [SerializeField] private Camera mainCamera;
 
-    private float originalY;
+    [SerializeField] private MinigameCursor _cursor;
 
     void Start()
     {
@@ -21,8 +21,6 @@ public class TopDownDrag : MonoBehaviour
         //mainCamera = Camera.main;
 
         DragPlaneY = transform.position.y + DragPlaneY;
-
-        originalY = transform.position.y;
     }
 
     void OnMouseDown()
@@ -52,9 +50,15 @@ public class TopDownDrag : MonoBehaviour
 
     void Update()
     {
+        ControllerSupport();
+
         if (IsDragging)
         {
             Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+
+            // still needs fixing, weeeeeee
+            if(_cursor.IsUsed()) ray = mainCamera.ViewportPointToRay(_cursor.GetPosition());
+
             Plane dragPlane = new Plane(Vector3.up, new Vector3(0f, DragPlaneY, 0f));
             if (dragPlane.Raycast(ray, out float enter))
             {
@@ -63,6 +67,23 @@ public class TopDownDrag : MonoBehaviour
                 Vector3 targetPosition = new Vector3(hitPoint.x, DragPlaneY, hitPoint.z);
                 rb.MovePosition(Vector3.Lerp(transform.position, targetPosition, 0.4f));
             }
+        }
+    }
+
+    private void ControllerSupport()
+    {
+        if (_cursor == null) return;
+
+        if (_cursor.OnDownEvent())
+        {
+            OnMouseDown();
+            Debug.Log("Down event!");
+        }
+
+        if (_cursor.OnUpEvent())
+        {
+            OnMouseUp();
+            Debug.Log("Up event!");
         }
     }
 }

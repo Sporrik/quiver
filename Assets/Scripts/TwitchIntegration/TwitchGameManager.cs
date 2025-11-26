@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Xml;
 using TMPro;
 using TwitchIntegration;
 using UI;
 using UnityEngine;
+using UnityEngine.Rendering;
+using Random = System.Random;
 
 public class TwitchGameManager : TwitchMonoBehaviour
 {
@@ -17,6 +17,8 @@ public class TwitchGameManager : TwitchMonoBehaviour
 
     [Header("UI")]
     [SerializeField] private UIScriptableObject uiData;
+    [SerializeField] private TextMeshProUGUI babyBrabbleTextUI;
+    [SerializeField] private TextMeshProUGUI chatUserNameTextUI;
 
     [Header("Refresh time")]
     [SerializeField] private float refreshTime = 15f * 60f; //seconds, for minutes times it by 60
@@ -29,7 +31,7 @@ public class TwitchGameManager : TwitchMonoBehaviour
     //DON'T REMOVE || dummy var for function call
     private readonly System.Action<bool> _authorized = null;
 
-    //inout field vars
+    //input field vars
     private string _username;
     private string _channelName;
 
@@ -46,42 +48,141 @@ public class TwitchGameManager : TwitchMonoBehaviour
 
     private static List<string> _commands = new List<string>();
 
+    //twitch user vars
+    private TwitchUser _userPoop = new TwitchUser();
+    private TwitchUser _userPee = new TwitchUser();
+    private TwitchUser _userHunger = new TwitchUser();
+    private TwitchUser _userEmpty; //just an empty for empty assignment
+
+    private float _accTimeUser = 0;
+    private const float MaxWaitTimeUser = 0.5f;
+
+    //baby brabble
+    private TwitchUser _userBrabble = new TwitchUser();
+    private TwitchUser _userBrabblePrev = new TwitchUser();
+    private string _stringBrabble;
+    private string _stringBrabblePrev;
+
+    private float _accTimeBrabble;
+    private Random _randomBrabble = new Random();
+    private float _maxWaitTimeBrabble = 0;
+    private bool _msgOnScreen = false;
+
+    private float _accTimeBrabbleRemove;
+    private const float MaxWaitTimeBrabbleRemove = 10f;
+
 
     #region TwitchCommands
 
     [TwitchCommand("poop_command", "poo", "poO", "pOo", "pOO", "Poo", "PoO", "POo", "POO")]
-    public void FillupPoopBar()
+    public void FillupPoopBar(TwitchUser user)
     {
         _commands.Add("poop_command"); //DON'T REMOVE || used for statistics in log file
         Debug.Log("Command poop proc"); //remove if clutter
         if (uiData == null) { Debug.LogWarning("TwitchManager: UIData not assigned."); return; }
         uiData.IncrementPoop(incPoop); //Increment call inside ui script
+        _userPoop = user;
     }
 
     [TwitchCommand("wee_command", "wee", "weE", "wEe", "wEE", "Wee", "WeE", "WEe", "WEE")]
-    public void FillupPeeBar()
+    public void FillupPeeBar(TwitchUser user)
     {
         _commands.Add("wee_command"); //DON'T REMOVE || used for statistics in log file
         Debug.Log("Command wee proc"); //remove if clutter
         if (uiData == null) { Debug.LogWarning("TwitchManager: UIData not assigned."); return; }
         uiData.IncrementPee(incPee); //Increment call inside ui script
+        _userPee = user;
     }
     [TwitchCommand("hunger_command", "hunger", "hungeR", "hungEr", "hungER", "hunGer", "hunGeR", "hunGEr", "hunGER", "huNger", "huNgeR", "huNgEr",
         "huNgER", "huNGer", "huNGeR", "huNGEr", "huNGER", "hUnger", "hUngeR", "hUngEr", "hUngER", "hUnGer", "hUnGeR", "hUnGEr", "hUnGER", "Hunger", "HungeR",
         "HungEr", "HungER", "HunGer", "HunGeR", "HunGEr", "HunGER")]
-    public void FillupHungerBar()
+    public void FillupHungerBar(TwitchUser user)
     {
         _commands.Add("hunger_command"); //DON'T REMOVE || used for statistics in log file
         Debug.Log("Command hunger proc"); //remove if clutter
         if (uiData == null) { Debug.LogWarning("TwitchManager: UIData not assigned."); return; }
         uiData.IncrementHungry(incHungry); //Increment call inside ui script
+        _userHunger = user;
     }
     #endregion
 
-    //AUTH
+    private void Start()
+    {
+        babyBrabbleTextUI.text = " ";
+        chatUserNameTextUI.text = " ";
+    }
+
     private void Update()
     {
-        TwitchManager.OnTwitchMessageReceived += (user, s) => AddUser(user); //DON'T REMOVE || Has to check every time if a msg is sent || used for active viewer count
+        //DON'T REMOVE || Has to check every time if a msg is sent || used for active viewer count
+        TwitchManager.OnTwitchMessageReceived += (user, s) =>
+        {
+            AddUser(user);
+            _userBrabble = user;
+            _stringBrabble = s;
+        };
+
+        //DON'T REMOVE || empties out the twitchUser's for UI 
+        _accTimeUser += Time.deltaTime;
+
+        if (_accTimeUser >= MaxWaitTimeUser)
+        {
+            _userHunger = _userEmpty;
+            _userPee = _userEmpty;
+            _userPoop = _userEmpty;
+        }
+
+        //DON'T REMOVE || Brabble logic
+        _accTimeBrabble += Time.deltaTime;
+        if (_msgOnScreen) _accTimeBrabbleRemove += Time.deltaTime;
+
+        if (_accTimeBrabble >= _maxWaitTimeBrabble)
+        {
+            if (_stringBrabble.Substring(0, 1) != "!")
+            {
+                if (_stringBrabble.Contains("PRIVMSG"))
+                {
+                    _stringBrabble = ParseRawIrcMessage(_stringBrabble);
+                }
+
+                if (_userBrabble.userid == _userBrabblePrev.userid)
+                {
+                    if (_stringBrabble == _stringBrabblePrev)
+                    {
+                        _stringBrabble = " ";
+                        _userBrabble = _userEmpty;
+                    }
+                }
+                babyBrabbleTextUI.text = _stringBrabble;
+                chatUserNameTextUI.text = _userBrabble.displayname;
+
+                //color player name on screen
+                Random randR = new Random();
+                Random randG = new Random();
+                Random randB = new Random();
+
+                float r = randR.Next(256);
+                float g = randG.Next(256);
+                float b = randB.Next(256);
+                chatUserNameTextUI.color = new Color(r / 256f, g / 256f, b / 256f);
+
+                _msgOnScreen = true;
+
+                _stringBrabblePrev = _stringBrabble;
+                _userBrabblePrev = _userBrabble;
+            }
+
+            _accTimeBrabble = 0;
+            _maxWaitTimeBrabble = _randomBrabble.Next(20, 21); //random interval between 60sec and 120sec
+        }
+
+        if (_accTimeBrabbleRemove >= MaxWaitTimeBrabbleRemove)
+        {
+            babyBrabbleTextUI.text = " ";
+            chatUserNameTextUI.text = " ";
+            _accTimeBrabbleRemove = 0;
+            _msgOnScreen = false;
+        }
 
         //DON'T REMOVE || calculates current active chatters in chat || uses refresh time as waiting time 
         if (_userIDsInChat.Count > 0)
@@ -119,7 +220,7 @@ public class TwitchGameManager : TwitchMonoBehaviour
     }
 
 
-    //DON'T REMOVE || log creation after application close
+    //DON'T REMOVE || log creation after application.quit
     private void OnApplicationQuit()
     {
         Debug.Log("application close");
@@ -181,11 +282,21 @@ public class TwitchGameManager : TwitchMonoBehaviour
         _viewerCount++;
     }
 
-    //DON'T REMOVE || Separate class for log creation
+    //Parses over string and removes unnecessary stuff from the string
+    private string ParseRawIrcMessage(string ircLine)
+    {
+        // Example input: hynatos!hynatos@hynatos.tmi.twitch.tv PRIVMSG #amazonubereats :What a loser
+        var exclamationIdx = ircLine.IndexOf('!');
+        var spaceAfterUsernameIdx = ircLine.IndexOf(' ', exclamationIdx);
+        var colonIdx = ircLine.IndexOf(':', spaceAfterUsernameIdx);
 
+        string user = exclamationIdx > 0 ? ircLine.Substring(0, exclamationIdx) : "Unknown";
+        string message = colonIdx > 0 ? ircLine.Substring(colonIdx + 1) : "";
 
-    //DON'T REMOVE || public function calls, read summaries!
+        return $"{message}";
+    }
 
+    //=============== DON'T REMOVE || public function calls, read summaries! ===============
     /// <summary>
     /// Calls authenticate function with given parameters from textboxes in TwitchGameManager
     /// </summary>
@@ -207,6 +318,31 @@ public class TwitchGameManager : TwitchMonoBehaviour
     {
         return _viewerCount;
     }
+
+    /// <summary>
+    /// Gets the most recent username of the person who set the most recent poop command
+    /// </summary>
+    public string GetUserNamePoopCommand()
+    {
+        return _userPoop.displayname;
+    }
+
+    /// <summary>
+    /// Gets the most recent username of the person who set the most recent pee command
+    /// </summary>
+    public string GetUserNamePeeCommand()
+    {
+        return _userPee.displayname;
+    }
+
+    /// <summary>
+    /// Gets the most recent username of the person who set the most recent hunger command
+    /// </summary>
+    public string GetUserNameHungerCommand()
+    {
+        return _userHunger.displayname;
+    }
+
 }
 
 
