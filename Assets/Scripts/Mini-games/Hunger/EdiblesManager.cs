@@ -178,7 +178,7 @@ public class EdiblesManager : MonoBehaviour
         if(_index1 != null)
         {
             if (ctx.canceled)
-                Destroy(_index1.gameObject);
+                _index1.DropEdible();
         }
     }
     public void Discard2(InputAction.CallbackContext ctx)
@@ -186,7 +186,7 @@ public class EdiblesManager : MonoBehaviour
         if(_index2 != null)
         {
             if (ctx.canceled)
-                Destroy(_index2.gameObject);
+                _index2.DropEdible();
         }
     }
     public void Discard3(InputAction.CallbackContext ctx)
@@ -194,7 +194,7 @@ public class EdiblesManager : MonoBehaviour
         if(_index3 != null)
         {
             if (ctx.canceled)
-                Destroy(_index3.gameObject);
+                _index3.DropEdible();
         }
     }
     public void Discard4(InputAction.CallbackContext ctx)
@@ -202,7 +202,7 @@ public class EdiblesManager : MonoBehaviour
         if(_index4 != null)
         {
             if (ctx.canceled)
-                Destroy(_index4.gameObject);
+                _index4.DropEdible();
         }
     }
 
