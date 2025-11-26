@@ -17,6 +17,7 @@ public class PeeMiniGame : MonoBehaviour
     [Header("Win condition:")]
     [SerializeField] private MinigameWinToggle _winCondition = null;
     [SerializeField] private float _winTriggerDelay = 1f;
+    [SerializeField] private GameObject _peeVisual;
 
     private int _currentRange;
     private float _currentSpeed;
@@ -52,6 +53,16 @@ public class PeeMiniGame : MonoBehaviour
 
             _timer = 0f;
         }
+
+        // Smoothly interpolate the Y scale of _peeVisual
+        float targetScaleY = 1.5f / 100f * _percentageComplete;
+        float currentScaleY = _peeVisual.transform.localScale.y;
+
+        _peeVisual.transform.localScale = new Vector3(
+            _peeVisual.transform.localScale.x,
+            Mathf.Lerp(currentScaleY, targetScaleY, Time.deltaTime * 5f), // 5f is the lerp speed
+            _peeVisual.transform.localScale.z
+        );
 
         if (_turnLeft)
         {
