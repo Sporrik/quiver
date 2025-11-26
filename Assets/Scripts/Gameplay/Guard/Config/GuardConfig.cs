@@ -98,18 +98,6 @@ namespace Gameplay.GuardCfg
             public float FovExitLag => _fovExitLag;
         }
 
-        [Serializable]
-        public sealed class GuardSocialAggro
-        {
-            [SerializeField] private float _shoutTime;  // cooldown between shouts
-            [SerializeField] private float _shoutRadius;
-            [SerializeField] private LayerMask _allyLayerMask;  // guard layer
-
-            public float ShoutTime => _shoutTime;
-            public float ShoutRadius => _shoutRadius;
-            public LayerMask AllyLayerMask => _allyLayerMask;
-        }
-
         [Header("Sections")]
         [SerializeField] private GuardPerception _perception = new();
         [SerializeField] private GuardMovement _movement = new();
@@ -117,7 +105,6 @@ namespace Gameplay.GuardCfg
         [SerializeField] private GuardCombat _combat = new();
         [SerializeField] private GuardDebug _debug = new();
         [SerializeField] private GuardStability _stability = new();
-        [SerializeField] private GuardSocialAggro _socialAggro = new();
 
         public string PlayerTag => _playerTag;
         public LayerMask LoSMask => _losMask;
@@ -128,7 +115,6 @@ namespace Gameplay.GuardCfg
         public GuardCombat Combat => _combat;
         public GuardDebug Debug => _debug;
         public GuardStability Stability => _stability;
-        public GuardSocialAggro SocialAggro => _socialAggro;
 
 #if UNITY_EDITOR
         private void OnValidate()
@@ -140,7 +126,6 @@ namespace Gameplay.GuardCfg
             _combat ??= new GuardCombat();
             _debug ??= new GuardDebug();
             _stability ??= new GuardStability();
-            _socialAggro ??= new GuardSocialAggro();
         }
 #endif
     }
