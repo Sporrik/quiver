@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using TwitchIntegration;
@@ -51,10 +52,10 @@ public class TwitchGameManager : TwitchMonoBehaviour
     private TwitchUser _userPoop = new TwitchUser();
     private TwitchUser _userPee = new TwitchUser();
     private TwitchUser _userHunger = new TwitchUser();
-    private TwitchUser _userEmpty;
+    private TwitchUser _userEmpty; //just an empty for empty assignment
 
     private float _accTimeUser = 0;
-    private float _maxWaitTimeUser = 0.5f;
+    private const float MaxWaitTimeUser = 0.5f;
 
     //baby brabble
     private TwitchUser _userBrabble = new TwitchUser();
@@ -68,7 +69,7 @@ public class TwitchGameManager : TwitchMonoBehaviour
     private bool _msgOnScreen = false;
 
     private float _accTimeBrabbleRemove;
-    private float _maxWaitTimeBrabbleRemove = 15;
+    private const float MaxWaitTimeBrabbleRemove = 10f;
 
 
     #region TwitchCommands
@@ -105,6 +106,11 @@ public class TwitchGameManager : TwitchMonoBehaviour
     }
     #endregion
 
+    private void Start()
+    {
+        babyBrabbleTextUI.text = " ";
+        chatUserNameTextUI.text = " ";
+    }
 
     private void Update()
     {
@@ -119,7 +125,7 @@ public class TwitchGameManager : TwitchMonoBehaviour
         //DON'T REMOVE || empties out the twitchUser's for UI 
         _accTimeUser += Time.deltaTime;
 
-        if (_accTimeUser >= _maxWaitTimeUser)
+        if (_accTimeUser >= MaxWaitTimeUser)
         {
             _userHunger = _userEmpty;
             _userPee = _userEmpty;
@@ -170,7 +176,7 @@ public class TwitchGameManager : TwitchMonoBehaviour
             _maxWaitTimeBrabble = _randomBrabble.Next(20, 21); //random interval between 60sec and 120sec
         }
 
-        if (_accTimeBrabbleRemove >= _maxWaitTimeBrabbleRemove)
+        if (_accTimeBrabbleRemove >= MaxWaitTimeBrabbleRemove)
         {
             babyBrabbleTextUI.text = " ";
             chatUserNameTextUI.text = " ";
