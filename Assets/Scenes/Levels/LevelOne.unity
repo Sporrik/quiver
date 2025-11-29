@@ -3842,6 +3842,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7452090815979141085, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
+      propertyPath: m_Texture
+      value: 
+      objectReference: {fileID: 2800000, guid: 2e6681c43ee184b45b2b092114802f6e, type: 3}
     - target: {fileID: 7835341541522685678, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.94
@@ -4099,7 +4103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6790e1fb103e1bf4ab3863371a53793c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PauseScreen: {fileID: 897806447}
+  pauseScreen: {fileID: 0}
 --- !u!4 &166690247 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7847894918087726200, guid: 08fb33ceadfad864b9aec24a3bfeaaf5, type: 3}
