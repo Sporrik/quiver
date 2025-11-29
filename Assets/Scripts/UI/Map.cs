@@ -4,7 +4,9 @@ public class Map : MonoBehaviour
 {
     [SerializeField] GameObject[] dots;
     private float timer;
-    [SerializeField] private float BlinkingTime;
+    [SerializeField] private float BlinkingTimeOff;
+    [SerializeField] private float BlinkingTimeOn;
+
     void Start()
     {
         gameObject.SetActive(true);
@@ -18,19 +20,19 @@ public class Map : MonoBehaviour
     void Update()
     {
         timer += Time.deltaTime;
-        if(timer > BlinkingTime)
+        if(timer > BlinkingTimeOff)
         {
             
             foreach (GameObject d in dots)
             {
                 d.SetActive(true);
             }
-            if(timer > BlinkingTime + 1)
+            if(timer > BlinkingTimeOff + BlinkingTimeOn)
             {
                 foreach(GameObject d in dots)
                 {
                     d.SetActive(false);
-                    BlinkingTime = 0;
+                    timer = 0;
                 }
             }
 

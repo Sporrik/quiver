@@ -3524,6 +3524,18 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 147133085544273770, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
+      propertyPath: m_Color.b
+      value: 0.76729554
+      objectReference: {fileID: 0}
+    - target: {fileID: 147133085544273770, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
+      propertyPath: m_Color.g
+      value: 0.61344844
+      objectReference: {fileID: 0}
+    - target: {fileID: 147133085544273770, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
+      propertyPath: m_Color.r
+      value: 0.21474618
+      objectReference: {fileID: 0}
     - target: {fileID: 1422546785472211885, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
       propertyPath: _twitchGameManager
       value: 
@@ -3559,6 +3571,10 @@ PrefabInstance:
     - target: {fileID: 2803527776641870814, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2822184489850842754, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
+      propertyPath: m_Name
+      value: Minimap
       objectReference: {fileID: 0}
     - target: {fileID: 3025353731871684774, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
       propertyPath: m_Pivot.x
@@ -3751,6 +3767,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 8859954548469103447, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
+    - {fileID: 2554324015927964222, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 3025353731871684774, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
       insertIndex: 2
@@ -4851,7 +4868,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 130f660889a70c947bff4c8ba8a2c73e, type: 3}
-  m_Color: {r: 0, g: 0.7209945, b: 1, a: 1}
+  m_Color: {r: 0.26595065, g: 0.7484276, b: 0.32617274, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -11154,7 +11171,7 @@ Transform:
   m_GameObject: {fileID: 321419947}
   serializedVersion: 2
   m_LocalRotation: {x: -0.9848077, y: -0, z: -0, w: 0.17364825}
-  m_LocalPosition: {x: -1.87, y: 1.43, z: 4.56}
+  m_LocalPosition: {x: -1.9, y: 1.45, z: 4.51}
   m_LocalScale: {x: 0.2104, y: 0.2104, z: 0.2104}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -14664,7 +14681,7 @@ MonoBehaviour:
   _progressTimerHunger: 0
   colorStart: {r: 0.8742138, g: 0.8512608, b: 0.7779953, a: 0}
   ColorEnd: {r: 0.9568628, g: 0.78823537, b: 0.1764706, a: 1}
-  animationTime: 10
+  animationTime: 2
   _currentTwitchTextPoo: {fileID: 484393301}
   _currentTwitchTextPee: {fileID: 1329372353}
   _currentTwitchTextHunger: {fileID: 1734366902}
@@ -15713,6 +15730,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dots:
+  - {fileID: 1831451501}
   - {fileID: 573879837}
   - {fileID: 469705843}
   - {fileID: 974450523}
@@ -15721,7 +15739,8 @@ MonoBehaviour:
   - {fileID: 989903413}
   - {fileID: 497553552}
   - {fileID: 1279202252}
-  BlinkingTime: 2
+  BlinkingTimeOff: 2
+  BlinkingTimeOn: 1
 --- !u!1 &614689349
 GameObject:
   m_ObjectHideFlags: 0
@@ -20585,7 +20604,7 @@ Transform:
   m_GameObject: {fileID: 635599722}
   serializedVersion: 2
   m_LocalRotation: {x: -0.9848077, y: -0, z: -0, w: 0.17364825}
-  m_LocalPosition: {x: -1.59, y: 1.6, z: 4.09}
+  m_LocalPosition: {x: -1.62, y: 1.59, z: 4.12}
   m_LocalScale: {x: 0.2104, y: 0.2104, z: 0.2104}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -40529,7 +40548,7 @@ Transform:
   m_GameObject: {fileID: 1532068574}
   serializedVersion: 2
   m_LocalRotation: {x: -0.9848077, y: -0, z: -0, w: 0.17364825}
-  m_LocalPosition: {x: -1.28, y: 1.82, z: 3.49}
+  m_LocalPosition: {x: -1.44, y: 1.75, z: 3.74}
   m_LocalScale: {x: 0.2104, y: 0.2104, z: 0.2104}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -40811,7 +40830,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 792f8a7239479df4386eae5b6f88e307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _minigameSpawnPoint: {fileID: 2339469992590709862}
+  _minigameSpawnPoint: {fileID: 0}
   _sceneNames:
   - BabyDiaper
   - Pee
@@ -45138,6 +45157,11 @@ Transform:
   - {fileID: 695267216}
   m_Father: {fileID: 453090260}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1831451501 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1159406328736929049, guid: e5e0501b1770dc34aa9440c6ed3d0c49, type: 3}
+  m_PrefabInstance: {fileID: 23150187}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1838467192
 GameObject:
   m_ObjectHideFlags: 0
@@ -45865,7 +45889,7 @@ GameObject:
   - component: {fileID: 1891132171}
   - component: {fileID: 1891132169}
   m_Layer: 0
-  m_Name: Map
+  m_Name: MapCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46389,8 +46413,8 @@ Transform:
   - {fileID: 1891132168}
   - {fileID: 646089487}
   - {fileID: 1532068577}
-  - {fileID: 321419950}
   - {fileID: 635599725}
+  - {fileID: 321419950}
   m_Father: {fileID: 1256686442}
   m_LocalEulerAnglesHint: {x: 70, y: 0, z: 0}
 --- !u!114 &1900901401
@@ -49282,11 +49306,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &2339469992590709862 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2339469992440194841, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
-  m_PrefabInstance: {fileID: 152793983}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2803527776524998817 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2803527776641870814, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
