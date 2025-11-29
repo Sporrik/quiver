@@ -43,8 +43,13 @@ namespace UI
         [SerializeField, Min(0f)] private float _cryCooldown = 2f;
 
 
-
         [Header("AnimationTwitch")]
+
+        [SerializeField] private ParticleSystem _addNameEffectPoo;
+        [SerializeField] private ParticleSystem _addNameEffectPee;
+        [SerializeField] private ParticleSystem _addNameEffectHunger;
+
+
 
         [SerializeField] private float _progressTimerPee;
         [SerializeField] private float _progressTimerPoo;
@@ -53,7 +58,7 @@ namespace UI
         [SerializeField] private Color colorStart;
         [SerializeField] private Color ColorEnd;
 
-
+        [SerializeField] private float animationTime = 2f;
 
 
 
@@ -174,17 +179,17 @@ namespace UI
             AddToList(_gameManager.GetUserNamePeeCommand(), _peeNamesList);
             AddToList(_gameManager.GetUserNamePoopCommand(), _pooNamesList);
 
-            _progressTimerPee = AnimateText(_endPositionPee, _peeNamesList, _progressTimerPee, _currentTwitchTextPee);
-            _progressTimerPoo = AnimateText(_endPositionPoo, _pooNamesList, _progressTimerPoo, _currentTwitchTextPoo);
-            _progressTimerHunger = AnimateText(_endPositionHunger, _hungerNamesList, _progressTimerHunger, _currentTwitchTextHunger);
+            _progressTimerPee = AnimateText(_endPositionPee, _peeNamesList, _progressTimerPee, _currentTwitchTextPee, _addNameEffectPee);
+            _progressTimerPoo = AnimateText(_endPositionPoo, _pooNamesList, _progressTimerPoo, _currentTwitchTextPoo, _addNameEffectPoo);
+            _progressTimerHunger = AnimateText(_endPositionHunger, _hungerNamesList, _progressTimerHunger, _currentTwitchTextHunger, _addNameEffectHunger);
         }
 
-        private float AnimateText(Vector3 endPosition, List<string> list, float progressTimer, TextMeshProUGUI text)
+        private float AnimateText(Vector3 endPosition, List<string> list, float progressTimer, TextMeshProUGUI text, ParticleSystem particle)
         {
             if (list.Count != 0)
             {
                 progressTimer += Time.deltaTime;
-                float progress = progressTimer / 2;
+                float progress = progressTimer / animationTime;
                 
 
                // Debug.Log("progress" + progress);
@@ -196,8 +201,10 @@ namespace UI
                 text.rectTransform.position = Vector3.Slerp(_startPosition, endPosition, progress); // move UI
 
 
-                if (progressTimer > 2) // RESET UI
+                if (progressTimer > animationTime) // RESET UI
                 {
+                    particle.Play();
+
                     progressTimer = 0;
                     list.RemoveAt(0);  // animation done
                 }
