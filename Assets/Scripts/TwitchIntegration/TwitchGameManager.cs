@@ -60,8 +60,8 @@ public class TwitchGameManager : TwitchMonoBehaviour
     //baby brabble
     private TwitchUser _userBrabble = new TwitchUser();
     private TwitchUser _userBrabblePrev = new TwitchUser();
-    private string _stringBrabble;
-    private string _stringBrabblePrev;
+    private string _stringBrabble = " ";
+    private string _stringBrabblePrev = " ";
 
     private float _accTimeBrabble;
     private Random _randomBrabble = new Random();
