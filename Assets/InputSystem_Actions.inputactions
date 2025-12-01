@@ -947,12 +947,12 @@
         },
         {
             "name": "MinigameCursor",
-            "id": "2e95603d-efe0-4384-bdff-89982f83476b",
+            "id": "f9851971-bcdb-4ecb-81b1-0ccb4c76840a",
             "actions": [
                 {
                     "name": "Move",
                     "type": "Value",
-                    "id": "4a590b00-bc01-4181-b04b-93fc29b655c8",
+                    "id": "a2dc7dcb-61b5-46f8-a9e8-c09d695e55df",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
@@ -961,7 +961,7 @@
                 {
                     "name": "Click",
                     "type": "Button",
-                    "id": "697e4730-266d-4842-9f07-48db3d406f80",
+                    "id": "75760545-e02f-452d-b90b-ebf7035d3ca3",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -971,30 +971,19 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "3c13b1c6-aea0-47d9-a0d0-828fe2a50382",
-                    "path": "<Joystick>/stick",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Joystick",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "f0df7fc3-5428-4463-a7c1-e04b3f884754",
-                    "path": "<Gamepad>/leftStick",
+                    "id": "3d4d264a-e19b-4eda-a52a-6898e7d3d327",
+                    "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "Move",
+                    "action": "Click",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "55613677-0d5c-4d34-872c-50839816236d",
-                    "path": "<Gamepad>/rightStick",
+                    "id": "e15a19a9-2716-42aa-ae64-1d2dbfe76c3d",
+                    "path": "<Gamepad>/leftStick",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -1004,12 +993,12 @@
                 },
                 {
                     "name": "",
-                    "id": "3627a5bd-c593-432a-831a-719a8089fc0d",
-                    "path": "<Gamepad>/buttonWest",
+                    "id": "2dc525ea-e1ba-4e85-b748-53bcfdc447c5",
+                    "path": "<Gamepad>/rightStick",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Gamepad",
-                    "action": "Click",
+                    "groups": "",
+                    "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -5,7 +5,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Gameplay.AI;
-using Audio;
 
 public class LevelManager : MonoBehaviour
 {
@@ -77,7 +76,6 @@ public class LevelManager : MonoBehaviour
             if (guardBehavior.DistanceToPlayer <= guardBehavior.CatchRange && guardBehavior.SeesPlayer)
             {
                 TriggerGameOver();
-                MusicController.instance.SetDeath();
             }
         }
     }
