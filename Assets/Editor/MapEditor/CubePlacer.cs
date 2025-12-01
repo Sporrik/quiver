@@ -1,5 +1,3 @@
-#if UNITY_EDITOR
-
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -194,7 +192,8 @@ public class CubePlacer : MonoBehaviour
             var prefabObject = Instantiate(_blueprintObject);
 
             prefabObject.transform.position = finalPosition;
-            prefabObject.transform.SetParent(transform);
+            prefabObject.transform.SetParent(transform); ;
+
         }
     }
 
@@ -249,4 +248,3 @@ public class CubePlacer : MonoBehaviour
     }
 }
 
-#endif
