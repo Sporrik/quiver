@@ -53,7 +53,7 @@ namespace Gameplay.AI
         public event Action<GuardBehavior> OnPlayerCaught;
         #endregion
 
-        #region Private Vars
+        #region Private vars
         private enum State { Patrolling, Chasing, Searching, Caught, Dead }
         [SerializeField] private State _state = State.Patrolling;
 
@@ -82,7 +82,7 @@ namespace Gameplay.AI
         private void Awake()
         {
             _agent = GetComponent<NavMeshAgent>();
-            _animator = GetComponent<Animator>();
+            _animator = GetComponentInChildren<Animator>();
 
             // Check references
             if (_guardCfg == null) { Debug.LogError($"{name}: GuardConfig missing.", this); enabled = false; return; }
@@ -202,7 +202,6 @@ namespace Gameplay.AI
                     _agent.SetDestination(_lastKnownPos);
                     break;
                 case State.Caught:
-                    MusicController.instance.SetDeath();
                     _agent.updateRotation = false;
                     _agent.ResetPath();
                     _agent.isStopped = true;
@@ -230,11 +229,6 @@ namespace Gameplay.AI
 
         private void OnExit(State state)
         {
-            if (state == State.Searching)
-            {
-                MusicController.instance.SetGameplay();
-            }
-
             if (state == State.Caught)
             {
                 if (_inputRelay != null) _inputRelay.EndBlock(_caughtBlockToken);
@@ -308,7 +302,7 @@ namespace Gameplay.AI
         }
         #endregion
 
-        #region States
+        #region State Machine
         private bool CanChangeState() => Time.time >= _nextStateChangeTime;     // potential to quick switching state (no reset?)
 
         private void TickState()
