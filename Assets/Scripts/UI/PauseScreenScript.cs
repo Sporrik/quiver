@@ -4,11 +4,13 @@ using UnityEngine.SceneManagement;
 public class PauseScreenScript : MonoBehaviour
 {
     [SerializeField] private GameObject pauseScreen;
+    [SerializeField] private GameObject background;
 
 
     private void Awake()
     {
         pauseScreen.SetActive(false);
+        background.SetActive(false);
     }
 
 
@@ -61,6 +63,8 @@ public class PauseScreenScript : MonoBehaviour
     /// </summary>
     public void MainMenuBtnFunc()
     {
+        background.SetActive(true);
+        GameManager.instance.GameResume();
         SceneManager.LoadScene("MenuScreen");
 
     }

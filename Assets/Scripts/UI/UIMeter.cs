@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +12,16 @@ namespace UI
         [SerializeField] private MeterType _meterType;
         
         [SerializeField] private bool _invert = true;
+
+        private bool _resetWorld = true;
+
+        //[Header("DifficultyValue")]
+        //[SerializeField] private float _balance = 1f;
+
+        [Header("Animation")]
+        [SerializeField] private float _delayAddSeconds = 2f;
+        [SerializeField] private TwitchGameManager _twitchGameManager;
+
 
         private UIScriptableObject _uiData;
         private Image _image;
@@ -76,9 +87,34 @@ namespace UI
         private void OnValue(float value01_100)
         {
             if (_image == null) return;
+
+            if (_uiData.GetGameModeSinglePlayer() == false && !_resetWorld) // if twitch enabled animate delay in adding value
+            {
+                //float balanced01_100 = value01_100;
+
+                //if (_twitchGameManager.GetViewerCount() != 0)
+                //     balanced01_100 = (value01_100*_balance/_twitchGameManager.GetViewerCount());
+
+
+                //Debug.Log($"value: {value01_100} balanced: {balanced01_100} with {_twitchGameManager.GetViewerCount()} vieuwers");
+                StartCoroutine(WaitAndPrint(value01_100)); // delay for game feel ?!
+            }
+            else
+            {
+                _resetWorld = false;
+                float v01 = Mathf.Clamp01(value01_100 * 0.01f);
+                _image.fillAmount = _invert ? (1f - v01) : v01;
+            }
+        }
+        private IEnumerator WaitAndPrint(float value01_100)
+        {
+            Debug.Log("Add1");
+            yield return new WaitForSeconds(_delayAddSeconds);  // delay 2 seconds for animation
+
             float v01 = Mathf.Clamp01(value01_100 * 0.01f);
             _image.fillAmount = _invert ? (1f - v01) : v01;
         }
+
 
         private static MeterType InferTypeFromName(string goName)
         {
