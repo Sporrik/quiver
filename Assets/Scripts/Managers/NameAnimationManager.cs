@@ -48,6 +48,10 @@ public class NameAnimationManager : MonoBehaviour
 
     [SerializeField] private TwitchGameManager _gameManager;
 
+    private void Awake()
+    {
+        _gameManager = GameObject.FindGameObjectWithTag("Twitch").GetComponent<TwitchGameManager>();
+    }
     private void Update()
     {
         GetNamesTwitch();
