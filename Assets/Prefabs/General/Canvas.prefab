@@ -445,6 +445,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7581056000469617094}
+  - {fileID: 7883356667929106159}
   m_Father: {fileID: 3025353731871684774}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -1742,6 +1743,68 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
+--- !u!1 &5687328467130894340
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7883356667929106159}
+  - component: {fileID: 2736341627523132170}
+  m_Layer: 5
+  m_Name: MinigameScreenLogic
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &7883356667929106159
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5687328467130894340}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5237352450633568906}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2736341627523132170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5687328467130894340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd637998f03b5ca4a9d978c70a23e6f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _blackScreen: {fileID: 0}
+  _border: {fileID: 0}
+  _minigameArea: {fileID: 0}
+  _panel: {fileID: 0}
+  _borderScaleOnFullscreen: 1.2
+  _diaperMinigame: BabyDiaper
+  _peeMinigame: Pee
+  _feedingMinigame: 
+  _clipPosition: {x: 0, y: 0}
+  _slideSpeed: 2500
+  _maxProgress: 60
+  _visualsBars: {fileID: 0}
+  _barManager: {fileID: 0}
+  _uiData: {fileID: 11400000, guid: 377fbeaf0c2d98543837ee90c8854047, type: 2}
 --- !u!1 &5914294147622588271
 GameObject:
   m_ObjectHideFlags: 0
@@ -2802,10 +2865,10 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 5237352450633568906}
   - {fileID: 6446940602375714671}
   - {fileID: 4158171691938326114}
   - {fileID: 1425231367113014610}
-  - {fileID: 5237352450633568906}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
