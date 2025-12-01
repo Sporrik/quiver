@@ -31,13 +31,13 @@ public class AudioSettingsUI : MonoBehaviour
         Audio.AudioSettings.ApplyToMixer(AudioManager.instance);
     }
 
-    private void OnDestroy()
-    {
-        _master.onValueChanged.RemoveListener(OnChanged);
-        _music.onValueChanged.RemoveListener(OnChanged);
-        _sfx.onValueChanged.RemoveListener(OnChanged);
-        _mute.onValueChanged.RemoveAllListeners();
-    }
+    //private void OnDestroy()
+    //{
+    //    _master.onValueChanged.RemoveListener(OnChanged);
+    //    _music.onValueChanged.RemoveListener(OnChanged);
+    //    _sfx.onValueChanged.RemoveListener(OnChanged);
+    //    _mute.onValueChanged.RemoveAllListeners();
+    //}
 
     private void OnChanged(float _)
     {
