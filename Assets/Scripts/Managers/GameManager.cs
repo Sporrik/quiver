@@ -36,14 +36,4 @@ public class GameManager : MonoBehaviour
         _gameState = GameState.START;
         _gamePaused = false;
     }
-
-    private void Start()
-    {
-    }
-
-    private void FixedUpdate()
-    {
-
-    }
-
 }

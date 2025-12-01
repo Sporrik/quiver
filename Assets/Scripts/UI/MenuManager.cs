@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UI;
+using Audio;
 
 public class MenuManager : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class MenuManager : MonoBehaviour
 
     private void Start()
     {
+        MusicController.instance.SetMenu();
 
         // syncronise singleplayer button
         if(_ScriptableObject.GetGameModeSinglePlayer() == false)
@@ -25,7 +27,6 @@ public class MenuManager : MonoBehaviour
             _singlePlayer = false;
             _twitchObject.SetActive(!_singlePlayer); // shows when single player is false -> true image
         }
-
     }
 
 
@@ -79,6 +80,7 @@ public class MenuManager : MonoBehaviour
             SceneManager.LoadScene("LevelOne");
             print("LOAD GAME");
 
+            MusicController.instance.SetGameplay();
         }
         else
         {
