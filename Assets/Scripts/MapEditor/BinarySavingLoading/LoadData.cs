@@ -4,10 +4,13 @@ using System.IO;
 using UnityEngine;
 using SimpleFileBrowser;
 
+
+//TODO:  Be able to select/insert the file you want to load 
+//TODO:  Unload a map
 public class LoadData : MonoBehaviour
 {
     private TileDataListWrapper _tilesInJson = null;
-    private bool _fileSelected = false;
+    private bool _FileSelected = false;
 
     public IEnumerator ShowLoadDialogCoroutine()
     {
@@ -31,7 +34,7 @@ public class LoadData : MonoBehaviour
             string jsonString = File.ReadAllText(filePath);
             _tilesInJson = JsonUtility.FromJson<TileDataListWrapper>(jsonString);
 
-            _fileSelected = true;
+            _FileSelected = true;
         }
         else
         {
@@ -50,12 +53,12 @@ public class LoadData : MonoBehaviour
 
     public bool GetFileSelected()
     {
-        return _fileSelected;
+        return _FileSelected;
     }
 
     public void ResetFileSelected()
     {
-        _fileSelected = false;
+        _FileSelected = false;
     }
 }
 #endif

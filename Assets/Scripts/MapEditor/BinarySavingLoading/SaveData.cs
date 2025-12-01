@@ -14,6 +14,8 @@ public class TileDataListWrapper
 
 }
 
+//TODO:  chose to save to json or fbx or both
+
 public class SaveData : MonoBehaviour
 {
 
