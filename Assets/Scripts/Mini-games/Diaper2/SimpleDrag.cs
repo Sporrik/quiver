@@ -5,14 +5,13 @@ using UnityEngine;
 public class SimpleDrag : MonoBehaviour
 {
     private Rigidbody rb;
-    public bool IsDragging = false;
+    public bool _isMouseDragging = false;
+    private bool _isControllerDragging = false;
 
     [SerializeField] private GameObject CurrentlyDraggedObject;
-
     [SerializeField] private Transform DragPlaneYTransform;
 
     [SerializeField] private Camera mainCamera;
-
     [SerializeField] private MinigameCursor _cursor;
 
     private float originalY;
@@ -28,7 +27,7 @@ public class SimpleDrag : MonoBehaviour
         if (this.isActiveAndEnabled == false)
             return;
 
-        IsDragging = true;
+        _isMouseDragging = true;
         rb.useGravity = false;
         rb.linearVelocity = Vector3.zero;
 
@@ -40,7 +39,7 @@ public class SimpleDrag : MonoBehaviour
         if (this.isActiveAndEnabled == false)
             return;
 
-        IsDragging = false;
+        _isMouseDragging = false;
         gameObject.GetComponent<MoveToObject>().MoveTo(0);
 
         if (CurrentlyDraggedObject == gameObject)
@@ -49,14 +48,11 @@ public class SimpleDrag : MonoBehaviour
 
     void Update()
     {
-        ControllerSupport();
+        if (DraggedByController()) return;
 
-        if (IsDragging)
+        if (_isMouseDragging)
         {
             Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-
-            // in case controller is used we use my fancy cursor
-            if (_cursor.IsUsed()) ray = mainCamera.ScreenPointToRay(_cursor.GetPosition());
 
             Plane dragPlane = new Plane(Vector3.up, new Vector3(0f, DragPlaneYTransform.position.y, 0f));
             if (dragPlane.Raycast(ray, out float enter))
@@ -68,20 +64,38 @@ public class SimpleDrag : MonoBehaviour
             }
         }
     }
-    private void ControllerSupport()
+    private bool DraggedByController()
     {
-        if (_cursor == null) return;
+        if (_cursor == null) return false;
 
-        if (_cursor.OnDownEvent())
-        {
-            OnMouseDown();
-            Debug.Log("Down event!");
-        }
+        if(!_cursor.IsUsed()) return false;
 
         if (_cursor.OnUpEvent())
         {
-            OnMouseUp();
-            Debug.Log("Up event!");
+            gameObject.GetComponent<MoveToObject>().MoveTo(0);
+            return false;
         }
+
+        if (!_cursor.IsPressed()) return false;
+
+        RaycastHit hit;
+
+        Ray ray = ray = mainCamera.ScreenPointToRay(new Vector3(_cursor.GetPosition().x, _cursor.GetPosition().y, 0f));
+
+        if(!Physics.Raycast(ray, out hit)) return false;
+
+        if(hit.rigidbody != rb) return false;
+
+        Plane dragPlane = new Plane(Vector3.up, new Vector3(0f, DragPlaneYTransform.position.y, 0f));
+
+        if (dragPlane.Raycast(ray, out float enter))
+        {
+            Vector3 hitPoint = ray.GetPoint(enter);
+
+            Vector3 targetPosition = new Vector3(hitPoint.x, DragPlaneYTransform.position.y, hitPoint.z);
+            rb.MovePosition(Vector3.Lerp(transform.position, targetPosition, 0.4f));
+        }
+
+        return true;
     }
 }
