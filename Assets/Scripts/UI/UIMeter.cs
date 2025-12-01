@@ -15,8 +15,8 @@ namespace UI
 
         private bool _resetWorld = true;
 
-        [Header("DifficultyValue")]
-        [SerializeField] private float _balance = 1f;
+        //[Header("DifficultyValue")]
+        //[SerializeField] private float _balance = 1f;
 
         [Header("Animation")]
         [SerializeField] private float _delayAddSeconds = 2f;
@@ -86,8 +86,6 @@ namespace UI
 
         private void OnValue(float value01_100)
         {
-            Debug.Log(value01_100);
-
             if (_image == null) return;
 
             if (_uiData.GetGameModeSinglePlayer() == false && !_resetWorld) // if twitch enabled animate delay in adding value
