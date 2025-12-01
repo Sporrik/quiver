@@ -1474,6 +1474,7 @@ RectTransform:
   - {fileID: 1557138917}
   - {fileID: 525321705}
   - {fileID: 1161955581}
+  - {fileID: 1911587441}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -2964,11 +2965,46 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &692145193 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2217565273016119878, guid: fcdf0fd16dfd1b44aa461ce5905c4440, type: 3}
+--- !u!1 &692145184 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7529873027166861095, guid: fcdf0fd16dfd1b44aa461ce5905c4440, type: 3}
   m_PrefabInstance: {fileID: 1296049332}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &692145187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 692145184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e4b8f3618471124cb618d962180ae4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _master: {fileID: 972108831}
+  _music: {fileID: 14951860}
+  _sfx: {fileID: 1782718357}
+  _mute: {fileID: 1103559890}
+  _saveDebounceSeconds: 0.5
+--- !u!114 &692145190
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 692145184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbf2cd50b456e1140ac85e0932d50aaa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _musicCfg:
+    menu: 0
+    gameplay: 1
+    chase: 2
+    minigame: 4
+    fade: 0.5
 --- !u!1 &701144218
 GameObject:
   m_ObjectHideFlags: 0
@@ -5021,22 +5057,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2208737023854727031, guid: fcdf0fd16dfd1b44aa461ce5905c4440, type: 3}
-      propertyPath: _sfx
-      value: 
-      objectReference: {fileID: 1782718357}
-    - target: {fileID: 2208737023854727031, guid: fcdf0fd16dfd1b44aa461ce5905c4440, type: 3}
-      propertyPath: _mute
-      value: 
-      objectReference: {fileID: 1103559890}
-    - target: {fileID: 2208737023854727031, guid: fcdf0fd16dfd1b44aa461ce5905c4440, type: 3}
-      propertyPath: _music
-      value: 
-      objectReference: {fileID: 14951860}
-    - target: {fileID: 2208737023854727031, guid: fcdf0fd16dfd1b44aa461ce5905c4440, type: 3}
-      propertyPath: _master
-      value: 
-      objectReference: {fileID: 972108831}
     - target: {fileID: 2217565273016119878, guid: fcdf0fd16dfd1b44aa461ce5905c4440, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -5083,11 +5103,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 2217565273016119878, guid: fcdf0fd16dfd1b44aa461ce5905c4440, type: 3}
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7529873027166861095, guid: fcdf0fd16dfd1b44aa461ce5905c4440, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1911587441}
-    m_AddedComponents: []
+      addedObject: {fileID: 692145187}
+    - targetCorrespondingSourceObject: {fileID: 7529873027166861095, guid: fcdf0fd16dfd1b44aa461ce5905c4440, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 692145190}
   m_SourcePrefab: {fileID: 100100000, guid: fcdf0fd16dfd1b44aa461ce5905c4440, type: 3}
 --- !u!1 &1311333773
 GameObject:
@@ -7426,8 +7449,8 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1911587440}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 12.5}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.000456, y: 1.000456, z: 1.000456}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7437,11 +7460,11 @@ RectTransform:
   - {fileID: 14951859}
   - {fileID: 1782718356}
   - {fileID: 1103559891}
-  m_Father: {fileID: 692145193}
+  m_Father: {fileID: 218150547}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 960, y: 533.4875}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1929552827
