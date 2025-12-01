@@ -1,62 +1,57 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class DragBaby : MonoBehaviour
 {
     [Header("Drag Settings")]
     [SerializeField] private float dragSpeed = 10f; // Speed multiplier for dragging
-
-    [SerializeField] private Camera _camera;
-    private bool isDragging = false;
-    private Vector3 targetPosition;
     [SerializeField] private GameObject _leftArrow;
     [SerializeField] private GameObject _rightArrow;
 
+    [Header("Boundary Colliders")]
+    [SerializeField] private Collider leftBoundary; // Left boundary collider
+    [SerializeField] private Collider rightBoundary; // Right boundary collider
+
+    private float horizontalInput = 0f; // Input value from the horizontal axis
+
     void Update()
     {
-        if (isDragging)
+        // Calculate the new position based on horizontal input (negate to fix reversed controls)
+        Vector3 newPosition = transform.position + new Vector3(-horizontalInput * dragSpeed * Time.deltaTime, 0, 0);
+
+        // Check if the new position is within the boundaries
+        if (leftBoundary != null && newPosition.x < leftBoundary.bounds.max.x)
         {
-            // Get the current position of the object
-            Vector3 currentPosition = transform.position;
+            newPosition.x = leftBoundary.bounds.max.x;
+        }
 
-            // Update only the X position based on the mouse position
-            Vector3 mousePosition = GetMouseWorldPosition();
-            targetPosition = new Vector3(mousePosition.x, currentPosition.y, currentPosition.z);
+        if (rightBoundary != null && newPosition.x > rightBoundary.bounds.min.x)
+        {
+            newPosition.x = rightBoundary.bounds.min.x;
+        }
 
-            // Smoothly move the object toward the target position
-            transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * dragSpeed);
+        // Apply the new position
+        transform.position = newPosition;
+
+        // Update arrow visibility based on input
+        if (horizontalInput != 0f)
+        {
+            _leftArrow.SetActive(false);
+            _rightArrow.SetActive(false);
+        }
+        else
+        {
+            _leftArrow.SetActive(true);
+            _rightArrow.SetActive(true);
+
+            // Call MoveTo(0) when input is 0
+            // GetComponent<MoveToObject>().MoveTo(0);
         }
     }
 
-    void OnMouseDown()
+    // Input System callback for horizontal movement
+    public void OnMove(InputAction.CallbackContext context)
     {
-        // Start dragging
-        isDragging = true;
-        Debug.Log("Started Dragging");
-
-        _leftArrow.SetActive(false);
-        _rightArrow.SetActive(false);
-    }
-
-    void OnMouseUp()
-    {
-        // Stop dragging
-        isDragging = false;
-        GetComponent<MoveToObject>().MoveTo(0);
-        Debug.Log("Stopped Dragging");
-
-        _leftArrow.SetActive(true);
-        _rightArrow.SetActive(true);
-    }
-
-    private Vector3 GetMouseWorldPosition()
-    {
-        // Get the mouse position in screen space
-        Vector3 screenPosition = Input.mousePosition;
-
-        // Calculate the distance from the camera to the object along the camera's forward direction
-        screenPosition.z = Vector3.Dot(transform.position - _camera.transform.position, _camera.transform.forward);
-
-        // Convert the screen position to world space
-        return _camera.ScreenToWorldPoint(screenPosition);
+        horizontalInput = context.ReadValue<float>();
     }
 }
