@@ -41,7 +41,7 @@ public class PeeMiniGame : MonoBehaviour
 
         if (_timer >= _interval)
         {
-            _currentSpeed = Random.Range(10f, Speed);
+            _currentSpeed = Random.Range(15f, Speed);
             _interval = Random.Range(1f, 5f);
 
             // Access the Emission Module and modify rateOverTime
@@ -54,8 +54,8 @@ public class PeeMiniGame : MonoBehaviour
             _timer = 0f;
         }
 
-        // Smoothly interpolate the Y scale of _peeVisual
-        float targetScaleY = 1.5f / 100f * _percentageComplete;
+        // Map _percentageComplete (0-100) to the range 1 to -0.54f
+        float targetScaleY = Mathf.Lerp(0f, 1.5f, _percentageComplete / 100f);
         float currentScaleY = _peeVisual.transform.localScale.y;
 
         _peeVisual.transform.localScale = new Vector3(
@@ -77,7 +77,7 @@ public class PeeMiniGame : MonoBehaviour
 
         if (angle == 0f)
         {
-            _currentRange = Random.Range(10, PeeRange);
+            _currentRange = Random.Range(20, PeeRange);
         }
 
         if (angle > _currentRange)

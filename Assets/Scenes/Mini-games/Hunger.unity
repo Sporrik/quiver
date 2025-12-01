@@ -273,11 +273,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c57524e7e08f47458f35f373cf5954d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 0.4
-  _spawnChance: 70
-  _badSpawnChance: 35
+  _speed: 0.45
+  _spawnChance: 80
+  _badSpawnChance: 40
   _goodItemValue: 5
-  _badItemValue: 25
+  _badItemValue: 20
   IsCompleted: 0
   _sandwhichPrefab1: {fileID: 1877881886351255760, guid: 3a3529375bbe8e341803bb42454b1e4e, type: 3}
   _sandwhichPrefab2: {fileID: 6752757747363541548, guid: 1ded81a647f04fe4eb9f074e78137c63, type: 3}
@@ -285,7 +285,6 @@ MonoBehaviour:
   _sandwhichStart: {fileID: 559193418}
   _counter: {fileID: 1184824000}
   _badItems:
-  - {fileID: 1138015528645343658, guid: 37dcb4076daae5b49b47123c873c2ec8, type: 3}
   - {fileID: 1925871234897208948, guid: cf76001bc43616a4f9bbf60643c4065b, type: 3}
   - {fileID: 904570376497280231, guid: aa3f817b44601d24fa0833691e6de2b9, type: 3}
   - {fileID: 4896255605392985800, guid: fb03f520c2781894dbb874a06b570e74, type: 3}
@@ -906,6 +905,14 @@ MonoBehaviour:
     m_ActionId: 36bb8ef1-5164-4f0b-ac0e-91891db4dfbe
     m_ActionName: 'MapBuilder/SwitchInBound[/Keyboard/4]'
   - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 4a590b00-bc01-4181-b04b-93fc29b655c8
+    m_ActionName: 'MinigameCursor/Move[/DualSenseGamepadHID/leftStick,/DualSenseGamepadHID/rightStick]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 697e4730-266d-4842-9f07-48db3d406f80
+    m_ActionName: 'MinigameCursor/Click[/DualSenseGamepadHID/buttonWest]'
+  - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 44313986}
         m_TargetAssemblyTypeName: EdiblesManager, Assembly-CSharp
@@ -919,8 +926,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: 925a834e-bd20-446d-a694-4ecd506515d6
-    m_ActionName: 'HungerMiniGame/Discard1[/Keyboard/w]'
+    m_ActionId: bd149d8f-71eb-4f50-9601-80d5bfb725f1
+    m_ActionName: 'HungerMinigame/Discard1[/Keyboard/upArrow,/Keyboard/w,/DualSenseGamepadHID/buttonNorth]'
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 44313986}
@@ -935,24 +942,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: e992be93-8ce2-4737-8084-3528a8df987b
-    m_ActionName: 'HungerMiniGame/Discard2[/Keyboard/a]'
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 44313986}
-        m_TargetAssemblyTypeName: EdiblesManager, Assembly-CSharp
-        m_MethodName: Discard3
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: ee58d133-b3f4-4c24-b2b2-ce5b12738a0f
-    m_ActionName: 'HungerMiniGame/Discard3[/Keyboard/s]'
+    m_ActionId: 378022ec-72ff-41a3-a3c5-3be50380d91d
+    m_ActionName: 'HungerMinigame/Discard2[/Keyboard/leftArrow,/Keyboard/q,/DualSenseGamepadHID/buttonWest]'
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 44313986}
@@ -967,11 +958,27 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: 7e7ab0d7-d91f-4943-9a42-2b903eafdb55
-    m_ActionName: 'HungerMiniGame/Discard4[/Keyboard/d]'
+    m_ActionId: a8d5b243-06b6-49dc-b2ae-c135ab99d9b5
+    m_ActionName: 'HungerMinigame/Discard3[/Keyboard/rightArrow,/Keyboard/d,/DualSenseGamepadHID/buttonEast]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 44313986}
+        m_TargetAssemblyTypeName: EdiblesManager, Assembly-CSharp
+        m_MethodName: Discard3
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: e82c2bbc-08b2-4c4d-981b-a8c5a87c01a6
+    m_ActionName: 'HungerMinigame/Discard4[/Keyboard/downArrow,/Keyboard/s,/DualSenseGamepadHID/buttonSouth]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: HungerMiniGame
+  m_DefaultActionMap: 
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!23 &947800160 stripped
