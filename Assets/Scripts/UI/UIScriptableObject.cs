@@ -31,10 +31,6 @@ namespace UI
         [Header("Mode")]
         [SerializeField] private bool _gameModeSinglePlayer;
 
-        //[Header("Animation")]
-        //[SerializeField] protected float _delay = 2f;
-
-
         // ------- Live Values -------
         private float _poop;
         private float _pee;

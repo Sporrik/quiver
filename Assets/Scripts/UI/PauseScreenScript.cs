@@ -1,14 +1,16 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 
 public class PauseScreenScript : MonoBehaviour
 {
     [SerializeField] private GameObject pauseScreen;
-
+    [SerializeField] private GameObject loadingScreen;
 
     private void Awake()
     {
         pauseScreen.SetActive(false);
+        loadingScreen.SetActive(false);
     }
 
 
@@ -33,6 +35,8 @@ public class PauseScreenScript : MonoBehaviour
         {
             Time.timeScale = 0;
             pauseScreen.SetActive(true);
+
+
         }
         else
         {
@@ -61,8 +65,9 @@ public class PauseScreenScript : MonoBehaviour
     /// </summary>
     public void MainMenuBtnFunc()
     {
+        loadingScreen.SetActive(true);
         SceneManager.LoadScene("MenuScreen");
-
+        GameManager.instance.GameResume(); //unpause game is paused
     }
     /// <summary>
     /// Quits game, function made for Quit Game button

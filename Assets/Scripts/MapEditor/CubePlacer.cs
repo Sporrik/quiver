@@ -165,11 +165,10 @@ public class CubePlacer : MonoBehaviour
 
     private void PlaceCubeNear(Vector3 nearPoint)
     {
-        //if there is an instance on the position from nearPoint return, otherwise continue
         var finalPosition = _grid.GetNearestPointOnGrid(nearPoint);
         _blueprintObject.transform.position = finalPosition;
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButton(0))
         {
             //check for filled tile
             for (var idx = 0; idx < transform.childCount; idx++)
@@ -185,8 +184,7 @@ public class CubePlacer : MonoBehaviour
 
                 if (child.gameObject == _blueprintObject) continue;
 
-                if (child.position == finalPosition)
-                    return;
+                if (child.position == finalPosition) return;
             }
             //make new object and place on position
             if (_blueprintObject.transform.CompareTag("DeletionCube")) return;

@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 public class ScreenPulse : MonoBehaviour
 {
+    //Don't actively use publics!!!! use serialiseField private please!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     public bool isTurnedOn;
     public float PulseSpeed;
 
