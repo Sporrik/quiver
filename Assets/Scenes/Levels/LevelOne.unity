@@ -3917,11 +3917,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6765684153959661525, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
   m_PrefabInstance: {fileID: 152793983}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &152793987 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1274694428153703874, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
-  m_PrefabInstance: {fileID: 152793983}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &158424700
 GameObject:
   m_ObjectHideFlags: 0
@@ -10595,34 +10590,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4771e0ba88aea647838dade0e57b83c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FlashingBar: {fileID: 152793987}
-  PulseOverlay: {fileID: 1116821666}
   _playerController: {fileID: 557317126}
   _scriptableObject: {fileID: 11400000, guid: 377fbeaf0c2d98543837ee90c8854047, type: 2}
   _timeToGetRandomEvent: 1
   _amountToIncreaseBar: 3
   _singlePlayerOverride: 0
   _happinessTickInterval: 5
-  _happinessIncrement: 1
-  _happinessBaseChance: 0
-  _happinessChanceAtFull: 0.5
   _cryRange: 50
   _guardMask:
     serializedVersion: 2
     m_Bits: 1024
   _cryCooldown: 2
-  _progressTimerPee: 0
-  _progressTimerPoo: 0
-  _progressTimerHunger: 0
-  _currentTwitchTextPoo: {fileID: 484393301}
-  _currentTwitchTextPee: {fileID: 1329372353}
-  _currentTwitchTextHunger: {fileID: 1734366902}
-  _startPosition: {x: 1920, y: 322, z: 0}
-  _endPositionPee: {x: 450, y: 829, z: 0}
-  _endPositionPoo: {x: 450, y: 962, z: 0}
-  _endPositionHunger: {x: 450, y: 900, z: 0}
-  _addNameDelay: 0
-  _gameManager: {fileID: 1396096293}
 --- !u!114 &501072587
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34590,6 +34568,50 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5979843015687193542, guid: 9bf4b46c3b6490e4f844d26453f087a8, type: 3}
   m_PrefabInstance: {fileID: 1820600987}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1824751527
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1824751529}
+  - component: {fileID: 1824751528}
+  m_Layer: 0
+  m_Name: MusicHooks_Level
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1824751528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1824751527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8db55a563b9bc594089ade233c5fbdf9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1824751529
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1824751527}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 425, y: 239, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1825135145
 GameObject:
   m_ObjectHideFlags: 0
@@ -41593,3 +41615,4 @@ SceneRoots:
   - {fileID: 1256686442}
   - {fileID: 1527019458}
   - {fileID: 1698601643}
+  - {fileID: 1824751529}

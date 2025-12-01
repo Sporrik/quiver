@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using Gameplay.Interaction;
 using Gameplay.GuardCfg;
+using Audio;
 
 
 namespace Gameplay.AI
@@ -182,6 +183,7 @@ namespace Gameplay.AI
                     break;
 
                 case State.Chasing:
+                    MusicController.instance.SetChase(true);
                     AlertNearbyGuards(_player.position);
                     _agent.updateRotation = true;
                     SetRunSpeed();
