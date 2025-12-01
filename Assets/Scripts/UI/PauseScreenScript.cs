@@ -64,6 +64,7 @@ public class PauseScreenScript : MonoBehaviour
     public void MainMenuBtnFunc()
     {
         background.SetActive(true);
+        GameManager.instance.GameResume();
         SceneManager.LoadScene("MenuScreen");
 
     }
