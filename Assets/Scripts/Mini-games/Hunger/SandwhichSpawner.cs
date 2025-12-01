@@ -75,15 +75,15 @@ public class SandwhichSpawner : MonoBehaviour
         Transform spawnPoint2 = sandwhich.transform.Find("SpawnPoint2");
         Transform spawnPoint3 = sandwhich.transform.Find("SpawnPoint3");
 
-        if (spawnPoint1 != null && Random.Range(0, 100) < _spawnChance)
+        if (spawnPoint1 != null && Random.Range(0, 100) < _spawnChance /2f)
         {
             SpawnItemAt(spawnPoint1, sandwhich);
         }
-        if (spawnPoint2 != null && Random.Range(0, 100) < _spawnChance)
+        else if (spawnPoint2 != null && Random.Range(0, 100) < _spawnChance / 1.5f)
         {
             SpawnItemAt(spawnPoint2, sandwhich);
         }
-        if (spawnPoint3 != null && Random.Range(0, 100) < _spawnChance)
+        else if (spawnPoint3 != null && Random.Range(0, 100) < _spawnChance)
         {
             SpawnItemAt(spawnPoint3, sandwhich);
         }
