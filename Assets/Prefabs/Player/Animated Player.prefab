@@ -2208,7 +2208,7 @@ SkinnedMeshRenderer:
   - {fileID: 1221923065169841493, guid: cd0faf801a1c6114485d0eba7c1579dc, type: 3}
   - {fileID: -4740866918696808673, guid: cd0faf801a1c6114485d0eba7c1579dc, type: 3}
   - {fileID: -6148354693994597630, guid: cd0faf801a1c6114485d0eba7c1579dc, type: 3}
-  - {fileID: 2100000, guid: b8ba4a7ec3293d84699d5fb40b6afb3c, type: 2}
+  - {fileID: 433846810040673448, guid: cd0faf801a1c6114485d0eba7c1579dc, type: 3}
   - {fileID: 449154696236241867, guid: cd0faf801a1c6114485d0eba7c1579dc, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -2847,37 +2847,6 @@ Transform:
   - {fileID: 8642263471874621196}
   m_Father: {fileID: 2803703800010908320}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &8127467062708239929
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4621364494482780737}
-  m_Layer: 0
-  m_Name: Baby Emotes Origin
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4621364494482780737
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8127467062708239929}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0.47331968, y: -0, z: -0, w: 0.8808908}
-  m_LocalPosition: {x: -0.004, y: 1.2889996, z: 0.3959999}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3949508179338775089}
-  m_LocalEulerAnglesHint: {x: -56.5, y: 0, z: 0}
 --- !u!1 &8206141950140050813
 GameObject:
   m_ObjectHideFlags: 0
@@ -3692,9 +3661,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 5059840129627818774, guid: 3d3f353f3fafdf243bd75b8688c29d7b, type: 3}
-    - {fileID: 7036213049465896255, guid: 3d3f353f3fafdf243bd75b8688c29d7b, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3d3f353f3fafdf243bd75b8688c29d7b, type: 3}
       insertIndex: -1
@@ -3710,7 +3677,6 @@ PrefabInstance:
       addedObject: {fileID: 2879856479079548201}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3d3f353f3fafdf243bd75b8688c29d7b, type: 3}
       insertIndex: -1
-<<<<<<< Updated upstream
       addedObject: {fileID: 1859272983275702910}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3d3f353f3fafdf243bd75b8688c29d7b, type: 3}
       insertIndex: -1
@@ -3718,9 +3684,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3d3f353f3fafdf243bd75b8688c29d7b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1903116838900789150}
-=======
-      addedObject: {fileID: 4621364494482780737}
->>>>>>> Stashed changes
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3d3f353f3fafdf243bd75b8688c29d7b, type: 3}
       insertIndex: -1
