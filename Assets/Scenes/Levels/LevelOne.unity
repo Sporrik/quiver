@@ -3679,6 +3679,18 @@ PrefabInstance:
       propertyPath: _gameManager
       value: 
       objectReference: {fileID: 1396096293}
+    - target: {fileID: 5089145299955747618, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
+      propertyPath: _addNameEffectPee
+      value: 
+      objectReference: {fileID: 1311053389}
+    - target: {fileID: 5089145299955747618, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
+      propertyPath: _addNameEffectPoo
+      value: 
+      objectReference: {fileID: 177605094}
+    - target: {fileID: 5089145299955747618, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
+      propertyPath: _addNameEffectHunger
+      value: 
+      objectReference: {fileID: 2110160302}
     - target: {fileID: 5579800499973495160, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.48504674
@@ -4114,6 +4126,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 170436621}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!198 &177605094 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 8507385033747974921, guid: 0922becbffb8a1640b80e80808b182b5, type: 3}
+  m_PrefabInstance: {fileID: 4444965892042850732}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &185342691
 GameObject:
   m_ObjectHideFlags: 0
@@ -23110,6 +23127,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4000382717450356279, guid: 183f6f383c2c7a341903919d1db789c6, type: 3}
   m_PrefabInstance: {fileID: 1297079733}
   m_PrefabAsset: {fileID: 0}
+--- !u!198 &1311053389 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 6229459600729710045, guid: 0922becbffb8a1640b80e80808b182b5, type: 3}
+  m_PrefabInstance: {fileID: 4444965892042850732}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1315234849 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1729868530263080419, guid: 71d5223864bb6824491d8bcba78a8076, type: 3}
@@ -24204,7 +24226,7 @@ GameObject:
   - component: {fileID: 1396096293}
   m_Layer: 0
   m_Name: TwitchManager
-  m_TagString: Untagged
+  m_TagString: Twitch
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -37484,6 +37506,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2107522354}
   m_CullTransparentMesh: 1
+--- !u!198 &2110160302 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 1274300651657733822, guid: 0922becbffb8a1640b80e80808b182b5, type: 3}
+  m_PrefabInstance: {fileID: 4444965892042850732}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2132285582
 GameObject:
   m_ObjectHideFlags: 0
