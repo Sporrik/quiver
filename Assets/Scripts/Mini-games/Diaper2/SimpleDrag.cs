@@ -13,8 +13,6 @@ public class SimpleDrag : MonoBehaviour
 
     [SerializeField] private Camera mainCamera;
 
-    [SerializeField] private MinigameCursor _cursor;
-
     private float originalY;
 
     void Start()
@@ -49,15 +47,9 @@ public class SimpleDrag : MonoBehaviour
 
     void Update()
     {
-        ControllerSupport();
-
         if (IsDragging)
         {
             Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-
-            // in case controller is used we use my fancy cursor
-            if (_cursor.IsUsed()) ray = mainCamera.ScreenPointToRay(_cursor.GetPosition());
-
             Plane dragPlane = new Plane(Vector3.up, new Vector3(0f, DragPlaneYTransform.position.y, 0f));
             if (dragPlane.Raycast(ray, out float enter))
             {
@@ -66,22 +58,6 @@ public class SimpleDrag : MonoBehaviour
                 Vector3 targetPosition = new Vector3(hitPoint.x, DragPlaneYTransform.position.y, hitPoint.z);
                 rb.MovePosition(Vector3.Lerp(transform.position, targetPosition, 0.4f));
             }
-        }
-    }
-    private void ControllerSupport()
-    {
-        if (_cursor == null) return;
-
-        if (_cursor.OnDownEvent())
-        {
-            OnMouseDown();
-            Debug.Log("Down event!");
-        }
-
-        if (_cursor.OnUpEvent())
-        {
-            OnMouseUp();
-            Debug.Log("Up event!");
         }
     }
 }

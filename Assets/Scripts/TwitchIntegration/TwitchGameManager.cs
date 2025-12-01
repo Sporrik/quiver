@@ -7,9 +7,10 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using Random = System.Random;
 
+
 public class TwitchGameManager : TwitchMonoBehaviour
 {
-
+    
     [Header("Authorization")]
     [SerializeField] private TMP_InputField channelNameInput;
     [SerializeField] private TMP_InputField userNameInput;
@@ -60,8 +61,8 @@ public class TwitchGameManager : TwitchMonoBehaviour
     //baby brabble
     private TwitchUser _userBrabble = new TwitchUser();
     private TwitchUser _userBrabblePrev = new TwitchUser();
-    private string _stringBrabble;
-    private string _stringBrabblePrev;
+    private string _stringBrabble = " ";
+    private string _stringBrabblePrev = " ";
 
     private float _accTimeBrabble;
     private Random _randomBrabble = new Random();
@@ -110,6 +111,7 @@ public class TwitchGameManager : TwitchMonoBehaviour
     {
         babyBrabbleTextUI.text = " ";
         chatUserNameTextUI.text = " ";
+
     }
 
     private void Update()
