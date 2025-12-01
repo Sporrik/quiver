@@ -3776,8 +3776,8 @@ PrefabInstance:
       insertIndex: 3
       addedObject: {fileID: 1549537292}
     - targetCorrespondingSourceObject: {fileID: 3025353731871684774, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
-      insertIndex: 4
-      addedObject: {fileID: 293816999}
+      insertIndex: -1
+      addedObject: {fileID: 1310377758}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 2822184489850842754, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
       insertIndex: -1
@@ -6096,7 +6096,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 293816998}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -6104,7 +6104,7 @@ Transform:
   - {fileID: 484393300}
   - {fileID: 1734366901}
   - {fileID: 1329372352}
-  m_Father: {fileID: 969900976}
+  m_Father: {fileID: 1310377758}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &295841068
 PrefabInstance:
@@ -14673,23 +14673,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   _cryCooldown: 2
-  _addNameEffectPoo: {fileID: 1532068576}
-  _addNameEffectPee: {fileID: 321419948}
-  _addNameEffectHunger: {fileID: 635599723}
-  _progressTimerPee: 0
-  _progressTimerPoo: 0
-  _progressTimerHunger: 0
-  colorStart: {r: 0.8742138, g: 0.8512608, b: 0.7779953, a: 0}
-  ColorEnd: {r: 0.9568628, g: 0.78823537, b: 0.1764706, a: 1}
-  animationTime: 2
-  _currentTwitchTextPoo: {fileID: 484393301}
-  _currentTwitchTextPee: {fileID: 1329372353}
-  _currentTwitchTextHunger: {fileID: 1734366902}
-  _startPosition: {x: 1920, y: 322, z: 0}
-  _endPositionPee: {x: 450, y: 829, z: 0}
-  _endPositionPoo: {x: 450, y: 962, z: 0}
-  _endPositionHunger: {x: 450, y: 900, z: 0}
-  _addNameDelay: 0
   _gameManager: {fileID: 1396096293}
 --- !u!114 &501072587
 MonoBehaviour:
@@ -15789,7 +15772,7 @@ GameObject:
   - component: {fileID: 635599723}
   - component: {fileID: 635599724}
   m_Layer: 0
-  m_Name: HunerParticle
+  m_Name: HungerParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31919,6 +31902,73 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4000382717450356279, guid: 183f6f383c2c7a341903919d1db789c6, type: 3}
   m_PrefabInstance: {fileID: 1297079733}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1310377757
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1310377758}
+  - component: {fileID: 1310377759}
+  m_Layer: 5
+  m_Name: NameAnimationManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1310377758
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1310377757}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 293816999}
+  m_Father: {fileID: 969900976}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1310377759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1310377757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e971a48e63a33c24fa6f1c616c6bc087, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _addNameEffectPoo: {fileID: 1532068576}
+  _addNameEffectPee: {fileID: 321419948}
+  _addNameEffectHunger: {fileID: 635599723}
+  _progressTimerPee: 0
+  _progressTimerPoo: 0
+  _progressTimerHunger: 0
+  colorStart: {r: 0.81568635, g: 0.3803922, b: 0.3019608, a: 1}
+  ColorEnd: {r: 0.8862746, g: 0.7254902, b: 0.16862746, a: 1}
+  animationTime: 2
+  _currentTwitchTextPoo: {fileID: 484393301}
+  _currentTwitchTextPee: {fileID: 1329372353}
+  _currentTwitchTextHunger: {fileID: 1734366902}
+  _startPosition: {x: 0, y: 0, z: 0}
+  _endPositionPee: {x: 0, y: 0, z: 0}
+  _endPositionPoo: {x: 0, y: 0, z: 0}
+  _endPositionHunger: {x: 0, y: 0, z: 0}
+  _addNameDelay: 0
+  _gameManager: {fileID: 1396096293}
 --- !u!4 &1315234849 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1729868530263080419, guid: 71d5223864bb6824491d8bcba78a8076, type: 3}
