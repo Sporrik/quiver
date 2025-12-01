@@ -41,19 +41,11 @@ public sealed class MinigameScreen : MonoBehaviour
 
     private float _halfWidth;
 
-    private void OnEnable()
-    {
-        if (_barManager == null) { Debug.LogError($"{nameof(MinigameScreen)}: BarManager not set.", this); return; }
-        //_barManager.OnNeedFilled += HandleNeedFilled;
-    }
-
-    private void OnDisable()
-    {
-        //if (_barManager != null) _barManager.OnNeedFilled -= HandleNeedFilled;
-    }
-
     void Start()
     {
+        _barManager = GameManager.instance.gameObject.GetComponent<BarManager>();
+        if (_barManager == null) { Debug.LogError($"{nameof(MinigameScreen)}: BarManager not set.", this); return; }
+
         _manager = GetComponent<MinigameManager>();
         _minigameArea.enabled = false;
 
