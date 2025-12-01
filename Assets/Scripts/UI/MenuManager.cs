@@ -31,7 +31,7 @@ public class MenuManager : MonoBehaviour
 
     public void OnSinglePlayer()
     {
-        // set it for singleplayer
+        // set it for singleplayer 
         _ScriptableObject.SetSinglePlayer(true);
 
         SceneManager.LoadScene("LevelOne");
