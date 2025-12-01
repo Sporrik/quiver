@@ -1,9 +1,5 @@
 using Gameplay.AI;
-using NUnit.Framework;
 using System;
-using System.Collections.Generic;
-using TMPro;
-using TMPro.SpriteAssetUtilities;
 using UnityEngine;
 
 namespace UI
@@ -12,8 +8,6 @@ namespace UI
     public sealed class BarManager : MonoBehaviour
     {
         public enum NeedType { Poop, Hungry, Pee }
-        public GameObject FlashingBar;
-        private FlashEffect flashBarScript;
 
         #region Inspector
         [Header("Player")]
@@ -27,29 +21,20 @@ namespace UI
         [SerializeField, Min(0f)] private float _amountToIncreaseBar = 5f;
         [SerializeField] private bool _singlePlayerOverride = false;
 
-        [Header("Happiness (probabilistic)")]
+        [Header("Happiness")]
         [Tooltip("Seconds between happiness RNG checks.")]
         [SerializeField, Min(0.05f)] private float _happinessTickInterval = 1f;
-        [Tooltip("How Much Happiness increases when RNG check succeeds.")]
-        [SerializeField, Min(0f)] private float _happinessIncrement = 3f;
-        [Tooltip("Base success chance per check when needs are empty (0..1).")]
-        [SerializeField, UnityEngine.Range(0f, 1f)] private float _happinessBaseChance = 0.05f;
-        [Tooltip("Success chance per check when needs are full (0..1).")]
-        [SerializeField, UnityEngine.Range(0f, 1f)] private float _happinessChanceAtFull = 0.5f;
+        // [Tooltip("How Much Happiness increases when RNG check succeeds.")]                           // Old happiness logic
+        // [SerializeField, Min(0f)] private float _happinessIncrement = 3f;
+        // [Tooltip("Base success chance per check when needs are empty (0..1).")]
+        // [SerializeField, UnityEngine.Range(0f, 1f)] private float _happinessBaseChance = 0.05f;
+        // [Tooltip("Success chance per check when needs are full (0..1).")]
+        // [SerializeField, UnityEngine.Range(0f, 1f)] private float _happinessChanceAtFull = 0.5f;
 
         [Header("Cry/Alert")]
         [SerializeField, Min(0f)] private float _cryRange = 12f;
         [SerializeField] private LayerMask _guardMask;
         [SerializeField, Min(0f)] private float _cryCooldown = 2f;
-
-
-        
-
-
-
-        [SerializeField] private TwitchGameManager _gameManager;
-
-
         #endregion
 
         #region Events
@@ -96,15 +81,8 @@ namespace UI
             }
         }
 
-        private void Start()
-        {
-            flashBarScript = FlashingBar.GetComponent<FlashEffect>();
-        }
-
         private void Update()
         {
-            
-
             if (_scriptableObject == null) return;
 
             float dt = Time.deltaTime;
@@ -129,12 +107,6 @@ namespace UI
                 AlertGuardsInRange();
             }
         }
-
-
-        #endregion
-
-        #region TwitchNameAnimation
-       
         #endregion
 
         #region Handlers
@@ -225,11 +197,6 @@ namespace UI
                 if (c.TryGetComponent<IGuardAlertable>(out var alertable))
                 {
                     alertable.OnCryAlert(_playerController.transform.position);
-                    flashBarScript.isTurnedOn = true;
-                }
-                else
-                {
-                    flashBarScript.isTurnedOn = false;
                 }
             }
         }
