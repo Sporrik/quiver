@@ -11,7 +11,8 @@ namespace Audio
         Menu     = 0,
         Gameplay = 1,
         Chase    = 2,
-        Minigame = 3
+        Minigame = 3,
+        Death    = 4
     }
 
     [Serializable]
@@ -21,6 +22,7 @@ namespace Audio
         public SoundID gameplay;
         public SoundID chase;
         public SoundID minigame;
+        public SoundID death;
 
         [Header("Fade (seconds)")]
         [Range(0f, 5f)] public float fade;
@@ -71,6 +73,12 @@ namespace Audio
         public void SetMinigame(bool on)
         {
             ToggleOverlay(MusicPriority.Minigame, _musicCfg.minigame, on);
+            Evaluate();
+        }
+
+        public void SetDeath()
+        {
+            UpsertBase(MusicPriority.Minigame, _musicCfg.death);
             Evaluate();
         }
         #endregion
