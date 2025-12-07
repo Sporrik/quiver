@@ -3181,16 +3181,16 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.343711, y: 0.9272814, z: 1.4975038}
+  m_Size: {x: 1.343711, y: 5, z: 1.4975038}
   m_Center: {x: 0.014989078, y: -0.0025987625, z: 0.24875149}
 --- !u!54 &917160683
 Rigidbody:
@@ -6225,7 +6225,7 @@ PrefabInstance:
       objectReference: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     - target: {fileID: 4771784621287171409, guid: 5cdaefc681d0de544aa2835d36839dcc, type: 3}
       propertyPath: _speed
-      value: 2000
+      value: 250
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

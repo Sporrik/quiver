@@ -52,22 +52,10 @@ public class SimpleDrag : MonoBehaviour
 
     void Update()
     {
-        //if (IsDragging)
-        //{
-        //    Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-        //    Plane dragPlane = new Plane(Vector3.up, new Vector3(0f, DragPlaneYTransform.position.y, 0f));
-        //    if (dragPlane.Raycast(ray, out float enter))
-        //    {
-        //        Vector3 hitPoint = ray.GetPoint(enter);
-
-        //        Vector3 targetPosition = new Vector3(hitPoint.x, DragPlaneYTransform.position.y, hitPoint.z);
-        //        rb.MovePosition(Vector3.Lerp(transform.position, targetPosition, 0.4f));
-        //    }
-        //}
-
         ControllerInput();
         DragObject();
     }
+
     private void ControllerInput()
     {
         if (_cursor == null) return;
@@ -83,7 +71,7 @@ public class SimpleDrag : MonoBehaviour
             rb.useGravity = false;
             rb.linearVelocity = Vector3.zero;
 
-            Debug.Log("OnUp!");
+            //Debug.Log("OnUp!");
         }
 
         if (_cursor.OnDownEvent())
@@ -92,17 +80,17 @@ public class SimpleDrag : MonoBehaviour
             Ray ray = mainCamera.ScreenPointToRay(new Vector3(_cursor.GetPosition().x, _cursor.GetPosition().y, 0f));
 
             // check if the controller cursor is on the objects
+            Debug.Log(_cursor.GetPosition() + ", " + Input.mousePosition);
             if (!Physics.Raycast(ray, out hit)) return;
 
             Debug.Log("Hit collider: " + hit.collider.name + ", Expected collider: " + _collider.name);
-            Debug.Log(_cursor.GetPosition() + ", " + Input.mousePosition);
 
             if (hit.collider != _collider) return;
 
             CurrentlyDraggedObject = gameObject;
             _isControllerDragging = true;
 
-            Debug.Log("OnDown!");
+            //Debug.Log("OnDown!");
         }
     }
 
