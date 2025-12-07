@@ -3190,8 +3190,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.343711, y: 5, z: 1.4975038}
-  m_Center: {x: 0.014989078, y: -0.0025987625, z: 0.24875149}
+  m_Size: {x: 1.5, y: 2, z: 1.6}
+  m_Center: {x: 0.05, y: 2, z: 0.25}
 --- !u!54 &917160683
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4640,11 +4640,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1288968246}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!4 &1316577251 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1457857363353240567, guid: 52bd01088185fef4b84c43b2ac881687, type: 3}
-  m_PrefabInstance: {fileID: 1010316730}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1350186770
 GameObject:
   m_ObjectHideFlags: 0
@@ -5576,12 +5571,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 779a06601f627694e86b9dce799bf6c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsDragging: 0
   CurrentlyDraggedObject: {fileID: 0}
   DragPlaneYTransform: {fileID: 1069443003}
   mainCamera: {fileID: 882338403}
-  meshTransform: {fileID: 1316577251}
-  poopManager: {fileID: 1190879761}
+  _cursor: {fileID: 1971816410}
+  _meshTransform: {fileID: 1667746608}
+  _poopManager: {fileID: 1190879761}
 --- !u!114 &1667746607
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5640,7 +5635,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.0019952846, y: 0.00059711956, z: 0.0032805952}
+  m_Size: {x: 0.002, y: 0.0005, z: 0.0035}
   m_Center: {x: -0.00007639994, y: -0.00016938975, z: -0.0013128683}
 --- !u!1 &1723935466 stripped
 GameObject:
@@ -6218,14 +6213,6 @@ PrefabInstance:
     - target: {fileID: 2328519420533115012, guid: 5cdaefc681d0de544aa2835d36839dcc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4771784621287171409, guid: 5cdaefc681d0de544aa2835d36839dcc, type: 3}
-      propertyPath: _input
-      value: 
-      objectReference: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-    - target: {fileID: 4771784621287171409, guid: 5cdaefc681d0de544aa2835d36839dcc, type: 3}
-      propertyPath: _speed
-      value: 250
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
