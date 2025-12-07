@@ -22,7 +22,7 @@ public class DragDiaper : SimpleDrag
     private void Update()
     {
         ControllerInput();
-        DragObject();
+        DragObject(meshOffset);
     }
 
     private void OnTriggerEnter(Collider collision)

@@ -3367,8 +3367,9 @@ MonoBehaviour:
   rotationA: {x: -90, y: 0, z: 0}
   rotationB: {x: 90, y: 180, z: 0}
   rotationSpeed: 0.1
-  camera: {fileID: 882338403}
+  _camera: {fileID: 882338403}
   triggerCollider: {fileID: 952308534}
+  _cursor: {fileID: 1971816410}
   isFlipped: 0
 --- !u!135 &952308539
 SphereCollider:
@@ -5576,7 +5577,7 @@ MonoBehaviour:
   DragPlaneYTransform: {fileID: 1069443003}
   _cursor: {fileID: 1971816410}
   _poopManager: {fileID: 1190879761}
-  _meshTransform: {fileID: 1667746608}
+  _meshTransform: {fileID: 1069443003}
 --- !u!114 &1667746607
 MonoBehaviour:
   m_ObjectHideFlags: 0
