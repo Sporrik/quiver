@@ -14,10 +14,7 @@ public class SimpleDrag : MonoBehaviour
     [SerializeField] private Transform DragPlaneYTransform;
 
     [SerializeField] private Camera mainCamera;
-<<<<<<< Updated upstream
-=======
     [SerializeField] private MinigameCursor _cursor;
->>>>>>> Stashed changes
 
     private float originalY;
 
@@ -55,23 +52,20 @@ public class SimpleDrag : MonoBehaviour
 
     void Update()
     {
-<<<<<<< Updated upstream
-        if (IsDragging)
-        {
-            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-            Plane dragPlane = new Plane(Vector3.up, new Vector3(0f, DragPlaneYTransform.position.y, 0f));
-            if (dragPlane.Raycast(ray, out float enter))
-            {
-                Vector3 hitPoint = ray.GetPoint(enter);
+        //if (IsDragging)
+        //{
+        //    Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        //    Plane dragPlane = new Plane(Vector3.up, new Vector3(0f, DragPlaneYTransform.position.y, 0f));
+        //    if (dragPlane.Raycast(ray, out float enter))
+        //    {
+        //        Vector3 hitPoint = ray.GetPoint(enter);
 
-                Vector3 targetPosition = new Vector3(hitPoint.x, DragPlaneYTransform.position.y, hitPoint.z);
-                rb.MovePosition(Vector3.Lerp(transform.position, targetPosition, 0.4f));
-            }
-        }
-    }
-=======
+        //        Vector3 targetPosition = new Vector3(hitPoint.x, DragPlaneYTransform.position.y, hitPoint.z);
+        //        rb.MovePosition(Vector3.Lerp(transform.position, targetPosition, 0.4f));
+        //    }
+        //}
+
         ControllerInput();
-
         DragObject();
     }
     private void ControllerInput()
@@ -134,5 +128,4 @@ public class SimpleDrag : MonoBehaviour
         Vector3 targetPosition = new Vector3(hitPoint.x, DragPlaneYTransform.position.y, hitPoint.z);
         rb.MovePosition(Vector3.Lerp(transform.position, targetPosition, moveDistance));
     }
->>>>>>> Stashed changes
 }
