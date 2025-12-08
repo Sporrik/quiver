@@ -40,9 +40,6 @@ public class SimpleDrag : MonoBehaviour
 
         _isMouseDragging = false;
         gameObject.GetComponent<MoveToObject>().MoveTo(0);
-
-        if (CurrentlyDraggedObject == gameObject)
-            CurrentlyDraggedObject = null;
     }
 
     private void Update()
@@ -51,11 +48,12 @@ public class SimpleDrag : MonoBehaviour
         DragObject();
     }
 
+
     protected void ControllerInput()
     {
         if (_cursor == null) return;
 
-        if (!_cursor.IsUsed()) return;
+        if(!_cursor.IsUsed()) return;
 
         if (_cursor.OnUpEvent())
         {
@@ -66,7 +64,7 @@ public class SimpleDrag : MonoBehaviour
             rb.useGravity = false;
             rb.linearVelocity = Vector3.zero;
 
-            Debug.Log("OnUp!");
+            //Debug.Log("OnUp!");
         }
 
         if (_cursor.OnDownEvent())
@@ -82,7 +80,7 @@ public class SimpleDrag : MonoBehaviour
             CurrentlyDraggedObject = gameObject;
             _isControllerDragging = true;
 
-            Debug.Log("OnDown!");
+            //Debug.Log("OnDown!");
         }
     }
 
@@ -91,22 +89,22 @@ public class SimpleDrag : MonoBehaviour
     {
         const float moveDistance = 0.4f;
 
-    Ray ray = new Ray();
+        Ray ray = new Ray();
 
-    // check which position the object needs to be dragged to
-    if (_isControllerDragging) ray = mainCamera.ScreenPointToRay(_cursor.GetPosition());
-    else if (_isMouseDragging) ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-    else return;
+        // check which position the object needs to be dragged to
+        if (_isControllerDragging) ray = mainCamera.ScreenPointToRay(_cursor.GetPosition());
+        else if (_isMouseDragging) ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        else return;
 
-    Plane dragPlane = new Plane(Vector3.up, new Vector3(0f, DragPlaneYTransform.position.y, 0f));
+        Plane dragPlane = new Plane(Vector3.up, new Vector3(0f, DragPlaneYTransform.position.y, 0f));
 
-    // check where on the plane this point hits
-    if (!dragPlane.Raycast(ray, out float enter)) return;
+        // check where on the plane this point hits
+        if (!dragPlane.Raycast(ray, out float enter)) return;
 
-    Vector3 hitPoint = ray.GetPoint(enter);
+        Vector3 hitPoint = ray.GetPoint(enter);
 
-    //move the gameobject to the hitpoint on the plane
-    Vector3 targetPosition = new Vector3(hitPoint.x, DragPlaneYTransform.position.y, hitPoint.z) + offset;
+        // move the gameobject to the hitpoint on the plane
+        Vector3 targetPosition = new Vector3(hitPoint.x, DragPlaneYTransform.position.y, hitPoint.z) + offset;
         rb.MovePosition(Vector3.Lerp(transform.position, targetPosition, moveDistance));
     }
 }
