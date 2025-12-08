@@ -30,8 +30,8 @@ public class SimpleDrag : MonoBehaviour
         rb.useGravity = false;
         rb.linearVelocity = Vector3.zero;
 
-//        CurrentlyDraggedObject = gameObject;
-//    }
+        CurrentlyDraggedObject = gameObject;
+    }
 
     private void OnMouseUp()
     {
@@ -40,11 +40,6 @@ public class SimpleDrag : MonoBehaviour
 
         _isMouseDragging = false;
         gameObject.GetComponent<MoveToObject>().MoveTo(0);
-
-    private void Update()
-    {
-        ControllerInput();
-        DragObject();
     }
 
     private void Update()
@@ -52,6 +47,7 @@ public class SimpleDrag : MonoBehaviour
         ControllerInput();
         DragObject();
     }
+
 
     protected void ControllerInput()
     {
