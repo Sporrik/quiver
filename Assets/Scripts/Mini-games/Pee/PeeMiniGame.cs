@@ -17,7 +17,6 @@ public class PeeMiniGame : MonoBehaviour
     [Header("Win condition:")]
     [SerializeField] private MinigameWinToggle _winCondition = null;
     [SerializeField] private float _winTriggerDelay = 1f;
-    [SerializeField] private GameObject _peeVisual;
 
     private int _currentRange;
     private float _currentSpeed;
@@ -41,7 +40,7 @@ public class PeeMiniGame : MonoBehaviour
 
         if (_timer >= _interval)
         {
-            _currentSpeed = Random.Range(15f, Speed);
+            _currentSpeed = Random.Range(10f, Speed);
             _interval = Random.Range(1f, 5f);
 
             // Access the Emission Module and modify rateOverTime
@@ -53,16 +52,6 @@ public class PeeMiniGame : MonoBehaviour
 
             _timer = 0f;
         }
-
-        // Map _percentageComplete (0-100) to the range 1 to -0.54f
-        float targetScaleY = Mathf.Lerp(0f, 1.5f, _percentageComplete / 100f);
-        float currentScaleY = _peeVisual.transform.localScale.y;
-
-        _peeVisual.transform.localScale = new Vector3(
-            _peeVisual.transform.localScale.x,
-            Mathf.Lerp(currentScaleY, targetScaleY, Time.deltaTime * 5f), // 5f is the lerp speed
-            _peeVisual.transform.localScale.z
-        );
 
         if (_turnLeft)
         {
@@ -77,7 +66,7 @@ public class PeeMiniGame : MonoBehaviour
 
         if (angle == 0f)
         {
-            _currentRange = Random.Range(20, PeeRange);
+            _currentRange = Random.Range(10, PeeRange);
         }
 
         if (angle > _currentRange)
