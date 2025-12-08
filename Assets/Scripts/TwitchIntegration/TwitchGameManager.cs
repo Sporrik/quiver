@@ -357,8 +357,19 @@ public class TwitchGameManager : TwitchMonoBehaviour
         {
             return "";
         }
+        if(_stringBrabble == " ")
+        {
+            return "";
+        }
         return _stringBrabble;
     }
+
+    public TwitchUser GetBabyBrabbleUser()
+    {
+        
+        return _userBrabble;
+    }
+
 
 }
 

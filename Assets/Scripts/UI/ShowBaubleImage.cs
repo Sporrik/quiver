@@ -12,7 +12,7 @@ public class ShowBaubleImage : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(twitchGameManager.GetBabyBrabbleMessage() != " " || twitchGameManager.GetBabyBrabbleMessage() != "")
+        if(twitchGameManager.GetBabyBrabbleMessage() == "")
         {
             bauble.SetActive(false);
         }
@@ -20,6 +20,7 @@ public class ShowBaubleImage : MonoBehaviour
         {
             bauble.SetActive(true);
             Debug.Log(twitchGameManager.GetBabyBrabbleMessage());
+            Debug.Log(twitchGameManager.GetBabyBrabbleUser().displayname);
         }
     }
 }
