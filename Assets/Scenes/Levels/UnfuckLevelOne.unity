@@ -3968,6 +3968,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseScreen: {fileID: 163904458}
+  background: {fileID: 0}
 --- !u!1 &165421065
 GameObject:
   m_ObjectHideFlags: 0
@@ -37273,6 +37274,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 119198639999278394, guid: fcdf0fd16dfd1b44aa461ce5905c4440, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 988544426899538697, guid: fcdf0fd16dfd1b44aa461ce5905c4440, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2217565273016119878, guid: fcdf0fd16dfd1b44aa461ce5905c4440, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -37313,9 +37322,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4645924339989496266, guid: fcdf0fd16dfd1b44aa461ce5905c4440, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6452703906848338197, guid: fcdf0fd16dfd1b44aa461ce5905c4440, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7347308756187190029, guid: fcdf0fd16dfd1b44aa461ce5905c4440, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7529873027166861095, guid: fcdf0fd16dfd1b44aa461ce5905c4440, type: 3}
       propertyPath: m_Name
       value: AudioManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 9154803990901949118, guid: fcdf0fd16dfd1b44aa461ce5905c4440, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
