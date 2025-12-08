@@ -345,6 +345,21 @@ public class TwitchGameManager : TwitchMonoBehaviour
         return _userHunger.displayname;
     }
 
+    //2 getter functions 1 voor _stringBrabble en 1 voor _userBrabble (to know if you need to show babble UI image;
+
+    /// <summary>
+    /// Gets the most recent baby brabble message
+    /// </summary>
+    /// <returns></returns>
+    public string GetBabyBrabbleMessage()
+    {
+        if(_stringBrabble == null)
+        {
+            return "";
+        }
+        return _stringBrabble;
+    }
+
 }
 
 
