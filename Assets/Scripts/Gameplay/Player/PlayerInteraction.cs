@@ -52,7 +52,7 @@ public sealed class PlayerInteraction : MonoBehaviour
         int count = OverlapAtOrigin();
         for (int i = 0; i < count; i++)
         {
-            if (_hits[i].TryGetComponent<Interactable>(out var interactable) && interactable.CanInteract(_interactor))
+            if (_hits[i].TryGetComponent<IInteractable>(out var interactable) && interactable.CanInteract(_interactor))
             {
                 interactable.Interact(_interactor);
                 break;  // interact with first valid target only
