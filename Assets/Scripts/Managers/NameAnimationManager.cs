@@ -89,7 +89,7 @@ public class NameAnimationManager : MonoBehaviour
             float progress = progressTimer / animationTime;
 
 
-             Debug.Log("progress" + progress);
+            // Debug.Log("progress" + progress);
 
             text.text = list[0];   // set name
 
