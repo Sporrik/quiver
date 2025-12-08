@@ -26,9 +26,9 @@ public class SimpleDrag : MonoBehaviour
         if (this.isActiveAndEnabled == false)
             return;
 
-//        _isMouseDragging = true;
-//        rb.useGravity = false;
-//        rb.linearVelocity = Vector3.zero;
+        _isMouseDragging = true;
+        rb.useGravity = false;
+        rb.linearVelocity = Vector3.zero;
 
 //        CurrentlyDraggedObject = gameObject;
 //    }
@@ -38,12 +38,14 @@ public class SimpleDrag : MonoBehaviour
         if (this.isActiveAndEnabled == false)
             return;
 
-//        _isMouseDragging = false;
-//        gameObject.GetComponent<MoveToObject>().MoveTo(0);
+        _isMouseDragging = false;
+        gameObject.GetComponent<MoveToObject>().MoveTo(0);
 
-//        if (CurrentlyDraggedObject == gameObject)
-//            CurrentlyDraggedObject = null;
-//    }
+    private void Update()
+    {
+        ControllerInput();
+        DragObject();
+    }
 
     private void Update()
     {
@@ -55,32 +57,32 @@ public class SimpleDrag : MonoBehaviour
     {
         if (_cursor == null) return;
 
-//        if(!_cursor.IsUsed()) return;
+        if(!_cursor.IsUsed()) return;
 
-//        if (_cursor.OnUpEvent())
-//        {
-//            gameObject.GetComponent<MoveToObject>().MoveTo(0);
+        if (_cursor.OnUpEvent())
+        {
+            gameObject.GetComponent<MoveToObject>().MoveTo(0);
 
-//            _isControllerDragging = false;
+            _isControllerDragging = false;
 
-//            rb.useGravity = false;
-//            rb.linearVelocity = Vector3.zero;
+            rb.useGravity = false;
+            rb.linearVelocity = Vector3.zero;
 
             //Debug.Log("OnUp!");
         }
 
-//        if (_cursor.OnDownEvent())
-//        {
-//            RaycastHit hit;
-//            Ray ray = mainCamera.ScreenPointToRay(new Vector3(_cursor.GetPosition().x, _cursor.GetPosition().y, 0f));
+        if (_cursor.OnDownEvent())
+        {
+            RaycastHit hit;
+            Ray ray = mainCamera.ScreenPointToRay(new Vector3(_cursor.GetPosition().x, _cursor.GetPosition().y, 0f));
 
-//            // check if the controller cursor is on the objects
-//            if (!Physics.Raycast(ray, out hit)) return;
+            // check if the controller cursor is on the objects
+            if (!Physics.Raycast(ray, out hit)) return;
 
             if (hit.rigidbody != rb) return;
 
-//            CurrentlyDraggedObject = gameObject;
-//            _isControllerDragging = true;
+            CurrentlyDraggedObject = gameObject;
+            _isControllerDragging = true;
 
             //Debug.Log("OnDown!");
         }
@@ -91,19 +93,19 @@ public class SimpleDrag : MonoBehaviour
     {
         const float moveDistance = 0.4f;
 
-//        Ray ray = new Ray();
+        Ray ray = new Ray();
 
-//        // check which position the object needs to be dragged to
-//        if (_isControllerDragging) ray = mainCamera.ScreenPointToRay(_cursor.GetPosition());
-//        else if (_isMouseDragging) ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-//        else return;
+        // check which position the object needs to be dragged to
+        if (_isControllerDragging) ray = mainCamera.ScreenPointToRay(_cursor.GetPosition());
+        else if (_isMouseDragging) ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        else return;
 
-//        Plane dragPlane = new Plane(Vector3.up, new Vector3(0f, DragPlaneYTransform.position.y, 0f));
+        Plane dragPlane = new Plane(Vector3.up, new Vector3(0f, DragPlaneYTransform.position.y, 0f));
 
-//        // check where on the plane this point hits
-//        if (!dragPlane.Raycast(ray, out float enter)) return;
+        // check where on the plane this point hits
+        if (!dragPlane.Raycast(ray, out float enter)) return;
 
-//        Vector3 hitPoint = ray.GetPoint(enter);
+        Vector3 hitPoint = ray.GetPoint(enter);
 
         // move the gameobject to the hitpoint on the plane
         Vector3 targetPosition = new Vector3(hitPoint.x, DragPlaneYTransform.position.y, hitPoint.z) + offset;
