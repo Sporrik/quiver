@@ -3299,6 +3299,17 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 158424700}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &159466194 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7379686036508257053, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
+  m_PrefabInstance: {fileID: 1986287498}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6790e1fb103e1bf4ab3863371a53793c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &165421065
 GameObject:
   m_ObjectHideFlags: 0
@@ -31031,14 +31042,6 @@ PrefabInstance:
       propertyPath: _barManager
       value: 
       objectReference: {fileID: 501072586}
-    - target: {fileID: 7379686036508257053, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
-      propertyPath: background
-      value: 
-      objectReference: {fileID: 1986287499}
-    - target: {fileID: 7422614795320567546, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7675440232490458213, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
       propertyPath: twitchGameManager
       value: 
@@ -31052,11 +31055,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
---- !u!1 &1986287499 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 19614191958167880, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
-  m_PrefabInstance: {fileID: 1986287498}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1990778227
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -33306,6 +33304,18 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5986510627739013121, guid: fcdf0fd16dfd1b44aa461ce5905c4440, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 159466194}
+    - target: {fileID: 5986510627739013121, guid: fcdf0fd16dfd1b44aa461ce5905c4440, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CloseOptionsBtnFunc
+      objectReference: {fileID: 0}
+    - target: {fileID: 5986510627739013121, guid: fcdf0fd16dfd1b44aa461ce5905c4440, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: PauseScreenScript, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 6452703906848338197, guid: fcdf0fd16dfd1b44aa461ce5905c4440, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -33319,6 +33329,10 @@ PrefabInstance:
       value: AudioManager
       objectReference: {fileID: 0}
     - target: {fileID: 7529873027166861095, guid: fcdf0fd16dfd1b44aa461ce5905c4440, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8573403027438691044, guid: fcdf0fd16dfd1b44aa461ce5905c4440, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
