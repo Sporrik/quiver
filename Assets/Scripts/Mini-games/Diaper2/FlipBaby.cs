@@ -3,19 +3,20 @@ using UnityEngine;
 public class FlipBaby : MonoBehaviour
 {
     [Header("Rotation Settings")]
-    [SerializeField] private Vector3 rotationA = new Vector3(0, 0, 0); // Starting rotation (Euler angles)
-    [SerializeField] private Vector3 rotationB = new Vector3(0, 180, 0); // Target rotation (Euler angles)
-    [SerializeField] private float rotationSpeed = 2f; // Speed of rotation lerp
+    [SerializeField] private Vector3 rotationA = new Vector3(0, 0, 0);      // Starting rotation (Euler angles)
+    [SerializeField] private Vector3 rotationB = new Vector3(0, 180, 0);    // Target rotation (Euler angles)
+    [SerializeField] private float rotationSpeed = 2f;                      // Speed of rotation lerp
 
-    [Header("Click Settings")]
-    public new Camera camera; // Reference to the camera
-    [SerializeField] private Collider triggerCollider; // Collider to detect clicks
+    [Header("Click Settings:")]
+    [SerializeField] private Camera _camera;            // Reference to the _camera
+    [SerializeField] private Collider triggerCollider;  // Collider to detect clicks
+    [SerializeField] private MinigameCursor _cursor;    // the cursor with controller support
 
-    private bool isRotating = false; // Flag to determine if rotation is in progress
-    private Quaternion targetRotation; // Target rotation
-    private Quaternion startRotation; // Starting rotation
-    private float lerpProgress = 0f; // Progress of the lerp
-    public bool isFlipped = false; // Tracks the current rotation state
+    private bool isRotating = false;    // Flag to determine if rotation is in progress
+    private Quaternion targetRotation;  // Target rotation
+    private Quaternion startRotation;   // Starting rotation
+    private float lerpProgress = 0f;    // Progress of the lerp
+    public bool isFlipped = false;      // Tracks the current rotation state
 
     void Start()
     {
@@ -27,6 +28,8 @@ public class FlipBaby : MonoBehaviour
 
     void Update()
     {
+        ControllerSupport();
+
         if (isRotating)
         {
             LerpRotation();
@@ -35,17 +38,14 @@ public class FlipBaby : MonoBehaviour
 
     void OnMouseDown()
     {
-        // Detect if the mouse is over the trigger collider
-        Ray ray = camera.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit) && hit.collider == triggerCollider)
-        {
-            // Toggle the target rotation
-            isFlipped = !isFlipped;
-            targetRotation = isFlipped ? Quaternion.Euler(rotationB) : Quaternion.Euler(rotationA);
+        OnClickBaby(Input.mousePosition);
+    }
 
-            // Start the rotation
-            isRotating = true;
-            lerpProgress = 0f; // Reset lerp progress
+    private void ControllerSupport()
+    {
+        if(_cursor.OnDownEvent())
+        {
+            OnClickBaby(_cursor.GetPosition());
         }
     }
 
@@ -60,6 +60,23 @@ public class FlipBaby : MonoBehaviour
         {
             transform.rotation = targetRotation; // Snap to the target rotation
             isRotating = false;
+        }
+    }
+
+    private void OnClickBaby(Vector3 screenPosition)
+    {
+        // Detect if the mouse is over the trigger collider
+
+        Ray ray = _camera.ScreenPointToRay(screenPosition);
+        if (Physics.Raycast(ray, out RaycastHit hit) && hit.collider == triggerCollider)
+        {
+            // Toggle the target rotation
+            isFlipped = !isFlipped;
+            targetRotation = isFlipped ? Quaternion.Euler(rotationB) : Quaternion.Euler(rotationA);
+
+            // Start the rotation
+            isRotating = true;
+            lerpProgress = 0f; // Reset lerp progress
         }
     }
 }

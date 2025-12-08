@@ -3,21 +3,20 @@ using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
 {
-    private Vector3 CameraPosition;
-    private float CameraRotation;
-
     [Header("Camera Settings")]
-    [SerializeField] private float CameraSpeed = 1f;
-    [SerializeField] private float CameraRotationSpeed = 100f;
+    [SerializeField] private float cameraSpeed = 1f;
+    [SerializeField] private float cameraRotationSpeed = 100f;
 
-    private float BaseCameraSpeed;
+    private Vector3 _cameraPosition;
+    private float _cameraRotation;
+    private float _baseCameraSpeed;
     private void Start()
     {
-        CameraPosition = transform.position;
-        CameraRotation = transform.eulerAngles.y;
-        CameraSpeed /= 10;
-        CameraRotationSpeed /= 10;
-        BaseCameraSpeed = CameraSpeed;
+        _cameraPosition = transform.position;
+        _cameraRotation = transform.eulerAngles.y;
+        cameraSpeed /= 10;
+        cameraRotationSpeed /= 10;
+        _baseCameraSpeed = cameraSpeed;
     }
 
     private void FixedUpdate()
@@ -28,35 +27,35 @@ public class CameraMovement : MonoBehaviour
         // Movement input
         if (Input.GetKey(KeyCode.LeftShift))
         {
-            CameraSpeed = BaseCameraSpeed * 3;
+            cameraSpeed = _baseCameraSpeed * 3;
         }
         else
         {
-            CameraSpeed = BaseCameraSpeed;
+            cameraSpeed = _baseCameraSpeed;
         }
         if (Input.GetKey(KeyCode.W))
         {
-            CameraPosition += forward * CameraSpeed;
+            _cameraPosition += forward * cameraSpeed;
         }
         if (Input.GetKey(KeyCode.S))
         {
-            CameraPosition -= forward * CameraSpeed;
+            _cameraPosition -= forward * cameraSpeed;
         }
         if (Input.GetKey(KeyCode.D))
         {
-            CameraPosition += right * CameraSpeed;
+            _cameraPosition += right * cameraSpeed;
         }
         if (Input.GetKey(KeyCode.A))
         {
-            CameraPosition -= right * CameraSpeed;
+            _cameraPosition -= right * cameraSpeed;
         }
         if (Input.GetKey(KeyCode.Q))
         {
-            CameraPosition.y -= CameraSpeed;
+            _cameraPosition.y -= cameraSpeed;
         }
         if (Input.GetKey(KeyCode.E))
         {
-            CameraPosition.y += CameraSpeed;
+            _cameraPosition.y += cameraSpeed;
         }
 
         if (Input.GetMouseButton(1))
@@ -73,11 +72,11 @@ public class CameraMovement : MonoBehaviour
         if (Input.GetMouseButton(1))
         {
             float mouseX = Input.GetAxis("Mouse X");
-            CameraRotation += mouseX * CameraRotationSpeed;
+            _cameraRotation += mouseX * cameraRotationSpeed;
         }
 
-        transform.position = CameraPosition;
-        transform.rotation = Quaternion.Euler(60f, CameraRotation, 0); // Keep X locked at 60°
+        transform.position = _cameraPosition;
+        transform.rotation = Quaternion.Euler(60f, _cameraRotation, 0); // Keep X locked at 60°
     }
 }
 #endif
