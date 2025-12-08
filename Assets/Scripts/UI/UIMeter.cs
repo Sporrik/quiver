@@ -108,7 +108,7 @@ namespace UI
         }
         private IEnumerator WaitAndPrint(float value01_100)
         {
-            Debug.Log("Add1");
+            //Debug.Log("Add1");
             yield return new WaitForSeconds(_delayAddSeconds);  // delay 2 seconds for animation
 
             float v01 = Mathf.Clamp01(value01_100 * 0.01f);
