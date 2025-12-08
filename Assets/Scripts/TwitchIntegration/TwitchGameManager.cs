@@ -381,6 +381,32 @@ public class TwitchGameManager : TwitchMonoBehaviour
         return _userHunger.displayname;
     }
 
+    //2 getter functions 1 voor _stringBrabble en 1 voor _userBrabble (to know if you need to show babble UI image;
+
+    /// <summary>
+    /// Gets the most recent baby brabble message
+    /// </summary>
+    /// <returns></returns>
+    public string GetBabyBrabbleMessage()
+    {
+        if(_stringBrabble == null)
+        {
+            return "";
+        }
+        if(_stringBrabble == " ")
+        {
+            return "";
+        }
+        return _stringBrabble;
+    }
+
+    public TwitchUser GetBabyBrabbleUser()
+    {
+        
+        return _userBrabble;
+    }
+
+
     /// <summary>
     /// Returns amount of streaks if the commandName matches the recent command, if it does not match returns 0 [names : ("poop_command", "wee_command", "hunger_command")]
     /// </summary>
