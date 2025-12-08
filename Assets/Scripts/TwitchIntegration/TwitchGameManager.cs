@@ -109,8 +109,11 @@ public class TwitchGameManager : TwitchMonoBehaviour
 
     private void Start()
     {
-        babyBrabbleTextUI.text = " ";
-        chatUserNameTextUI.text = " ";
+        if (babyBrabbleTextUI != null)
+        {
+            babyBrabbleTextUI.text = " ";
+            chatUserNameTextUI.text = " ";
+        }
 
     }
 
@@ -135,55 +138,60 @@ public class TwitchGameManager : TwitchMonoBehaviour
         }
 
         //DON'T REMOVE || Brabble logic
-        _accTimeBrabble += Time.deltaTime;
-        if (_msgOnScreen) _accTimeBrabbleRemove += Time.deltaTime;
-
-        if (_accTimeBrabble >= _maxWaitTimeBrabble)
+        if (babyBrabbleTextUI != null)
         {
-            if (_stringBrabble.Substring(0, 1) != "!")
+
+            _accTimeBrabble += Time.deltaTime;
+            if (_msgOnScreen) _accTimeBrabbleRemove += Time.deltaTime;
+
+            if (_accTimeBrabble >= _maxWaitTimeBrabble)
             {
-                if (_stringBrabble.Contains("PRIVMSG"))
+                if (_stringBrabble.Substring(0, 1) != "!")
                 {
-                    _stringBrabble = ParseRawIrcMessage(_stringBrabble);
-                }
-
-                if (_userBrabble.userid == _userBrabblePrev.userid)
-                {
-                    if (_stringBrabble == _stringBrabblePrev)
+                    if (_stringBrabble.Contains("PRIVMSG"))
                     {
-                        _stringBrabble = " ";
-                        _userBrabble = _userEmpty;
+                        _stringBrabble = ParseRawIrcMessage(_stringBrabble);
                     }
+
+                    if (_userBrabble.userid == _userBrabblePrev.userid)
+                    {
+                        if (_stringBrabble == _stringBrabblePrev)
+                        {
+                            _stringBrabble = " ";
+                            _userBrabble = _userEmpty;
+                        }
+                    }
+
+                    babyBrabbleTextUI.text = _stringBrabble;
+                    chatUserNameTextUI.text = _userBrabble.displayname;
+
+                    //color player name on screen
+                    Random randR = new Random();
+                    Random randG = new Random();
+                    Random randB = new Random();
+
+                    float r = randR.Next(256);
+                    float g = randG.Next(256);
+                    float b = randB.Next(256);
+                    chatUserNameTextUI.color = new Color(r / 256f, g / 256f, b / 256f);
+
+                    _msgOnScreen = true;
+
+                    _stringBrabblePrev = _stringBrabble;
+                    _userBrabblePrev = _userBrabble;
                 }
-                babyBrabbleTextUI.text = _stringBrabble;
-                chatUserNameTextUI.text = _userBrabble.displayname;
 
-                //color player name on screen
-                Random randR = new Random();
-                Random randG = new Random();
-                Random randB = new Random();
-
-                float r = randR.Next(256);
-                float g = randG.Next(256);
-                float b = randB.Next(256);
-                chatUserNameTextUI.color = new Color(r / 256f, g / 256f, b / 256f);
-
-                _msgOnScreen = true;
-
-                _stringBrabblePrev = _stringBrabble;
-                _userBrabblePrev = _userBrabble;
+                _accTimeBrabble = 0;
+                _maxWaitTimeBrabble = _randomBrabble.Next(10, 15); //random interval between 60sec and 120sec
             }
 
-            _accTimeBrabble = 0;
-            _maxWaitTimeBrabble = _randomBrabble.Next(10, 15); //random interval between 60sec and 120sec
-        }
-
-        if (_accTimeBrabbleRemove >= MaxWaitTimeBrabbleRemove)
-        {
-            babyBrabbleTextUI.text = " ";
-            chatUserNameTextUI.text = " ";
-            _accTimeBrabbleRemove = 0;
-            _msgOnScreen = false;
+            if (_accTimeBrabbleRemove >= MaxWaitTimeBrabbleRemove)
+            {
+                babyBrabbleTextUI.text = " ";
+                chatUserNameTextUI.text = " ";
+                _accTimeBrabbleRemove = 0;
+                _msgOnScreen = false;
+            }
         }
 
         //DON'T REMOVE || calculates current active chatters in chat || uses refresh time as waiting time 
@@ -353,7 +361,7 @@ public class TwitchGameManager : TwitchMonoBehaviour
     /// <returns></returns>
     public string GetBabyBrabbleMessage()
     {
-        
+
         if (_stringBrabble == null || _stringBrabble == " ")
         {
             return null;
@@ -367,7 +375,7 @@ public class TwitchGameManager : TwitchMonoBehaviour
         Debug.Log(_msgOnScreen);
         return _msgOnScreen;
     }
-public TwitchUser GetBabyBrabbleUser()
+    public TwitchUser GetBabyBrabbleUser()
     {
 
         return _userBrabble;
