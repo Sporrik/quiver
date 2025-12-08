@@ -4,84 +4,109 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class SimpleDrag : MonoBehaviour
 {
-    private Rigidbody rb;
-    public bool IsDragging = false;
+    protected Rigidbody rb;
 
-    [SerializeField] private GameObject CurrentlyDraggedObject;
+    protected bool _isMouseDragging = false;
+    protected bool _isControllerDragging = false;
 
-    [SerializeField] private Transform DragPlaneYTransform;
-
+    [Header("SimpleDrag:")]
     [SerializeField] private Camera mainCamera;
-
+    [SerializeField] private Transform DragPlaneYTransform;
     [SerializeField] private MinigameCursor _cursor;
 
-    private float originalY;
+    private GameObject CurrentlyDraggedObject;
 
-    void Start()
+    private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        originalY = transform.position.y;
     }
 
-    void OnMouseDown()
+    private void OnMouseDown()
     {
         if (this.isActiveAndEnabled == false)
             return;
 
-        IsDragging = true;
+        _isMouseDragging = true;
         rb.useGravity = false;
         rb.linearVelocity = Vector3.zero;
 
         CurrentlyDraggedObject = gameObject;
     }
 
-    public void OnMouseUp()
+    private void OnMouseUp()
     {
         if (this.isActiveAndEnabled == false)
             return;
 
-        IsDragging = false;
+        _isMouseDragging = false;
         gameObject.GetComponent<MoveToObject>().MoveTo(0);
 
         if (CurrentlyDraggedObject == gameObject)
             CurrentlyDraggedObject = null;
     }
 
-    void Update()
+    private void Update()
     {
-        ControllerSupport();
-
-        if (IsDragging)
-        {
-            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-
-            // in case controller is used we use my fancy cursor
-            if (_cursor.IsUsed()) ray = mainCamera.ScreenPointToRay(_cursor.GetPosition());
-
-            Plane dragPlane = new Plane(Vector3.up, new Vector3(0f, DragPlaneYTransform.position.y, 0f));
-            if (dragPlane.Raycast(ray, out float enter))
-            {
-                Vector3 hitPoint = ray.GetPoint(enter);
-
-                Vector3 targetPosition = new Vector3(hitPoint.x, DragPlaneYTransform.position.y, hitPoint.z);
-                rb.MovePosition(Vector3.Lerp(transform.position, targetPosition, 0.4f));
-            }
-        }
+        ControllerInput();
+        DragObject();
     }
-    private void ControllerSupport()
+
+    protected void ControllerInput()
     {
         if (_cursor == null) return;
 
-        if (_cursor.OnDownEvent())
-        {
-            OnMouseDown();
-            Debug.Log("Down event!");
-        }
+        if(!_cursor.IsUsed()) return;
 
         if (_cursor.OnUpEvent())
         {
-            OnMouseUp();
-            Debug.Log("Up event!");
+            gameObject.GetComponent<MoveToObject>().MoveTo(0);
+
+            _isControllerDragging = false;
+
+            rb.useGravity = false;
+            rb.linearVelocity = Vector3.zero;
+
+            //Debug.Log("OnUp!");
         }
+
+        if (_cursor.OnDownEvent())
+        {
+            RaycastHit hit;
+            Ray ray = mainCamera.ScreenPointToRay(new Vector3(_cursor.GetPosition().x, _cursor.GetPosition().y, 0f));
+
+            // check if the controller cursor is on the objects
+            if (!Physics.Raycast(ray, out hit)) return;
+
+            if (hit.rigidbody != rb) return;
+
+            CurrentlyDraggedObject = gameObject;
+            _isControllerDragging = true;
+
+            //Debug.Log("OnDown!");
+        }
+    }
+
+    // this offset is optional
+    protected void DragObject(Vector3 offset = new Vector3())
+    {
+        const float moveDistance = 0.4f;
+
+        Ray ray = new Ray();
+
+        // check which position the object needs to be dragged to
+        if (_isControllerDragging) ray = mainCamera.ScreenPointToRay(_cursor.GetPosition());
+        else if (_isMouseDragging) ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        else return;
+
+        Plane dragPlane = new Plane(Vector3.up, new Vector3(0f, DragPlaneYTransform.position.y, 0f));
+
+        // check where on the plane this point hits
+        if (!dragPlane.Raycast(ray, out float enter)) return;
+
+        Vector3 hitPoint = ray.GetPoint(enter);
+
+        // move the gameobject to the hitpoint on the plane
+        Vector3 targetPosition = new Vector3(hitPoint.x, DragPlaneYTransform.position.y, hitPoint.z) + offset;
+        rb.MovePosition(Vector3.Lerp(transform.position, targetPosition, moveDistance));
     }
 }

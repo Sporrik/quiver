@@ -174,9 +174,6 @@ namespace UI
 
             float increment = (_poopCapped ? 1 : 0) + (_peeCapped ? 1 : 0) + (_hungryCapped ? 1 : 0);
 
-            Debug.Log(increment);
-            Debug.Log(_poopCapped);
-
             _scriptableObject.IncrementHappiness(increment);
             
         }

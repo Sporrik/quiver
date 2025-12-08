@@ -77,7 +77,7 @@ public class MinigameCursor : MonoBehaviour
     {
         if (_move == null)
         {
-            Debug.Log("nope, not happening!");
+            Debug.Log("No matching input action for MOVE!");
             return false;
         }
 
@@ -140,7 +140,14 @@ public class MinigameCursor : MonoBehaviour
 
     public Vector2 GetPosition()
     {
-        return _position;
+        //return _position;
+
+        return 
+            RectTransformUtility.WorldToScreenPoint
+            (
+            null,   // canvas is in screen space so no camera is needed
+            _cursor.rectTransform.position
+            );
     }
 
     public bool OnDownEvent()
