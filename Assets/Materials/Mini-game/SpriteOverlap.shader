@@ -4,6 +4,11 @@ Shader "Custom/SpriteOverlap"
     {
         _MainTex ("Sprite Texture", 2D) = "white" {}
         _Color   ("Tint", Color) = (1,1,1,1)
+
+        // These match Unity's built-in sprite shaders
+        _RendererColor ("Renderer Color", Color) = (1,1,1,1)
+        _AlphaTex      ("External Alpha", 2D) = "white" {}
+        _EnableExternalAlpha ("Enable External Alpha", Float) = 0
     }
 
     SubShader
@@ -14,50 +19,25 @@ Shader "Custom/SpriteOverlap"
             "RenderType"="Transparent"
             "IgnoreProjector"="True"
             "CanUseSpriteAtlas"="True"
+            "PreviewType"="Plane"
         }
 
         Cull Off
         Lighting Off
-        ZWrite Off
-        ZTest Always
+        ZWrite Off         // don't write to depth
+        ZTest Always       // ignore depth buffer, always draw
         Blend One OneMinusSrcAlpha
 
         Pass
         {
             CGPROGRAM
-            #pragma vertex vert
-            #pragma fragment frag
+            #pragma vertex SpriteVert
+            #pragma fragment SpriteFrag
+            #pragma target 2.0
+
             #include "UnityCG.cginc"
+            #include "UnitySprites.cginc"   // uses Unity's sprite vert/frag
 
-            struct appdata
-            {
-                float4 vertex : POSITION;
-                float2 uv     : TEXCOORD0;
-            };
-
-            struct v2f
-            {
-                float4 pos : SV_POSITION;
-                float2 uv  : TEXCOORD0;
-            };
-
-            sampler2D _MainTex;
-            float4 _MainTex_ST;
-            float4 _Color;
-
-            v2f vert (appdata v)
-            {
-                v2f o;
-                o.pos = UnityObjectToClipPos(v.vertex);
-                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-                return o;
-            }
-
-            fixed4 frag (v2f i) : SV_Target
-            {
-                fixed4 c = tex2D(_MainTex, i.uv) * _Color;
-                return c;
-            }
             ENDCG
         }
     }
