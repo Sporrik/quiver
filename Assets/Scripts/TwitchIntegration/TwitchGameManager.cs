@@ -10,7 +10,7 @@ using Random = System.Random;
 
 public class TwitchGameManager : TwitchMonoBehaviour
 {
-    
+
     [Header("Authorization")]
     [SerializeField] private TMP_InputField channelNameInput;
     [SerializeField] private TMP_InputField userNameInput;
@@ -175,7 +175,7 @@ public class TwitchGameManager : TwitchMonoBehaviour
             }
 
             _accTimeBrabble = 0;
-            _maxWaitTimeBrabble = _randomBrabble.Next(20, 21); //random interval between 60sec and 120sec
+            _maxWaitTimeBrabble = _randomBrabble.Next(10, 15); //random interval between 60sec and 120sec
         }
 
         if (_accTimeBrabbleRemove >= MaxWaitTimeBrabbleRemove)
@@ -353,20 +353,23 @@ public class TwitchGameManager : TwitchMonoBehaviour
     /// <returns></returns>
     public string GetBabyBrabbleMessage()
     {
-        if(_stringBrabble == null)
-        {
-            return "";
-        }
-        if(_stringBrabble == " ")
-        {
-            return "";
-        }
-        return _stringBrabble;
-    }
-
-    public TwitchUser GetBabyBrabbleUser()
-    {
         
+        if (_stringBrabble == null || _stringBrabble == " ")
+        {
+            return null;
+        }
+        Debug.Log(_stringBrabble);
+        return _stringBrabble;
+
+    }
+    public bool GetBabyBrabbleMsgOnScreen()
+    {
+        Debug.Log(_msgOnScreen);
+        return _msgOnScreen;
+    }
+public TwitchUser GetBabyBrabbleUser()
+    {
+
         return _userBrabble;
     }
 

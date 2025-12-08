@@ -12,7 +12,7 @@ public class ShowBaubleImage : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(twitchGameManager.GetBabyBrabbleMessage() == "")
+        if(twitchGameManager.GetBabyBrabbleMessage() == null || !twitchGameManager.GetBabyBrabbleMsgOnScreen())
         {
             bauble.SetActive(false);
         }
