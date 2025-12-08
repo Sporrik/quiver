@@ -90,13 +90,12 @@ namespace UI
 
             if (_uiData.GetGameModeSinglePlayer() == false && !_resetWorld) // if twitch enabled animate delay in adding value
             {
-                //float balanced01_100 = value01_100;
-
-                //if (_twitchGameManager.GetViewerCount() != 0)
-                //     balanced01_100 = (value01_100*_balance/_twitchGameManager.GetViewerCount());
-
-
-                //Debug.Log($"value: {value01_100} balanced: {balanced01_100} with {_twitchGameManager.GetViewerCount()} vieuwers");
+                
+                if(gameObject.name.Contains("Happiness"))
+                {
+                    AddValue(value01_100);
+                    return;
+                }
                 StartCoroutine(WaitAndPrint(value01_100)); // delay for game feel ?!
             }
             else
@@ -110,11 +109,14 @@ namespace UI
         {
             //Debug.Log("Add1");
             yield return new WaitForSeconds(_delayAddSeconds);  // delay 2 seconds for animation
+            AddValue(value01_100);
 
-            float v01 = Mathf.Clamp01(value01_100 * 0.01f);
+        }
+        private void AddValue(float value)
+        {
+            float v01 = Mathf.Clamp01(value * 0.01f);
             _image.fillAmount = _invert ? (1f - v01) : v01;
         }
-
 
         private static MeterType InferTypeFromName(string goName)
         {
