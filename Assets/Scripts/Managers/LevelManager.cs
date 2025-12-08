@@ -101,6 +101,7 @@ public class LevelManager : MonoBehaviour
         if (_gameOver && _timeUntilRestart <= 0f)
         {
             _gameOver = false;
+            _gameOverPanel.SetActive(false);
             LoadLevel();
         }
         else if (_gameOver)
