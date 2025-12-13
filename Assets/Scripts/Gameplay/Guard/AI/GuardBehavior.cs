@@ -133,6 +133,7 @@ namespace Gameplay.AI
         {
             if (_player == null) return false;
             if (_distanceToPlayer > CatchRange) return false;
+            if (!_seesPlayer) return false;
 
             SetState(State.Caught);
             return true;
