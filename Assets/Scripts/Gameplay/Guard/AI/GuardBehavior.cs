@@ -363,7 +363,7 @@ namespace Gameplay.AI
                 return;
             }
 
-            if (!_agent.pathPending && _agent.remainingDistance <= _guardCfg.Movement.WaypointArriveDistance)
+            if ( !_agent.pathPending && _agent.remainingDistance <= _guardCfg.Movement.WaypointArriveDistance )
             {
                 if (wp.waitSeconds > 0f)
                 {
