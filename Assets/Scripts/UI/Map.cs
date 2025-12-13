@@ -54,8 +54,6 @@ public class Map : MonoBehaviour
             // Now radar can be anywhere!
             Vector3 dirToDot = (dot.transform.position - _radar.transform.position).normalized;
 
-             
-
             float dp = Vector3.Dot(sweepDir, dirToDot);
 
             float threshold = Mathf.Cos(radarAngle * Mathf.Deg2Rad);
