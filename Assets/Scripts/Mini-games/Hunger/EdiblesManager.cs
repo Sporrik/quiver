@@ -121,13 +121,12 @@ public class EdiblesManager : MonoBehaviour
             item.InputIndex = 1;
             _index1 = item;
 
-            if (_usingController)
+            if (_usingController && _controllerType == "PlayStationController")
             {
                 item.ControlSprite.sprite = _triangle;
-
-                if(_controllerType == "XboxController")
-                    item.ControlSprite.sprite = _y;
             }
+            if (_usingController && _controllerType != "PlayStationController")
+                item.ControlSprite.sprite = _y;
 
             if (!_usingController)
                 item.ControlSprite.sprite = _up;
@@ -137,13 +136,14 @@ public class EdiblesManager : MonoBehaviour
             item.InputIndex = 2;
             _index2 = item;
 
-            if (_usingController)
+            if (_usingController && _controllerType == "PlayStationController")
             {
-                    item.ControlSprite.sprite = _square;
-
-                    if (_controllerType == "XboxController")
-                    item.ControlSprite.sprite = _x;
+                item.ControlSprite.sprite = _square;
             }
+
+            if (_usingController && _controllerType != "PlayStationController")
+                item.ControlSprite.sprite = _x;
+
             if (!_usingController)
                 item.ControlSprite.sprite = _right;
         }
@@ -152,13 +152,14 @@ public class EdiblesManager : MonoBehaviour
             item.InputIndex = 3;
             _index3 = item;
 
-            if (_usingController)
+            if (_usingController && _controllerType == "PlayStationController")
             {
                 item.ControlSprite.sprite = _cross;
-
-                if (_controllerType == "XboxController")
-                    item.ControlSprite.sprite = _a;
             }
+
+            if (_usingController && _controllerType != "PlayStationController")
+                item.ControlSprite.sprite = _a;
+
             if (!_usingController)
                 item.ControlSprite.sprite = _down;
         }
@@ -167,13 +168,13 @@ public class EdiblesManager : MonoBehaviour
             item.InputIndex = 4;
             _index4 = item;
 
-            if (_usingController)
+            if (_usingController && _controllerType != "PlayStationController")
             {
+                item.ControlSprite.sprite = _b;
+            }
+            if (_usingController && _controllerType == "PlayStationController")
                 item.ControlSprite.sprite = _circle;
 
-                if (_controllerType == "XboxController")
-                    item.ControlSprite.sprite = _b;
-            }
             if (!_usingController)
                 item.ControlSprite.sprite = _left;
         }
@@ -240,11 +241,11 @@ public class EdiblesManager : MonoBehaviour
         {
             string controllerName = Gamepad.current.displayName.ToLower();
 
-            if (controllerName.Contains("xbox"))
-            {
-                _controllerType = "XboxController";
-            }
-            else if (controllerName.Contains("playstation") || controllerName.Contains("dualshock") || controllerName.Contains("dual sense"))
+            // Check for PlayStation controllers
+            if (controllerName.Contains("playstation") || 
+                controllerName.Contains("dualshock") || 
+                controllerName.Contains("dualsense") || 
+                controllerName.Contains("dual sense")) 
             {
                 _controllerType = "PlayStationController";
             }
