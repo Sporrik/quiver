@@ -40,9 +40,6 @@ public class SimpleDrag : MonoBehaviour
 
         _isMouseDragging = false;
         gameObject.GetComponent<MoveToObject>().MoveTo(0);
-
-        if (CurrentlyDraggedObject == gameObject)
-            CurrentlyDraggedObject = null;
     }
 
     private void Update()
@@ -50,6 +47,7 @@ public class SimpleDrag : MonoBehaviour
         ControllerInput();
         DragObject();
     }
+
 
     protected void ControllerInput()
     {
