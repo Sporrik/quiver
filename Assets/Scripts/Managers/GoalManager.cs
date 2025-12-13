@@ -2,11 +2,9 @@ using UnityEngine;
 
 public class GoalManager : MonoBehaviour
 {
-
     [SerializeField] public GameObject[] Goals;
     [SerializeField] GameObject _winFeedback;
     public int _goalScore = 0;
-
     void Start()
     {
         foreach (GameObject go in Goals)
@@ -14,15 +12,11 @@ public class GoalManager : MonoBehaviour
             go.SetActive(false);
         }
         Goals[0].SetActive(true);
-
     }
-
     // Update is called once per frame
     void Update()
     {
-        
     }
-
     public void ShowNextGoal()
     {
         _goalScore++;
@@ -34,5 +28,4 @@ public class GoalManager : MonoBehaviour
         }
         Goals[_goalScore].SetActive(true);
     }
-
 }
