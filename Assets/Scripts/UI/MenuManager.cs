@@ -35,7 +35,7 @@ public class MenuManager : MonoBehaviour
         // set it for singleplayer
         _ScriptableObject.SetSinglePlayer(true);
 
-        SceneManager.LoadScene("LevelOne");
+        SceneManager.LoadScene("UnfuckLevelOne");
 
         Debug.Log("Single");
     }
@@ -54,7 +54,7 @@ public class MenuManager : MonoBehaviour
 
     public void OnPlayWithTwitch()
     {
-        SceneManager.LoadScene("LevelOne");
+        SceneManager.LoadScene("UnfuckLevelOne");
 
         // check if it is autorized;
         // set it for multiplayer
@@ -77,7 +77,7 @@ public class MenuManager : MonoBehaviour
         // _PlayScreen.SetActive(true);
         if (_singlePlayer)
         {
-            SceneManager.LoadScene("LevelOne");
+            SceneManager.LoadScene("UnfuckLevelOne");
             print("LOAD GAME");
 
             MusicController.instance.SetGameplay();
@@ -93,8 +93,7 @@ public class MenuManager : MonoBehaviour
     {
         Application.Quit();
     }
-
-
+    
     public void OnBacktoMainMenu()
     {
         _controlScreen.SetActive(false);
@@ -103,14 +102,4 @@ public class MenuManager : MonoBehaviour
 
 
     }
-   
-
-
-
-
-
-
-
-
-
 }
