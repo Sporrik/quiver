@@ -15,13 +15,13 @@ public class SceneLoader : MonoBehaviour
     public void LoadMainMenu()
     {
         // Unload all non-persistent scenes
-        SceneManager.LoadScene(_mainMenuScene, LoadSceneMode.Single);
+        SceneManager.LoadSceneAsync(_mainMenuScene, LoadSceneMode.Additive);
     }
 
     public void StartGameAtLevel(int levelIndex)
     {
         _currentLevelIndex = levelIndex;
-        LoadLevelInternal(levelScenes[levelIndex]);
+        LoadLevelInternal(_levelScenes[levelIndex]);
     }
 
     public void LoadNextLevel()
@@ -29,7 +29,31 @@ public class SceneLoader : MonoBehaviour
         int nextIndex = _currentLevelIndex + 1;
         if (nextIndex >= 0 && nextIndex < _levelScenes.Length)
         {
-            
+            _currentLevelIndex = nextIndex;
+            LoadLevelInternal(_levelScenes[nextIndex]);
         }
+        else
+        {
+            LoadMainMenu();
+        }
+    }
+
+    private void LoadLevelInternal(string sceneName)
+    {
+        SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+    }
+
+    public void LoadMinigame(int minigameIndex)
+    {
+        if (_currentMinigameScene != null) return;
+        _currentMinigameScene = _minigameScenes[minigameIndex];
+        SceneManager.LoadSceneAsync(_currentMinigameScene, LoadSceneMode.Additive);
+    }
+
+    public void UnloadMinigame()
+    {
+        if (_currentMinigameScene == null) return;
+        SceneManager.UnloadSceneAsync(_currentMinigameScene);
+        _currentMinigameScene = null;
     }
 }
