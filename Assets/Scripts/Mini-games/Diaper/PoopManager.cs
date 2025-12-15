@@ -17,7 +17,8 @@ public class PoopManager : MonoBehaviour
     [SerializeField] private GameObject _baby;
     [SerializeField] private GameObject _confettiParticle;
     [SerializeField] private GameObject _confettiParticle1;
-    [SerializeField] private GameObject _confettiParticle2;
+    [SerializeField] private GameObject _confettiParticle2; 
+    [SerializeField] private GameObject _taskComplete;
 
 
     [SerializeField] private bool DirtyDiaperCompleted = false;
@@ -112,8 +113,12 @@ public class PoopManager : MonoBehaviour
             _confettiParticle.SetActive(true);
             _confettiParticle1.SetActive(true);
             _confettiParticle2.SetActive(true);
-            SetActiveTip(_UITips[5]);
+            _taskComplete.SetActive(true);
 
+            foreach (GameObject tip in _UITips)
+            {
+                tip.SetActive(false);
+            }
             _won = true;
         }
 

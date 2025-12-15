@@ -9,6 +9,7 @@ public class PeeMiniGame : MonoBehaviour
     [SerializeField] private Transform PeeOrigin;
     [SerializeField] private Transform Baby;
     [SerializeField] private TextMeshProUGUI PeeCountText;
+    [SerializeField] private GameObject _UITip;
     [SerializeField] private ParticleSystem PeeEffect;
     [SerializeField] private ParticleSystem SplashEffect;
     [SerializeField] private int PeeRange = 30;
@@ -21,9 +22,12 @@ public class PeeMiniGame : MonoBehaviour
     [SerializeField] private GameObject _confettiParticle;
     [SerializeField] private GameObject _confettiParticle1;
     [SerializeField] private GameObject _confettiParticle2;
+    [SerializeField] private GameObject _taskComplete;
+
 
     private int _currentRange;
     private float _currentSpeed;
+    private int _lastPercentageComplete = 0;
 
     [SerializeField] private bool _turnLeft = false;
     private float _timer;
@@ -104,12 +108,22 @@ public class PeeMiniGame : MonoBehaviour
         // needed in order to trigger the closing of the minigame
         if (TaskComplete)
         {
-            if(_winTriggerDelay <= 0)
+            _taskComplete.SetActive(true);
+            PeeCountText.gameObject.SetActive(false);
+            _UITip.gameObject.SetActive(false);
+
+            if (_winTriggerDelay <= 0)
             {
                 _winCondition.WinMinigame();
             }
 
             _winTriggerDelay -= Time.deltaTime;
+        }
+
+        if(_lastPercentageComplete != _percentageComplete)
+        {
+            PeeCountText.GetComponent<UIShake>().ShakeUI();
+            _lastPercentageComplete = _percentageComplete;
         }
     }
 }
