@@ -1,3 +1,4 @@
+using Audio;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -15,7 +16,7 @@ public class PauseScreenScript : MonoBehaviour
 
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         //pause game
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -56,6 +57,7 @@ public class PauseScreenScript : MonoBehaviour
     /// </summary>
     public void OptionsBtnFunc()
     {
+        AudioManager.instance.EnableCanvas();
     }
 
     /// <summary>
