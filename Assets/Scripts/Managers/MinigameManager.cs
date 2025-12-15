@@ -107,6 +107,7 @@ public sealed class MinigameManager : MonoBehaviour
             _state = MiniState.Running;
             Resumed?.Invoke();
         }
+        
     }
 
     private void EnableRootObjs(bool enable)
