@@ -405,14 +405,10 @@ MonoBehaviour:
   _triangle: {fileID: 21300000, guid: dc6ad8e1aee90c1488696f527250698c, type: 3}
   _circle: {fileID: 21300000, guid: 461b6da85ff89694882d5ce8d76f1e13, type: 3}
   _square: {fileID: 21300000, guid: 1c795ffe3a959964188ac251492d98a0, type: 3}
-  _right: {fileID: 21300000, guid: b9287e85b1fd49142b86c98df40d5614, type: 3}
-  _left: {fileID: 21300000, guid: 8276c492a60d1a448aefec45495c84cc, type: 3}
+  _right: {fileID: 21300000, guid: 8276c492a60d1a448aefec45495c84cc, type: 3}
+  _left: {fileID: 21300000, guid: b9287e85b1fd49142b86c98df40d5614, type: 3}
   _up: {fileID: 21300000, guid: 596f2fc96213537459fea409c0c8d919, type: 3}
   _down: {fileID: 21300000, guid: c5316ecbf7ecc5448ae1f2fad9e3a41f, type: 3}
-  _a: {fileID: 21300000, guid: ebdae8f26ad35b1469d684b8f41792c3, type: 3}
-  _y: {fileID: 21300000, guid: 14de5643a3f619f439ede84f981241e9, type: 3}
-  _b: {fileID: 21300000, guid: 32b0d96211193244eb20384415092762, type: 3}
-  _x: {fileID: 21300000, guid: ecd63be02f7a53d4fbc5cf2c61205860, type: 3}
 --- !u!1 &514358582
 GameObject:
   m_ObjectHideFlags: 0
@@ -980,10 +976,6 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: e82c2bbc-08b2-4c4d-981b-a8c5a87c01a6
     m_ActionName: 'HungerMinigame/Discard4[/Keyboard/downArrow,/Keyboard/s,/DualSenseGamepadHID/buttonSouth]'
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 17e54dac-9aa6-42d2-bfe4-9a1c401a48c8
-    m_ActionName: 'PeeMinigame/Axis[/XInputControllerWindows1/leftStick/left,/XInputControllerWindows1/leftStick/right,/Keyboard/a,/Keyboard/d,/Keyboard/leftArrow,/Keyboard/rightArrow]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: 
@@ -1071,8 +1063,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 0 %
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: fcbf86116c1b3b74eb81b58725c6182a, type: 2}
-  m_sharedMaterial: {fileID: 5709217611003870898, guid: fcbf86116c1b3b74eb81b58725c6182a, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: cbdf4c334302570418d990257a5105cf, type: 2}
+  m_sharedMaterial: {fileID: 3059197163734592903, guid: cbdf4c334302570418d990257a5105cf, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1106,7 +1098,7 @@ MonoBehaviour:
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
-  m_characterSpacing: 1
+  m_characterSpacing: 0
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -1746,8 +1738,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Remove dangerous items!
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: fcbf86116c1b3b74eb81b58725c6182a, type: 2}
-  m_sharedMaterial: {fileID: 5709217611003870898, guid: fcbf86116c1b3b74eb81b58725c6182a, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: cbdf4c334302570418d990257a5105cf, type: 2}
+  m_sharedMaterial: {fileID: 3059197163734592903, guid: cbdf4c334302570418d990257a5105cf, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1771,7 +1763,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30.15
+  m_fontSize: 25.65
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1781,7 +1773,7 @@ MonoBehaviour:
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
-  m_characterSpacing: 1
+  m_characterSpacing: 0
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0

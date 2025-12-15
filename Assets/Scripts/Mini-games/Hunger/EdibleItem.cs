@@ -29,20 +29,9 @@ public class EdibleItem : MonoBehaviour
             if(_isBadItem)
             {
                 _baby.GetComponent<IncorrectFood>().TriggerFlash();
-                LaunchEdible();
-                gameObject.tag = "Untagged";
-
-                _ediblesManager.RemoveItemFromList(this);
-                _ediblesManager.ClearInputIndex(this.InputIndex);
-                _ediblesManager.DetectNextClosestItem();
-
-                ControlSprite.gameObject.SetActive(false);
-
             }
-            else
-            {
-                Destroy(gameObject);
-            }
+
+            Destroy(gameObject);
         }
 
         if (other.name == "floor")
@@ -53,7 +42,6 @@ public class EdibleItem : MonoBehaviour
 
     private void OnDestroy()
     {
-        if(gameObject.tag == "Untagged") return;
         _ediblesManager.RemoveItemFromList(this);
         _ediblesManager.ClearInputIndex(this.InputIndex);
         _ediblesManager.DetectNextClosestItem();
@@ -61,25 +49,10 @@ public class EdibleItem : MonoBehaviour
 
     public void DropEdible()
     {
-        transform.SetParent(null);
-
         Rigidbody rb = GetComponent<Rigidbody>();
         rb.useGravity = true;
         rb.isKinematic = false;
         rb.AddForce(Vector3.up * 1.5f, ForceMode.Impulse);
-        _isCleared = true;
-    }
-
-    private void LaunchEdible()
-    {
-        transform.SetParent(null);
-
-        Rigidbody rb = GetComponent<Rigidbody>();
-        rb.useGravity = true;
-        rb.isKinematic = false;
-        rb.AddForce(Vector3.up * 3f, ForceMode.Impulse);
-        rb.AddForce(Vector3.left * 3f, ForceMode.Impulse);
-        rb.AddTorque(Random.insideUnitSphere * 5f, ForceMode.Impulse);
         _isCleared = true;
     }
 }

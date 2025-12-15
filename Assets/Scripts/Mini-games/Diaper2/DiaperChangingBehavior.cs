@@ -19,9 +19,6 @@ public class DiaperChangingBehavior : MonoBehaviour
     [SerializeField] private GameObject _rightArrow;
     [SerializeField] private GameObject _frontArrow;
 
-    [Header("Controller support:")]
-    [SerializeField] private MinigameCursor _cursor;
-
 
     private Vector3 _lastMousePosition;
     private bool _isDragging = false;
@@ -35,78 +32,25 @@ public class DiaperChangingBehavior : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        PlayerFeedback();
-    }
-
-    private Vector2 GetDragDirection()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            _lastMousePosition = Input.mousePosition;
-            _isDragging = true;
-        }
-        else if (_cursor.OnDownEvent())
-        {
-            _lastMousePosition = _cursor.GetPosition();
-            _isDragging = true;
-        }
-
-        if (Input.GetMouseButtonUp(0) || _cursor.OnUpEvent())
-        {
-            _isDragging = false;
-            _rightArrow.SetActive(false);
-            _leftArrow.SetActive(false);
-            _frontArrow.SetActive(false);
-        }
-
-        if (_isDragging)
-        {
-            Vector3 currentMousePosition = Vector3.zero;
-
-            if (_cursor.IsUsed()) currentMousePosition = _cursor.GetPosition();
-            else currentMousePosition = Input.mousePosition;
-
-            Vector3 dragDelta = currentMousePosition - _lastMousePosition;
-
-            Vector2 dragDirection = Vector2.zero;
-
-            if (dragDelta.sqrMagnitude > 0.01f)
-            {
-                dragDirection = dragDelta.normalized;
-            }
-
-            _lastMousePosition = currentMousePosition;
-
-            return dragDirection;
-        }
-        else
-        {
-            return Vector2.zero;
-        }
-    }
-
-    private void PlayerFeedback()
-    {
         Vector2 dragDirection = GetDragDirection();
 
+        Ray ray;
         RaycastHit hit;
-        Vector3 clickPosition = Vector3.zero;
 
-        if (_cursor.IsUsed()) clickPosition = _cursor.GetPosition();
-        else clickPosition = Input.mousePosition;
-
-        Ray ray = _camera.ScreenPointToRay(clickPosition);
+        ray = _camera.ScreenPointToRay(Input.mousePosition);
 
         Collider target = null;
 
         if (Physics.Raycast(ray, out hit))
         {
+            //print(hit.collider.name);
+
             target = hit.collider;
         }
 
-        if (target == _frontStrap)
+        if(target == _frontStrap)
         {
-            if (dragDirection.y > 0)
+            if(dragDirection.y > 0)
             {
                 _animator.SetBool("frontIsWorn", true);
                 _isDragging = false;
@@ -117,7 +61,8 @@ public class DiaperChangingBehavior : MonoBehaviour
                 _animator.SetBool("frontIsWorn", false);
                 _isDragging = false;
             }
-            if (_isDragging) _frontArrow.SetActive(true);
+            if (_isDragging)
+                _frontArrow.SetActive(true);
         }
 
         if (target == _leftStrap)
@@ -133,7 +78,8 @@ public class DiaperChangingBehavior : MonoBehaviour
                 _animator.SetBool("leftIsWorn", true);
                 _isDragging = false;
             }
-            if (_isDragging) _leftArrow.SetActive(true);
+            if (_isDragging)
+                _leftArrow.SetActive(true);
         }
 
         if (target == _rightStrap)
@@ -150,7 +96,46 @@ public class DiaperChangingBehavior : MonoBehaviour
                 _isDragging = false;
             }
 
-            if (_isDragging) _rightArrow.SetActive(true);
+            if(_isDragging)
+                _rightArrow.SetActive(true);
+        }
+    }
+
+    private Vector2 GetDragDirection()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            _lastMousePosition = Input.mousePosition;
+            _isDragging = true;
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            _isDragging = false;
+            _rightArrow.SetActive(false);
+            _leftArrow.SetActive(false);
+            _frontArrow.SetActive(false);
+        }
+
+        if (_isDragging)
+        {
+            Vector3 currentMousePosition = Input.mousePosition;
+            Vector3 dragDelta = currentMousePosition - _lastMousePosition;
+
+            Vector2 dragDirection = Vector2.zero;
+
+            if (dragDelta.sqrMagnitude > 0.01f)
+            {
+                dragDirection = dragDelta.normalized;
+            }
+
+            _lastMousePosition = currentMousePosition;
+
+            return dragDirection;
+        }
+        else
+        {
+            return Vector2.zero;
         }
     }
 
