@@ -768,14 +768,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.2891848, g: 0.6603774, b: 0.21389571, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 27b3e99fa204b894d8eba262f1d2527a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1279,6 +1279,7 @@ MonoBehaviour:
   _settingsScreen: {fileID: 1911587440}
   _twitchObject: {fileID: 1875501812}
   _ScriptableObject: {fileID: 11400000, guid: 377fbeaf0c2d98543837ee90c8854047, type: 2}
+  _levelOne: UnfuckLevelOne
 --- !u!4 &228680057
 Transform:
   m_ObjectHideFlags: 0
@@ -2936,14 +2937,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.20711198, g: 0.55345905, b: 0.5222199, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 0}
+  m_Texture: {fileID: 2800000, guid: 5bb4ef46389ec164f93294bb10aec209, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -3514,6 +3515,22 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8626954282237592717, guid: fcdf0fd16dfd1b44aa461ce5905c4440, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8626954282237592717, guid: fcdf0fd16dfd1b44aa461ce5905c4440, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8626954282237592717, guid: fcdf0fd16dfd1b44aa461ce5905c4440, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8626954282237592717, guid: fcdf0fd16dfd1b44aa461ce5905c4440, type: 3}
+      propertyPath: m_Texture
+      value: 
+      objectReference: {fileID: 2800000, guid: 27b3e99fa204b894d8eba262f1d2527a, type: 3}
     - target: {fileID: 9154803990901949118, guid: fcdf0fd16dfd1b44aa461ce5905c4440, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -5333,6 +5350,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1663229821494265314, guid: 9ae3c5275716bb940b1048d0229202f3, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1940866970970853771, guid: 9ae3c5275716bb940b1048d0229202f3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 183
@@ -5377,6 +5398,10 @@ PrefabInstance:
       propertyPath: uiData
       value: 
       objectReference: {fileID: 11400000, guid: 377fbeaf0c2d98543837ee90c8854047, type: 2}
+    - target: {fileID: 3615059022639628010, guid: 9ae3c5275716bb940b1048d0229202f3, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3785931778052134353, guid: 9ae3c5275716bb940b1048d0229202f3, type: 3}
       propertyPath: m_UiScaleMode
       value: 1
