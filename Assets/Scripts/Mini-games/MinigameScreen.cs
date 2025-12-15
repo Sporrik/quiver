@@ -245,6 +245,8 @@ public sealed class MinigameScreen : MonoBehaviour
             if (poop >= _maxProgress) _pendingSceneName = _diaperMinigame;
 
             else if (pee >= _maxProgress) _pendingSceneName = _peeMinigame;
+
+            else if(hungry >= _maxProgress) _pendingSceneName = _feedingMinigame;
         }
 
         _slideIn = true;
