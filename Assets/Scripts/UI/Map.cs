@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -17,6 +18,9 @@ public class Map : MonoBehaviour
     [SerializeField] private float _rotation;
 
     [SerializeField] private float rotSpeed = -40f;
+
+    //private Dictionary<GameObject, Coroutine> dotTimers = new Dictionary<GameObject, Coroutine>();
+
 
     void Start()
     {
@@ -47,22 +51,37 @@ public class Map : MonoBehaviour
 
     private void UpdatedAngle()
     {
-        Vector3 sweepDir = _radar.transform.forward; // or correct axis
+        Vector3 sweepDir =
+       Quaternion.Euler(0f, 40f, 0f) * _radar.transform.forward;
+
+        sweepDir.Normalize();
+        Debug.DrawRay(radarCenter.position, sweepDir * 5f, Color.green);
 
         foreach (GameObject dot in dots)
         {
             // Now radar can be anywhere!
             Vector3 dirToDot = (dot.transform.position - _radar.transform.position).normalized;
+            dirToDot.Normalize();
+            sweepDir.Normalize();
 
-             
 
             float dp = Vector3.Dot(sweepDir, dirToDot);
 
-            float threshold = Mathf.Cos(radarAngle * Mathf.Deg2Rad);
+            if (dots[1] == dot)
+            {
+                Debug.Log("Dot 1 Info:");
+                Debug.Log("sweepDir: " + sweepDir);
+                Debug.Log("dirToDot: " + dirToDot);
+                Debug.Log("Dot Product: " + dp);
+                Debug.Log("");
+            }
+            //float threshold = Mathf.Cos(radarAngle * Mathf.Deg2Rad);
 
-            dot.SetActive(dp > threshold);
+            dot.SetActive(dp >= 0.7f);
         }
     }
+
+
 
     private void UpdateCirlces()
     {
