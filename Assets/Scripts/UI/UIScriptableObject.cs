@@ -75,8 +75,11 @@ namespace UI
                 SetPoop(_poop + v);
             else
             {
-                SetPoop(_poop + (v * _balancePeePooHunger / _viewerCount + 1));
-                Debug.Log("IncrementPoop: " + (_poop + (v * _balancePeePooHunger / _viewerCount + 1)));
+                SetPoop(_poop + (v * _balancePeePooHunger / (_viewerCount + 1)));
+                Debug.Log("TotalPoop: " + (_poop + (v * _balancePeePooHunger / (_viewerCount + 1))));
+                Debug.Log("Increment: " + (v * _balancePeePooHunger / (_viewerCount + 1)));
+                Debug.Log("ViewerCount: " + _viewerCount + "Balance: " + _balancePeePooHunger + "v: " + v) ;
+
             }
         }
 
@@ -85,14 +88,14 @@ namespace UI
             if (_gameModeSinglePlayer)
                 SetPee(_pee + v);
             else
-                SetPee(_pee + (v * _balancePeePooHunger / _viewerCount + 1));
+                SetPee(_pee + (v * _balancePeePooHunger / (_viewerCount + 1)));
         }
         public void IncrementHungry(float v)
         {
             if (_gameModeSinglePlayer)
                 SetHungry(_hungry + v);
             else
-                SetHungry(_hungry + (v * _balancePeePooHunger / _viewerCount + 1));
+                SetHungry(_hungry + (v * _balancePeePooHunger / (_viewerCount + 1)));
         }
 
         public void IncrementHappiness(float v) => SetHappiness(_happiness + v);
