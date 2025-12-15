@@ -65,6 +65,8 @@ public class Map : MonoBehaviour
             sweepDir.Normalize();
 
 
+             
+
             float dp = Vector3.Dot(sweepDir, dirToDot);
 
             if (dots[1] == dot)
