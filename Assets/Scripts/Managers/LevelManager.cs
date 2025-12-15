@@ -74,7 +74,7 @@ public class LevelManager : MonoBehaviour
         foreach (GuardBehavior guardBehavior in guardBehaviors)
         {
             if (guardBehavior == null) return;
-            if (guardBehavior.DistanceToPlayer <= guardBehavior.CatchRange && guardBehavior.SeesPlayer)
+            if (guardBehavior.CaughtPlayer())
             {
                 TriggerGameOver();
                 MusicController.instance.SetDeath();

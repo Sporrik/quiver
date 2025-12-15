@@ -113,6 +113,15 @@ namespace Gameplay.AI
             }
         }
 
+        private void Start()
+        {
+            // avoids lag
+            MusicController.instance.SetChase(true);
+            MusicController.instance.SetChase(false);
+            MusicController.instance.SetMinigame(true);
+            MusicController.instance.SetMinigame(false);
+        }
+
         private void Update()
         {
             UpdatePerception();
@@ -485,6 +494,12 @@ namespace Gameplay.AI
             _animator.SetBool(SearchingState, _state == State.Searching);
             _animator.SetBool(DeathState, _state == State.Dead);
         }
+
+        public bool CaughtPlayer()
+        {
+            return _state == State.Caught;
+        }
+
         #endregion
 
         // ---------- Gizmos ----------
