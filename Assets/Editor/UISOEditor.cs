@@ -17,6 +17,8 @@ public sealed class UIScriptableObjectEditor : Editor
 
     void OnEnable()
     {
+
+        
         _defaultsProp = serializedObject.FindProperty("_defaults");
         
         _defPoop      = _defaultsProp.FindPropertyRelative("Poop");
@@ -29,6 +31,7 @@ public sealed class UIScriptableObjectEditor : Editor
 
     public override void OnInspectorGUI()
     {
+        base.OnInspectorGUI();
         var so = (UIScriptableObject)target;
         serializedObject.Update();
 

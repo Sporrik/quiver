@@ -9,6 +9,7 @@ namespace UI
     {
         public enum NeedType { Poop, Hungry, Pee }
 
+        [SerializeField] private TwitchGameManager _twitchManager;
         #region Inspector
         [Header("Player")]
         [SerializeField] private PlayerController _playerController;
@@ -64,6 +65,8 @@ namespace UI
         private void Awake()
         {
 
+            _twitchManager = GameObject.FindGameObjectWithTag("Twitch").GetComponent<TwitchGameManager>(); // for vieuwercount balance in Scriptable Object
+
             if (_playerController == null) Debug.LogError($"{nameof(BarManager)}: PlayerController missing.", this);
             if (_scriptableObject == null) Debug.LogError($"{nameof(BarManager)}: UIScriptableObject missing.", this);
 
@@ -104,6 +107,7 @@ namespace UI
         private void Update()
         {
 
+
             if (_scriptableObject == null) return;
 
             float dt = Time.deltaTime;
@@ -127,6 +131,8 @@ namespace UI
                 OnBabyCrying?.Invoke(this);
                 AlertGuardsInRange();
             }
+            if(_twitchManager != null)
+                _scriptableObject.SetTwitchVieuwerCount(_twitchManager.GetViewerCount()); // for vieuwercount balance in Scriptable Object
         }
         #endregion
 
