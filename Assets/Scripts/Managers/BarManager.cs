@@ -54,6 +54,10 @@ namespace UI
         private bool _hungryCapped;
 
         private readonly Collider[] _guardHits = new Collider[16];
+
+
+        
+        private bool _initialized = false;
         #endregion
 
         #region Unity
@@ -64,30 +68,42 @@ namespace UI
             if (_scriptableObject == null) Debug.LogError($"{nameof(BarManager)}: UIScriptableObject missing.", this);
 
             _isSinglePlayer = _singlePlayerOverride || (_scriptableObject != null && _scriptableObject.GetGameModeSinglePlayer());
-
             _playerController = GameObject.FindGameObjectWithTag("Player")?.GetComponent<PlayerController>();
+
             Debug.Log(_playerController);
         }
 
         private void OnEnable()
         {
-
+            _initialized = false;
             if (_playerController != null)
             {
                 _playerController.OnStaminaChanged += HandleStaminaChanged;
+
             }
         }
 
         private void OnDisable()
         {
+            _initialized = false;
             if (_playerController != null)
             {
                 _playerController.OnStaminaChanged -= HandleStaminaChanged;
             }
         }
+        private void LateUpdate()
+        {
+            
+                _playerController = GameObject.FindGameObjectWithTag("Player")?.GetComponent<PlayerController>();
+                _playerController.OnStaminaChanged += HandleStaminaChanged;
+                _initialized = true;
 
+            
+            
+        }
         private void Update()
         {
+
             if (_scriptableObject == null) return;
 
             float dt = Time.deltaTime;
@@ -117,7 +133,7 @@ namespace UI
         #region Handlers
         private void HandleStaminaChanged(float stamina, float max)
         {
-            _scriptableObject?.SetStamina(stamina);
+            _scriptableObject.SetStamina(stamina);
         }
         #endregion
 
