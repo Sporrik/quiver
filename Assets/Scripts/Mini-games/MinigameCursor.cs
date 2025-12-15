@@ -28,6 +28,8 @@ public class MinigameCursor : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Start()
     {
+        _input.Enable();
+
         _move = _input.FindActionMap("MinigameCursor").FindAction("Move");
         _click = _input.FindActionMap("MinigameCursor").FindAction("Click");
 
