@@ -6,7 +6,9 @@ using TMPro;
 
 public class SandwhichSpawner : MonoBehaviour
 {
+    [SerializeField] private float _initialSpeed = 5f;
     [SerializeField] private float _speed = 5f;
+    [SerializeField] private float _speedMultiplier = 1.05f;
     [SerializeField] private int _spawnChance = 75;   // Chance to spawn an item in a sandwhich spawnpoint
     [SerializeField] private int _badSpawnChance = 50; // Chance that item spawned is bad
     [SerializeField] private int _goodItemValue = 5;
@@ -18,6 +20,9 @@ public class SandwhichSpawner : MonoBehaviour
     [SerializeField] private GameObject _sandwhichPrefab3;
     [SerializeField] private GameObject _sandwhichStart;
     [SerializeField] private TextMeshProUGUI _counter;
+    [SerializeField] private GameObject _confettiParticle;
+    [SerializeField] private GameObject _confettiParticle1;
+    [SerializeField] private GameObject _confettiParticle2;
 
 
     [SerializeField] private List<GameObject> _badItems;
@@ -28,6 +33,7 @@ public class SandwhichSpawner : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        _speed = _initialSpeed;
         _sandwhichStart.GetComponent<Sandwhich>().Speed = _speed;   
     }
 
@@ -108,22 +114,61 @@ public class SandwhichSpawner : MonoBehaviour
         if (!isBadItem)
         {
             _percentage += _goodItemValue;
+            IncreaseSpeed();
+
             if (_percentage >= 100)
             {
                 _percentage = 100;
                 IsCompleted = true;
+                _confettiParticle.SetActive(true);
+                _confettiParticle1.SetActive(true);
+                _confettiParticle2.SetActive(true);
                 Debug.Log("Hunger minigame completed!");
             }
         }
         else
         {
+            if (IsCompleted)
+                return;
+
             _percentage -= _badItemValue;
+
             if (_percentage < 0)
             {
                 _percentage = 0;
             }
+
+            DecreaseSpeed();
         }
 
         _counter.text = _percentage.ToString() + "%";
+    }
+
+    private void IncreaseSpeed()
+    {
+        _speed *= _speedMultiplier;
+        _speed = Mathf.Min(1.2f, _speed);
+        GameObject[] sandwhiches = GameObject.FindGameObjectsWithTag("Sandwhich");
+        foreach (GameObject sandwhich in sandwhiches)
+        {
+            sandwhich.GetComponent<Sandwhich>().Speed = _speed;
+        }
+    }
+
+    private void DecreaseSpeed()
+    {
+        _speed /= _speedMultiplier;
+        _speed /= _speedMultiplier;
+        _speed /= _speedMultiplier;
+        _speed /= _speedMultiplier;
+
+        if(_speed < _initialSpeed)
+            _speed = _initialSpeed;
+
+        GameObject[] sandwhiches = GameObject.FindGameObjectsWithTag("Sandwhich");
+        foreach (GameObject sandwhich in sandwhiches)
+        {
+            sandwhich.GetComponent<Sandwhich>().Speed = _speed;
+        }
     }
 }

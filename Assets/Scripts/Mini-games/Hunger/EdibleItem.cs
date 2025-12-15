@@ -63,6 +63,9 @@ public class EdibleItem : MonoBehaviour
     {
         transform.SetParent(null);
 
+        if (gameObject.GetComponent<IncorrectFood>() != null)
+            gameObject.GetComponent<IncorrectFood>().TriggerFlash();
+
         Rigidbody rb = GetComponent<Rigidbody>();
         rb.useGravity = true;
         rb.isKinematic = false;
