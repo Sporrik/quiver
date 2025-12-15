@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 [DisallowMultipleComponent]
 public sealed class MinigameManager : MonoBehaviour
@@ -17,6 +18,8 @@ public sealed class MinigameManager : MonoBehaviour
     [Header("Options")]
     [Tooltip("If true, unloading then loading another minigame happens as a single operation")]
     [SerializeField] private bool _allowSwapWhileRunning = true;
+    [SerializeField] private GameObject _player;
+
     #endregion
 
     #region Events
@@ -229,4 +232,16 @@ public sealed class MinigameManager : MonoBehaviour
         yield return CoLoad(nextScene);
     }
     #endregion
+
+    private void Update()
+    {
+       if( _state == MiniState.Running)
+        {
+            _player.GetComponent<PlayerInput>().enabled = false;
+        }
+        else
+        {
+            _player.GetComponent<PlayerInput>().enabled = true;
+        }
+    }
 }

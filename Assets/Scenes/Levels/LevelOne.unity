@@ -34827,6 +34827,7 @@ MonoBehaviour:
   - Pee
   - Hunger
   _allowSwapWhileRunning: 1
+  _player: {fileID: 557317119}
   _state: 0
 --- !u!1 &1547433096
 GameObject:
@@ -43228,7 +43229,6 @@ MonoBehaviour:
   - {fileID: 87835081}
   - {fileID: 402660782}
   - {fileID: 1481881409}
-  _winFeedback: {fileID: 0}
   _goalScore: 0
 --- !u!1001 &2049932725
 PrefabInstance:
@@ -45364,6 +45364,70 @@ PrefabInstance:
     - target: {fileID: 4432853128341917835, guid: 5caf5bb964e6f904c8d4350217215474, type: 3}
       propertyPath: m_Name
       value: Animated Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 5226253694834983525, guid: 5caf5bb964e6f904c8d4350217215474, type: 3}
+      propertyPath: m_DefaultActionMap
+      value: df70fa95-8a34-4494-b137-73ab6b9c7d37
+      objectReference: {fileID: 0}
+    - target: {fileID: 5226253694834983525, guid: 5caf5bb964e6f904c8d4350217215474, type: 3}
+      propertyPath: m_ActionEvents.Array.size
+      value: 26
+      objectReference: {fileID: 0}
+    - target: {fileID: 5226253694834983525, guid: 5caf5bb964e6f904c8d4350217215474, type: 3}
+      propertyPath: m_ActionEvents.Array.data[19].m_ActionId
+      value: 4a590b00-bc01-4181-b04b-93fc29b655c8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5226253694834983525, guid: 5caf5bb964e6f904c8d4350217215474, type: 3}
+      propertyPath: m_ActionEvents.Array.data[20].m_ActionId
+      value: 697e4730-266d-4842-9f07-48db3d406f80
+      objectReference: {fileID: 0}
+    - target: {fileID: 5226253694834983525, guid: 5caf5bb964e6f904c8d4350217215474, type: 3}
+      propertyPath: m_ActionEvents.Array.data[21].m_ActionId
+      value: bd149d8f-71eb-4f50-9601-80d5bfb725f1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5226253694834983525, guid: 5caf5bb964e6f904c8d4350217215474, type: 3}
+      propertyPath: m_ActionEvents.Array.data[22].m_ActionId
+      value: 378022ec-72ff-41a3-a3c5-3be50380d91d
+      objectReference: {fileID: 0}
+    - target: {fileID: 5226253694834983525, guid: 5caf5bb964e6f904c8d4350217215474, type: 3}
+      propertyPath: m_ActionEvents.Array.data[23].m_ActionId
+      value: a8d5b243-06b6-49dc-b2ae-c135ab99d9b5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5226253694834983525, guid: 5caf5bb964e6f904c8d4350217215474, type: 3}
+      propertyPath: m_ActionEvents.Array.data[24].m_ActionId
+      value: e82c2bbc-08b2-4c4d-981b-a8c5a87c01a6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5226253694834983525, guid: 5caf5bb964e6f904c8d4350217215474, type: 3}
+      propertyPath: m_ActionEvents.Array.data[25].m_ActionId
+      value: 17e54dac-9aa6-42d2-bfe4-9a1c401a48c8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5226253694834983525, guid: 5caf5bb964e6f904c8d4350217215474, type: 3}
+      propertyPath: m_ActionEvents.Array.data[19].m_ActionName
+      value: 'MinigameCursor/Move[/XInputControllerWindows/leftStick,/XInputControllerWindows/rightStick]'
+      objectReference: {fileID: 0}
+    - target: {fileID: 5226253694834983525, guid: 5caf5bb964e6f904c8d4350217215474, type: 3}
+      propertyPath: m_ActionEvents.Array.data[20].m_ActionName
+      value: 'MinigameCursor/Click[/XInputControllerWindows/buttonSouth]'
+      objectReference: {fileID: 0}
+    - target: {fileID: 5226253694834983525, guid: 5caf5bb964e6f904c8d4350217215474, type: 3}
+      propertyPath: m_ActionEvents.Array.data[21].m_ActionName
+      value: 'HungerMinigame/Discard1[/Keyboard/upArrow,/Keyboard/w,/XInputControllerWindows/buttonNorth]'
+      objectReference: {fileID: 0}
+    - target: {fileID: 5226253694834983525, guid: 5caf5bb964e6f904c8d4350217215474, type: 3}
+      propertyPath: m_ActionEvents.Array.data[22].m_ActionName
+      value: 'HungerMinigame/Discard2[/Keyboard/leftArrow,/Keyboard/a,/XInputControllerWindows/buttonWest]'
+      objectReference: {fileID: 0}
+    - target: {fileID: 5226253694834983525, guid: 5caf5bb964e6f904c8d4350217215474, type: 3}
+      propertyPath: m_ActionEvents.Array.data[23].m_ActionName
+      value: 'HungerMinigame/Discard3[/Keyboard/rightArrow,/Keyboard/d,/XInputControllerWindows/buttonEast]'
+      objectReference: {fileID: 0}
+    - target: {fileID: 5226253694834983525, guid: 5caf5bb964e6f904c8d4350217215474, type: 3}
+      propertyPath: m_ActionEvents.Array.data[24].m_ActionName
+      value: 'HungerMinigame/Discard4[/Keyboard/downArrow,/Keyboard/s,/XInputControllerWindows/buttonSouth]'
+      objectReference: {fileID: 0}
+    - target: {fileID: 5226253694834983525, guid: 5caf5bb964e6f904c8d4350217215474, type: 3}
+      propertyPath: m_ActionEvents.Array.data[25].m_ActionName
+      value: 'PeeMinigame/Axis[/XInputControllerWindows/leftStick/left,/XInputControllerWindows/leftStick/right,/Keyboard/a,/Keyboard/d,/Keyboard/leftArrow,/Keyboard/rightArrow]'
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
