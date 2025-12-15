@@ -9384,6 +9384,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   _cryCooldown: 2
+  _balanceViewerScaling: 1
+  _twitchGameManager: {fileID: 0}
 --- !u!114 &501072587
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25355,6 +25357,7 @@ MonoBehaviour:
   - BabyDiaper
   - Pee
   _allowSwapWhileRunning: 1
+  _player: {fileID: 0}
   _state: 0
 --- !u!1001 &1545928622
 PrefabInstance:
@@ -31329,6 +31332,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 121112471117085753, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
+      propertyPath: m_Name
+      value: HapinessBar
+      objectReference: {fileID: 0}
     - target: {fileID: 1541133743901409253, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
       propertyPath: _radar
       value: 
@@ -31513,6 +31520,10 @@ PrefabInstance:
       propertyPath: m_sharedMaterial
       value: 
       objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+    - target: {fileID: 4238064377002657675, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
+      propertyPath: m_Name
+      value: StaminaBar
+      objectReference: {fileID: 0}
     - target: {fileID: 5089145299955747618, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
       propertyPath: _gameManager
       value: 
