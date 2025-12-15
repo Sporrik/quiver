@@ -59,6 +59,7 @@ namespace UI
         #region Unity
         private void Awake()
         {
+
             if (_playerController == null) Debug.LogError($"{nameof(BarManager)}: PlayerController missing.", this);
             if (_scriptableObject == null) Debug.LogError($"{nameof(BarManager)}: UIScriptableObject missing.", this);
 
@@ -69,6 +70,7 @@ namespace UI
 
         private void OnEnable()
         {
+
             if (_playerController != null)
             {
                 _playerController.OnStaminaChanged += HandleStaminaChanged;
