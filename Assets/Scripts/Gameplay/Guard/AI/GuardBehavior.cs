@@ -127,8 +127,8 @@ namespace Gameplay.AI
             UpdatePerception();
             TickState();
             TickAnimator();
-            _hadVisualLastFrame = _seesPlayer;
 
+            _hadVisualLastFrame = _seesPlayer;
         }
 
         private void OnDisable()
@@ -154,7 +154,6 @@ namespace Gameplay.AI
         {
             if (_player == null) return false;
             if (_distanceToPlayer > CatchRange) return false;
-            if (!_seesPlayer) return false;
 
             SetState(State.Caught);
             return true;
