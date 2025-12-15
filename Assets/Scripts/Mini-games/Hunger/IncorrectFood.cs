@@ -16,6 +16,7 @@ public class IncorrectFood : MonoBehaviour
     private Material[] _materials;
     private Color[] _originalColors;
     private Vector3 _originalPosition;
+    private bool _hasBeenInitialized = false;
 
     void Start()
     {
@@ -41,8 +42,13 @@ public class IncorrectFood : MonoBehaviour
 
     IEnumerator Flash()
     {
+        if(_hasBeenInitialized == false)
+            _originalPosition = transform.position;
+
+
         if (!_flashingFlash)
         {
+            _hasBeenInitialized = true;
             // Single blended flash, then restore
             for (int i = 0; i < _materials.Length; i++)
             {
