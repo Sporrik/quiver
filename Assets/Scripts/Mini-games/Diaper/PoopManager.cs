@@ -12,9 +12,15 @@ public class PoopManager : MonoBehaviour
     public bool TaskCompleted = false;
     private int _amountToSpawn;
 
-    [SerializeField] private DiaperChangingBehavior DirtyDiaper;
-    [SerializeField] private DiaperChangingBehavior CleanDiaper;
-    [SerializeField] private GameObject Baby;
+    [SerializeField] private DiaperChangingBehavior _dirtyDiaper;
+    [SerializeField] private DiaperChangingBehavior _cleanDiaper;
+    [SerializeField] private GameObject _baby;
+    [SerializeField] private GameObject _confettiParticle;
+    [SerializeField] private GameObject _confettiParticle1;
+    [SerializeField] private GameObject _confettiParticle2; 
+    [SerializeField] private GameObject _taskComplete;
+    [SerializeField] private GameObject _controls;
+
 
     [SerializeField] private bool DirtyDiaperCompleted = false;
     public bool CleanDiaperEquipped = false;
@@ -45,10 +51,10 @@ public class PoopManager : MonoBehaviour
 
         CurrentPoops = _amountToSpawn;
 
-        CleanDiaper.GetComponent<DiaperChangingBehavior>().enabled = false;
-        CleanDiaper.GetComponent<Animator>().SetBool("frontIsWorn", false);
-        CleanDiaper.GetComponent<Animator>().SetBool("leftIsWorn", false);
-        CleanDiaper.GetComponent<Animator>().SetBool("rightIsWorn", false);
+        _cleanDiaper.GetComponent<DiaperChangingBehavior>().enabled = false;
+        _cleanDiaper.GetComponent<Animator>().SetBool("frontIsWorn", false);
+        _cleanDiaper.GetComponent<Animator>().SetBool("leftIsWorn", false);
+        _cleanDiaper.GetComponent<Animator>().SetBool("rightIsWorn", false);
 
     }
 
@@ -62,23 +68,23 @@ public class PoopManager : MonoBehaviour
         }
 
         //Open diaper check
-        if (DirtyDiaper.GetComponent<Animator>().GetBool("frontIsWorn") == false
-            && DirtyDiaper.GetComponent<Animator>().GetBool("leftIsWorn") == false
-            && DirtyDiaper.GetComponent<Animator>().GetBool("rightIsWorn") == false &&DirtyDiaperCompleted == false)
+        if (_dirtyDiaper.GetComponent<Animator>().GetBool("frontIsWorn") == false
+            && _dirtyDiaper.GetComponent<Animator>().GetBool("leftIsWorn") == false
+            && _dirtyDiaper.GetComponent<Animator>().GetBool("rightIsWorn") == false &&DirtyDiaperCompleted == false)
         {
             DirtyDiaperCompleted = true;
             SetActiveTip(_UITips[1]);
         }
 
         //Clean diaper check
-        if (CleanDiaper.GetComponent<Animator>().GetBool("frontIsWorn") == true
-            && CleanDiaper.GetComponent<Animator>().GetBool("leftIsWorn") == true
-            && CleanDiaper.GetComponent<Animator>().GetBool("rightIsWorn") == true)
+        if (_cleanDiaper.GetComponent<Animator>().GetBool("frontIsWorn") == true
+            && _cleanDiaper.GetComponent<Animator>().GetBool("leftIsWorn") == true
+            && _cleanDiaper.GetComponent<Animator>().GetBool("rightIsWorn") == true)
         {
             CleanDiaperCompleted = true;
         }
 
-        if(Baby.GetComponent<FlipBaby>().isFlipped == true && AllPoopCleaned == false && firstFlipTipShown == false)
+        if(_baby.GetComponent<FlipBaby>().isFlipped == true && AllPoopCleaned == false && firstFlipTipShown == false)
         {
             SetActiveTip(_UITips[2]);
             firstFlipTipShown = true;
@@ -87,9 +93,9 @@ public class PoopManager : MonoBehaviour
         if (DirtyDiaperCompleted && !hasMovedDirtyDiaper)
         {
             hasMovedDirtyDiaper = true;
-            DirtyDiaper.GetComponent<DiaperChangingBehavior>().enabled = false;
-            Baby.GetComponent<CapsuleCollider>().enabled = true;
-            Baby.GetComponent<FlipBaby>().enabled = true;
+            _dirtyDiaper.GetComponent<DiaperChangingBehavior>().enabled = false;
+            _baby.GetComponent<CapsuleCollider>().enabled = true;
+            _baby.GetComponent<FlipBaby>().enabled = true;
 
             StartCoroutine(DelayedMoveTo());
         }
@@ -105,17 +111,25 @@ public class PoopManager : MonoBehaviour
         if (AllPoopCleaned && DirtyDiaperCompleted == true && CleanDiaperCompleted == true && TaskCompleted == false)
         {
             TaskCompleted = true;
-            SetActiveTip(_UITips[5]);
+            _confettiParticle.SetActive(true);
+            _confettiParticle1.SetActive(true);
+            _confettiParticle2.SetActive(true);
+            _taskComplete.SetActive(true);
+            _controls.SetActive(false);
 
+            foreach (GameObject tip in _UITips)
+            {
+                tip.SetActive(false);
+            }
             _won = true;
         }
 
         // Check if the baby is facing the camera
-        if (AllPoopCleaned && Baby.transform.rotation.eulerAngles == new Vector3(270f, 0f, 0f) && BabyIsFlipped == false &&BabyIsFlipped==false)
+        if (AllPoopCleaned && _baby.transform.rotation.eulerAngles == new Vector3(270f, 0f, 0f) && BabyIsFlipped == false &&BabyIsFlipped==false)
         {
-            Baby.GetComponent<FlipBaby>().enabled = false;
-            Baby.GetComponent<CapsuleCollider>().enabled = false;
-            CleanDiaper.GetComponent<DragDiaper>().enabled = true;
+            _baby.GetComponent<FlipBaby>().enabled = false;
+            _baby.GetComponent<CapsuleCollider>().enabled = false;
+            _cleanDiaper.GetComponent<DragDiaper>().enabled = true;
             BabyIsFlipped = true;
             SetActiveTip(_UITips[3]);
         }
@@ -123,8 +137,8 @@ public class PoopManager : MonoBehaviour
         // Enable closing the clean diaper
         if (CleanDiaperEquipped && hasShownCleanDiaperTip == false)
         {
-            CleanDiaper.GetComponent<BoxCollider>().enabled = false;
-            CleanDiaper.GetComponent<DiaperChangingBehavior>().enabled = true;
+            _cleanDiaper.GetComponent<BoxCollider>().enabled = false;
+            _cleanDiaper.GetComponent<DiaperChangingBehavior>().enabled = true;
             SetActiveTip(_UITips[4]);
             hasShownCleanDiaperTip = true;
         }
@@ -145,7 +159,7 @@ public class PoopManager : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
 
-        DirtyDiaper.gameObject.GetComponent<MoveToObject>().MoveTo(0);
+        _dirtyDiaper.gameObject.GetComponent<MoveToObject>().MoveTo(0);
     }
 
     private void SetActiveTip(GameObject tipToEnable)
