@@ -10,17 +10,17 @@ public class ShowBaubleImage : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        if(twitchGameManager.GetBabyBrabbleMessage() == null || !twitchGameManager.GetBabyBrabbleMsgOnScreen())
-        {
-            bauble.SetActive(false);
-        }
-        else
-        {
-            bauble.SetActive(true);
-            Debug.Log(twitchGameManager.GetBabyBrabbleMessage());
-            Debug.Log(twitchGameManager.GetBabyBrabbleUser().displayname);
-        }
-    }
+    //void Update()
+    //{
+    //    if(twitchGameManager.GetBabyBrabbleMessage() == null || !twitchGameManager.GetBabyBrabbleMsgOnScreen())
+    //    {
+    //        bauble.SetActive(false);
+    //    }
+    //    else
+    //    {
+    //        bauble.SetActive(true);
+    //        Debug.Log(twitchGameManager.GetBabyBrabbleMessage());
+    //        Debug.Log(twitchGameManager.GetBabyBrabbleUser().displayname);
+    //    }
+    //}
 }

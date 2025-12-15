@@ -13,6 +13,8 @@ public class EdiblesManager : MonoBehaviour
     private PlayerInput _playerInput;
     private bool _usingController = false;
 
+    private string _controllerType = "Unknown";
+
     private EdibleItem _index1;
     private EdibleItem _index2;
     private EdibleItem _index3;
@@ -27,6 +29,11 @@ public class EdiblesManager : MonoBehaviour
     [SerializeField] Sprite _left;
     [SerializeField] Sprite _up;
     [SerializeField] Sprite _down;
+
+    [SerializeField] Sprite _a;
+    [SerializeField] Sprite _y;
+    [SerializeField] Sprite _b;
+    [SerializeField] Sprite _x;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -53,6 +60,7 @@ public class EdiblesManager : MonoBehaviour
             else if (currentScheme == "Gamepad")
             {
                 _usingController = true;
+                DetectControllerType();
             }
             else
             {
@@ -113,8 +121,13 @@ public class EdiblesManager : MonoBehaviour
             item.InputIndex = 1;
             _index1 = item;
 
-            if (_usingController)
+            if (_usingController && _controllerType == "PlayStationController")
+            {
                 item.ControlSprite.sprite = _triangle;
+            }
+            if (_usingController && _controllerType != "PlayStationController")
+                item.ControlSprite.sprite = _y;
+
             if (!_usingController)
                 item.ControlSprite.sprite = _up;
         }
@@ -123,8 +136,14 @@ public class EdiblesManager : MonoBehaviour
             item.InputIndex = 2;
             _index2 = item;
 
-            if (_usingController)
+            if (_usingController && _controllerType == "PlayStationController")
+            {
                 item.ControlSprite.sprite = _square;
+            }
+
+            if (_usingController && _controllerType != "PlayStationController")
+                item.ControlSprite.sprite = _x;
+
             if (!_usingController)
                 item.ControlSprite.sprite = _right;
         }
@@ -133,8 +152,14 @@ public class EdiblesManager : MonoBehaviour
             item.InputIndex = 3;
             _index3 = item;
 
-            if (_usingController)
+            if (_usingController && _controllerType == "PlayStationController")
+            {
                 item.ControlSprite.sprite = _cross;
+            }
+
+            if (_usingController && _controllerType != "PlayStationController")
+                item.ControlSprite.sprite = _a;
+
             if (!_usingController)
                 item.ControlSprite.sprite = _down;
         }
@@ -143,8 +168,13 @@ public class EdiblesManager : MonoBehaviour
             item.InputIndex = 4;
             _index4 = item;
 
-            if (_usingController)
+            if (_usingController && _controllerType != "PlayStationController")
+            {
+                item.ControlSprite.sprite = _b;
+            }
+            if (_usingController && _controllerType == "PlayStationController")
                 item.ControlSprite.sprite = _circle;
+
             if (!_usingController)
                 item.ControlSprite.sprite = _left;
         }
@@ -203,6 +233,32 @@ public class EdiblesManager : MonoBehaviour
         {
             if (ctx.canceled)
                 _index4.DropEdible();
+        }
+    }
+    private void DetectControllerType()
+    {
+        if (Gamepad.current != null)
+        {
+            string controllerName = Gamepad.current.displayName.ToLower();
+
+            // Check for PlayStation controllers
+            if (controllerName.Contains("playstation") || 
+                controllerName.Contains("dualshock") || 
+                controllerName.Contains("dualsense") || 
+                controllerName.Contains("dual sense")) 
+            {
+                _controllerType = "PlayStationController";
+            }
+            else
+            {
+                _controllerType = "Unknown Gamepad";
+            }
+
+            Debug.Log($"Detected Controller: {_controllerType}");
+        }
+        else
+        {
+            _controllerType = "No Gamepad Connected";
         }
     }
 

@@ -10,7 +10,6 @@ using Random = System.Random;
 
 public class TwitchGameManager : TwitchMonoBehaviour
 {
-
     [Header("Authorization")]
     [SerializeField] private TMP_InputField channelNameInput;
     [SerializeField] private TMP_InputField userNameInput;
@@ -72,38 +71,75 @@ public class TwitchGameManager : TwitchMonoBehaviour
     private float _accTimeBrabbleRemove;
     private const float MaxWaitTimeBrabbleRemove = 10f;
 
+    //streaks
+    private int _currentAmountStreaks = 0;
+    private string _recentCommand;
 
     #region TwitchCommands
 
     [TwitchCommand("poop_command", "poo", "poO", "pOo", "pOO", "Poo", "PoO", "POo", "POO")]
-    public void FillupPoopBar(TwitchUser user)
+    public void FillupPoopBar(TwitchUser user, TwitchCommand command)
     {
-        _commands.Add("poop_command"); //DON'T REMOVE || used for statistics in log file
-        Debug.Log("Command poop proc"); //remove if clutter
+        const string commandName = "poop_command";
+
+        _commands.Add(commandName); //DON'T REMOVE || used for statistics in log file
+        Debug.Log(commandName + " proc"); //remove if clutter
         if (uiData == null) { Debug.LogWarning("TwitchManager: UIData not assigned."); return; }
         uiData.IncrementPoop(incPoop); //Increment call inside ui script
         _userPoop = user;
+
+        if (_recentCommand == commandName)
+        {
+            _currentAmountStreaks++;
+        }
+        else
+        {
+            _recentCommand = commandName;
+            _currentAmountStreaks = 0;
+        }
     }
 
     [TwitchCommand("wee_command", "wee", "weE", "wEe", "wEE", "Wee", "WeE", "WEe", "WEE")]
     public void FillupPeeBar(TwitchUser user)
     {
-        _commands.Add("wee_command"); //DON'T REMOVE || used for statistics in log file
-        Debug.Log("Command wee proc"); //remove if clutter
+        const string commandName = "wee_command";
+        _commands.Add(commandName); //DON'T REMOVE || used for statistics in log file
+        Debug.Log(commandName + " proc"); //remove if clutter
         if (uiData == null) { Debug.LogWarning("TwitchManager: UIData not assigned."); return; }
         uiData.IncrementPee(incPee); //Increment call inside ui script
         _userPee = user;
+
+        if (_recentCommand == commandName)
+        {
+            _currentAmountStreaks++;
+        }
+        else
+        {
+            _recentCommand = commandName;
+            _currentAmountStreaks = 0;
+        }
     }
     [TwitchCommand("hunger_command", "hunger", "hungeR", "hungEr", "hungER", "hunGer", "hunGeR", "hunGEr", "hunGER", "huNger", "huNgeR", "huNgEr",
         "huNgER", "huNGer", "huNGeR", "huNGEr", "huNGER", "hUnger", "hUngeR", "hUngEr", "hUngER", "hUnGer", "hUnGeR", "hUnGEr", "hUnGER", "Hunger", "HungeR",
         "HungEr", "HungER", "HunGer", "HunGeR", "HunGEr", "HunGER")]
     public void FillupHungerBar(TwitchUser user)
     {
-        _commands.Add("hunger_command"); //DON'T REMOVE || used for statistics in log file
-        Debug.Log("Command hunger proc"); //remove if clutter
+        const string commandName = "hunger_command";
+        _commands.Add(commandName); //DON'T REMOVE || used for statistics in log file
+        Debug.Log(commandName + " proc"); //remove if clutter
         if (uiData == null) { Debug.LogWarning("TwitchManager: UIData not assigned."); return; }
         uiData.IncrementHungry(incHungry); //Increment call inside ui script
         _userHunger = user;
+
+        if (_recentCommand == commandName)
+        {
+            _currentAmountStreaks++;
+        }
+        else
+        {
+            _recentCommand = commandName;
+            _currentAmountStreaks = 0;
+        }
     }
     #endregion
 
@@ -114,7 +150,6 @@ public class TwitchGameManager : TwitchMonoBehaviour
             babyBrabbleTextUI.text = " ";
             chatUserNameTextUI.text = " ";
         }
-
     }
 
     private void Update()
@@ -140,7 +175,6 @@ public class TwitchGameManager : TwitchMonoBehaviour
         //DON'T REMOVE || Brabble logic
         if (babyBrabbleTextUI != null)
         {
-
             _accTimeBrabble += Time.deltaTime;
             if (_msgOnScreen) _accTimeBrabbleRemove += Time.deltaTime;
 
@@ -182,7 +216,7 @@ public class TwitchGameManager : TwitchMonoBehaviour
                 }
 
                 _accTimeBrabble = 0;
-                _maxWaitTimeBrabble = _randomBrabble.Next(10, 15); //random interval between 60sec and 120sec
+                _maxWaitTimeBrabble = _randomBrabble.Next(20, 21); //random interval between 60sec and 120sec
             }
 
             if (_accTimeBrabbleRemove >= MaxWaitTimeBrabbleRemove)
@@ -192,20 +226,20 @@ public class TwitchGameManager : TwitchMonoBehaviour
                 _accTimeBrabbleRemove = 0;
                 _msgOnScreen = false;
             }
-        }
 
-        //DON'T REMOVE || calculates current active chatters in chat || uses refresh time as waiting time 
-        if (_userIDsInChat.Count > 0)
-        {
-            for (var idx = 0; idx < _userIDsInChat.Count; idx++)
+            //DON'T REMOVE || calculates current active chatters in chat || uses refresh time as waiting time 
+            if (_userIDsInChat.Count > 0)
             {
-                _timeUserIDsInChat[idx] -= Time.deltaTime;
-
-                if (_timeUserIDsInChat[idx] < 0)
+                for (var idx = 0; idx < _userIDsInChat.Count; idx++)
                 {
-                    _timeUserIDsInChat.RemoveAt(idx);
-                    _userIDsInChat.RemoveAt(idx);
-                    if (_viewerCount > 0) _viewerCount--;
+                    _timeUserIDsInChat[idx] -= Time.deltaTime;
+
+                    if (_timeUserIDsInChat[idx] < 0)
+                    {
+                        _timeUserIDsInChat.RemoveAt(idx);
+                        _userIDsInChat.RemoveAt(idx);
+                        if (_viewerCount > 0) _viewerCount--;
+                    }
                 }
             }
         }
@@ -220,12 +254,6 @@ public class TwitchGameManager : TwitchMonoBehaviour
         {
             _viewerCounts.Add(_viewerCount);
             _accTime = 0f;
-        }
-
-        //MAKESHIFT SOLUTION
-        if (Input.GetKey(KeyCode.Escape))
-        {
-            Application.Quit();
         }
     }
 
@@ -361,26 +389,33 @@ public class TwitchGameManager : TwitchMonoBehaviour
     /// <returns></returns>
     public string GetBabyBrabbleMessage()
     {
-
-        if (_stringBrabble == null || _stringBrabble == " ")
+        if(_stringBrabble == null)
         {
-            return null;
+            return "";
         }
-        Debug.Log(_stringBrabble);
+        if(_stringBrabble == " ")
+        {
+            return "";
+        }
         return _stringBrabble;
+    }
 
-    }
-    public bool GetBabyBrabbleMsgOnScreen()
-    {
-        Debug.Log(_msgOnScreen);
-        return _msgOnScreen;
-    }
     public TwitchUser GetBabyBrabbleUser()
     {
-
+        
         return _userBrabble;
     }
 
+
+    /// <summary>
+    /// Returns amount of streaks if the commandName matches the recent command, if it does not match returns 0 [names : ("poop_command", "wee_command", "hunger_command")]
+    /// </summary>
+    public int GetStreakAmount(string commandName)
+    {
+        if (commandName == _recentCommand) 
+            return _currentAmountStreaks;
+        return 0;
+    }
 
 }
 
