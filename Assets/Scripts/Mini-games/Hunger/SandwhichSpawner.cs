@@ -23,6 +23,9 @@ public class SandwhichSpawner : MonoBehaviour
     [SerializeField] private GameObject _confettiParticle;
     [SerializeField] private GameObject _confettiParticle1;
     [SerializeField] private GameObject _confettiParticle2;
+    [SerializeField] private GameObject _taskCompleted;
+    [SerializeField] private GameObject _tip;
+
 
 
     [SerializeField] private List<GameObject> _badItems;
@@ -115,6 +118,7 @@ public class SandwhichSpawner : MonoBehaviour
         {
             _percentage += _goodItemValue;
             IncreaseSpeed();
+            _counter.GetComponent<UIShake>().ShakeUI();
 
             if (_percentage >= 100)
             {
@@ -123,6 +127,9 @@ public class SandwhichSpawner : MonoBehaviour
                 _confettiParticle.SetActive(true);
                 _confettiParticle1.SetActive(true);
                 _confettiParticle2.SetActive(true);
+                _taskCompleted.SetActive(true);
+                _counter.gameObject.SetActive(false);
+                _tip.SetActive(false);
                 Debug.Log("Hunger minigame completed!");
             }
         }
@@ -139,9 +146,11 @@ public class SandwhichSpawner : MonoBehaviour
             }
 
             DecreaseSpeed();
+            _counter.GetComponent<UIShake>().ShakeUI();
+
         }
 
-        _counter.text = _percentage.ToString() + "%";
+        _counter.text = _percentage.ToString() + " %";
     }
 
     private void IncreaseSpeed()
