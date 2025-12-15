@@ -17,6 +17,8 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private UIScriptableObject _ScriptableObject;
     private bool _singlePlayer = true;
 
+    [SerializeField] private string _levelOne;
+
     private void Start()
     {
         MusicController.instance.SetMenu();
@@ -35,7 +37,7 @@ public class MenuManager : MonoBehaviour
         // set it for singleplayer
         _ScriptableObject.SetSinglePlayer(true);
 
-        SceneManager.LoadScene("LevelOne");
+        SceneManager.LoadScene(_levelOne);
 
         Debug.Log("Single");
     }
@@ -54,7 +56,7 @@ public class MenuManager : MonoBehaviour
 
     public void OnPlayWithTwitch()
     {
-        SceneManager.LoadScene("LevelOne");
+        SceneManager.LoadScene(_levelOne);
 
         // check if it is autorized;
         // set it for multiplayer
@@ -77,7 +79,7 @@ public class MenuManager : MonoBehaviour
         // _PlayScreen.SetActive(true);
         if (_singlePlayer)
         {
-            SceneManager.LoadScene("LevelOne");
+            SceneManager.LoadScene(_levelOne);
             print("LOAD GAME");
 
             MusicController.instance.SetGameplay();

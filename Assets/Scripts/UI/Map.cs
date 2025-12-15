@@ -69,11 +69,11 @@ public class Map : MonoBehaviour
 
             if (dots[1] == dot)
             {
-                Debug.Log("Dot 1 Info:");
-                Debug.Log("sweepDir: " + sweepDir);
-                Debug.Log("dirToDot: " + dirToDot);
-                Debug.Log("Dot Product: " + dp);
-                Debug.Log("");
+                //Debug.Log("Dot 1 Info:");
+                //Debug.Log("sweepDir: " + sweepDir);
+                //Debug.Log("dirToDot: " + dirToDot);
+                //Debug.Log("Dot Product: " + dp);
+                //Debug.Log("");
             }
             //float threshold = Mathf.Cos(radarAngle * Mathf.Deg2Rad);
 

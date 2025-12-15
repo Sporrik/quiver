@@ -13,6 +13,11 @@ public class MapNextGoal : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(_goalManager._goalScore >= _goalManager.Goals.Length)
+            return;
+        // error out of array bounds
+
+
         _currentGoalPos = _goalManager.Goals[_goalManager._goalScore].transform.position;
         Vector3 direction = _currentGoalPos - transform.position;
 
