@@ -78,6 +78,12 @@ namespace Gameplay.AI
         private static readonly int ChaseState = Animator.StringToHash("IsChasing");
         private static readonly int SearchingState = Animator.StringToHash("IsSearching");
         private static readonly int DeathState = Animator.StringToHash("IsDead");
+
+        private int _runTriggerID;
+        private int _walkTriggerID;
+        private int _dieTriggerID;
+        private int _lookAroundTriggerID;
+
         #endregion
 
         #region Lifecycle
@@ -87,9 +93,12 @@ namespace Gameplay.AI
             _animator = GetComponent<Animator>();
 
             // Check references
+
+            // prefab
             if (_guardCfg == null) { Debug.LogError($"{name}: GuardConfig missing.", this); enabled = false; return; }
             if (_eyes == null) { Debug.LogError($"{name}: Eyes missing.", this); enabled = false; return; }
 
+            // player
             if (_player == null)
             {
                 var p = GameObject.FindGameObjectWithTag(_guardCfg.PlayerTag);
@@ -103,14 +112,30 @@ namespace Gameplay.AI
                 _inputRelay = p.GetComponent<PlayerInputRelay>();
             }
 
-            _agent.speed = _guardCfg.Movement.WalkSpeed;
-            if (_waypoints.Count > 0)
-                _agent.SetDestination(_waypoints[_waypointIndex].waypoint.position);
-
             if (_player)
             {
                 _playerController = _player.GetComponent<PlayerController>();
             }
+
+            // animation
+            if(_animator)
+            {
+                _walkTriggerID = Animator.StringToHash("Walk");
+                _runTriggerID = Animator.StringToHash("Run");
+                _dieTriggerID = Animator.StringToHash("Die");
+                _lookAroundTriggerID = Animator.StringToHash("Search");
+            }
+            else
+            {
+                Debug.Log("Animator is missing inside guardbehavior!");
+            }
+
+            // navmesh
+            _agent.speed = _guardCfg.Movement.WalkSpeed;
+            if (_waypoints.Count > 0)
+                _agent.SetDestination(_waypoints[_waypointIndex].waypoint.position);
+
+            
         }
 
         private void Start()
@@ -126,7 +151,7 @@ namespace Gameplay.AI
         {
             UpdatePerception();
             TickState();
-            TickAnimator();
+            //TickAnimator();
 
             _hadVisualLastFrame = _seesPlayer;
         }
@@ -246,6 +271,53 @@ namespace Gameplay.AI
                     _agent.isStopped = true;
                     _agent.enabled = false;
                     break;
+            }
+
+            UpdateAnimation(state);
+        }
+
+        private void UpdateAnimation(State state)
+        {
+            if (_animator == null) return;
+
+            int neededTriggerID = 0;
+            bool idIsValid = false;
+
+            switch (state)
+            {
+                case State.Patrolling:  neededTriggerID = _walkTriggerID;       break;
+
+                case State.Chasing:     neededTriggerID = _runTriggerID;        break;
+
+                case State.Searching:   neededTriggerID = _lookAroundTriggerID; break;
+
+                case State.Caught:      neededTriggerID = _walkTriggerID;       break;
+
+                case State.Dead:        neededTriggerID = _dieTriggerID;        break;
+
+                default:
+                    break;
+            }
+
+            // check if ID is valid
+            foreach(var parameter in _animator.parameters)
+            {
+                if(parameter.nameHash == neededTriggerID)
+                {
+                    idIsValid = true;
+                    break;
+                }
+            }
+
+            if( idIsValid )
+            {
+                _animator.SetTrigger(neededTriggerID);
+            }
+            else
+            {
+                _animator.SetTrigger(_walkTriggerID);
+
+                Debug.Log("Invalid trigger id for guardbehavior's animator!");
             }
         }
 
