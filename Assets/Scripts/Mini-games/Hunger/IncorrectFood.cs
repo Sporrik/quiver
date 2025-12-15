@@ -10,6 +10,8 @@ public class IncorrectFood : MonoBehaviour
     [SerializeField] private float _opacity = 0.1f;
     [SerializeField] private float _shakeIntensity = 0.1f; // Intensity of the shake
     [SerializeField] private int _shakeFrequency = 10; // Number of shakes per second
+    [SerializeField] private bool _enableShake = false;
+    [SerializeField] private bool _flashingFlash = false;
 
     private Material[] _materials;
     private Color[] _originalColors;
@@ -32,21 +34,59 @@ public class IncorrectFood : MonoBehaviour
     {
         StopAllCoroutines();
         StartCoroutine(Flash());
-        StartCoroutine(Shake());
+
+        if (_enableShake)
+            StartCoroutine(Shake());
     }
 
     IEnumerator Flash()
     {
-        // Blend the flash color with the original color
-        for (int i = 0; i < _materials.Length; i++)
+        if (!_flashingFlash)
         {
-            // Interpolate between the original color and the flash color
-            _materials[i].color = Color.Lerp(_originalColors[i], _flashColor, _opacity); // 0.5f is the blend factor
+            // Single blended flash, then restore
+            for (int i = 0; i < _materials.Length; i++)
+            {
+                // Interpolate between the original color and the flash color
+                _materials[i].color = Color.Lerp(_originalColors[i], _flashColor, _opacity);
+            }
+
+            yield return new WaitForSeconds(_flashDuration);
+
+            // Restore the original color
+            for (int i = 0; i < _materials.Length; i++)
+            {
+                _materials[i].color = _originalColors[i];
+            }
+
+            yield break;
         }
 
-        yield return new WaitForSeconds(_flashDuration);
+        // Flashing flash: toggle back and forth between flash color and original for the duration
+        float elapsed = 0f;
 
-        // Restore the original color
+        // Use up to ~10 toggles across the duration, but not faster than 0.05s.
+        float interval = Mathf.Clamp(_flashDuration / 5f, 0.05f, _flashDuration);
+
+        bool showFlash = true;
+
+        while (elapsed < _flashDuration)
+        {
+            // Apply either the blended flash color or the original color
+            for (int i = 0; i < _materials.Length; i++)
+            {
+                _materials[i].color = showFlash
+                    ? Color.Lerp(_originalColors[i], _flashColor, _opacity)
+                    : _originalColors[i];
+            }
+
+            float wait = Mathf.Min(interval, _flashDuration - elapsed);
+            elapsed += wait;
+            yield return new WaitForSeconds(wait);
+
+            showFlash = !showFlash;
+        }
+
+        // Ensure original colors are restored
         for (int i = 0; i < _materials.Length; i++)
         {
             _materials[i].color = _originalColors[i];

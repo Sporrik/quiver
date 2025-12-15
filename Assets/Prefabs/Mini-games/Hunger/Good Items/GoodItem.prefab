@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4209851246048010483}
   - component: {fileID: 8289620043956416688}
   - component: {fileID: 8459875887642368867}
+  - component: {fileID: 2424331190837820507}
   m_Layer: 0
   m_Name: GoodItem
   m_TagString: EdibleItem
@@ -155,6 +156,26 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &2424331190837820507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5074473344168576655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dccec19cc97ddb419908e36817c2a34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _targetRenderer: {fileID: 0}
+  _flashColor: {r: 0.64779866, g: 0, b: 0, a: 1}
+  _flashDuration: 0.3
+  _opacity: 0.75
+  _shakeIntensity: 0.02
+  _shakeFrequency: 7
+  _enableShake: 0
+  _flashingFlash: 1
 --- !u!1 &5911816362118576377
 GameObject:
   m_ObjectHideFlags: 0

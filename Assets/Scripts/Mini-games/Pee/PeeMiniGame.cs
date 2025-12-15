@@ -18,6 +18,9 @@ public class PeeMiniGame : MonoBehaviour
     [SerializeField] private MinigameWinToggle _winCondition = null;
     [SerializeField] private float _winTriggerDelay = 1f;
     [SerializeField] private GameObject _peeVisual;
+    [SerializeField] private GameObject _confettiParticle;
+    [SerializeField] private GameObject _confettiParticle1;
+    [SerializeField] private GameObject _confettiParticle2;
 
     private int _currentRange;
     private float _currentSpeed;
@@ -93,10 +96,13 @@ public class PeeMiniGame : MonoBehaviour
         {
             //Debug.Log("Pee Mini-game Complete!");
             TaskComplete = true;
+            _confettiParticle.SetActive(true);
+            _confettiParticle1.SetActive(true);
+            _confettiParticle2.SetActive(true);
         }
 
         // needed in order to trigger the closing of the minigame
-        if(TaskComplete)
+        if (TaskComplete)
         {
             if(_winTriggerDelay <= 0)
             {
