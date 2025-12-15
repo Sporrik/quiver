@@ -66,7 +66,6 @@ namespace UI
             _isSinglePlayer = _singlePlayerOverride || (_scriptableObject != null && _scriptableObject.GetGameModeSinglePlayer());
 
             _playerController = GameObject.FindGameObjectWithTag("Player")?.GetComponent<PlayerController>();
-            Debug.Log(_playerController);
         }
 
         private void OnEnable()

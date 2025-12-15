@@ -56,8 +56,16 @@ public class PauseScreenScript : MonoBehaviour
     /// </summary>
     public void OptionsBtnFunc()
     {
-        Debug.Log("Options menu"); //todo remove print
     }
+
+    /// <summary>
+    /// Closes options tab, function made for options button
+    /// </summary>
+    public void CloseOptionsBtnFunc()
+    {
+    }
+
+
     /// <summary>
     /// Quits level and goes back to Main Menu, function made for Main Menu button
     /// </summary>
