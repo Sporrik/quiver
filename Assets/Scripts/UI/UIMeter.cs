@@ -91,7 +91,7 @@ namespace UI
             if (_uiData.GetGameModeSinglePlayer() == false && !_resetWorld) // if twitch enabled animate delay in adding value
             {
                 
-                if(gameObject.name.Contains("Happiness") || gameObject.name.Contains("Stamina"))
+                if(gameObject.name.Contains("HappinessBar") || gameObject.name.Contains("StaminaBar"))
                 {
                     Debug.Log("Add without delay: " + gameObject.name);
                     AddValue(value01_100);
