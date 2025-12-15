@@ -1,4 +1,5 @@
 ﻿using System;
+using TwitchIntegration;
 using UnityEngine;
 
 namespace UI
@@ -6,6 +7,13 @@ namespace UI
     [CreateAssetMenu(fileName = "UIData", menuName = "Scriptable Objects/UIData")]
     public class UIScriptableObject : ScriptableObject
     {
+        // ------- Vieuwer balance Settings -------
+        [Header("Balance - Scaling")]
+        [SerializeField] private float _balancePeePooHunger = 1f;
+        private float _viewerCount = 0f;
+
+        // ------------------------------
+
         [Serializable]
         public struct Defaults
         {
@@ -27,6 +35,8 @@ namespace UI
             Stamina = 100f,
 
         };
+
+
 
         [Header("Mode")]
         [SerializeField] private bool _gameModeSinglePlayer;
@@ -56,9 +66,35 @@ namespace UI
         public float GetStamina() => Clamp(_stamina);
 
         // --- Increments / Setters ---
-        public void IncrementPoop(float v) => SetPoop(_poop + v);
-        public void IncrementPee(float v) => SetPee(_pee + v);
-        public void IncrementHungry(float v) => SetHungry(_hungry + v);
+
+
+
+        public void IncrementPoop(float v)
+        {
+            if (_gameModeSinglePlayer)
+                SetPoop(_poop + v);
+            else
+            {
+                SetPoop(_poop + (v * _balancePeePooHunger / _viewerCount + 1));
+                Debug.Log("IncrementPoop: " + (_poop + (v * _balancePeePooHunger / _viewerCount + 1)));
+            }
+        }
+
+        public void IncrementPee(float v)
+        {
+            if (_gameModeSinglePlayer)
+                SetPee(_pee + v);
+            else
+                SetPee(_pee + (v * _balancePeePooHunger / _viewerCount + 1));
+        }
+        public void IncrementHungry(float v)
+        {
+            if (_gameModeSinglePlayer)
+                SetHungry(_hungry + v);
+            else
+                SetHungry(_hungry + (v * _balancePeePooHunger / _viewerCount + 1));
+        }
+
         public void IncrementHappiness(float v) => SetHappiness(_happiness + v);
         public void SetStamina(float v) => SetStaminaInternal(v);
 
@@ -71,6 +107,14 @@ namespace UI
         public void ResetHappiness() => SetHappiness(0f);
         public void ResetStamina() => SetStaminaInternal(100f);
 
+        public void SetTwitchVieuwerCount(float value)
+        {
+            _viewerCount = value;
+        }
+        public void SetBalancePeePooHunger(float value)
+        {
+            _balancePeePooHunger = value;
+        }
         public void ResetAllToDefaults()
         {
             bool any = false;
@@ -84,10 +128,10 @@ namespace UI
         // -------- helpers --------
         private static float Clamp(float value) => value < 0f ? 0f : (value > 100f ? 100f : value);
 
-        private void SetPoop(float value)            { if (SetPoopSilent(value)) Changed?.Invoke(); }
-        private void SetPee(float value)             { if (SetPeeSilent(value)) Changed?.Invoke(); }
-        private void SetHungry(float value)          { if (SetHungrySilent(value)) Changed?.Invoke(); }
-        private void SetHappiness(float value)       { if (SetHappinessSilent(value)) Changed?.Invoke(); }
+        private void SetPoop(float value) { if (SetPoopSilent(value)) Changed?.Invoke(); }
+        private void SetPee(float value) { if (SetPeeSilent(value)) Changed?.Invoke(); }
+        private void SetHungry(float value) { if (SetHungrySilent(value)) Changed?.Invoke(); }
+        private void SetHappiness(float value) { if (SetHappinessSilent(value)) Changed?.Invoke(); }
         private void SetStaminaInternal(float value) { if (SetStaminaSilent(value)) Changed?.Invoke(); }
 
 
