@@ -205,6 +205,17 @@ namespace Audio
         {
             _mixer.SetFloat("MasterVolume", muted ? -80f : 0f);
         }
+
+        public void DisableCanvas()
+        {
+            GameObject canvas = gameObject.transform.GetChild(0).gameObject;
+            canvas.SetActive(false);
+        }
+        public void EnableCanvas()
+        {
+            GameObject canvas = gameObject.transform.GetChild(0).gameObject;
+            canvas.SetActive(true);
+        }
         #endregion
 
         #region Helpers
