@@ -150,8 +150,8 @@ namespace Gameplay.AI
         private void Update()
         {
             UpdatePerception();
+
             TickState();
-            //TickAnimator();
 
             _hadVisualLastFrame = _seesPlayer;
         }
@@ -270,6 +270,8 @@ namespace Gameplay.AI
                 case State.Dead:
                     _agent.isStopped = true;
                     _agent.enabled = false;
+
+                    gameObject.SetActive(false);
                     break;
             }
 
@@ -555,15 +557,6 @@ namespace Gameplay.AI
         {
             _takedownCooldownUntil = Time.time + (_takedown?.CooldownSeconds ?? 0f);
             SetState(State.Dead);
-        }
-
-        private void TickAnimator()
-        {
-            if (_animator == null) return;
-
-            _animator.SetBool(ChaseState, _state == State.Chasing);
-            _animator.SetBool(SearchingState, _state == State.Searching);
-            _animator.SetBool(DeathState, _state == State.Dead);
         }
 
         public bool CaughtPlayer()
