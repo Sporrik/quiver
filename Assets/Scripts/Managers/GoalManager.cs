@@ -4,7 +4,7 @@ public class GoalManager : MonoBehaviour
 {
 
     [SerializeField] public GameObject[] Goals;
-    [SerializeField] GameObject _winFeedback;
+  //  [SerializeField] GameObject _winFeedback;
     public int _goalScore = 0;
 
     void Start()
@@ -25,14 +25,21 @@ public class GoalManager : MonoBehaviour
 
     public void ShowNextGoal()
     {
+        Goals[_goalScore].SetActive(false);
         _goalScore++;
-        if (_goalScore >= Goals.Length)
+
+        if (_goalScore < Goals.Length)
         {
-            _winFeedback.SetActive(true);
-            Debug.Log("YOU WIN");
-            return;
+            Goals[_goalScore].SetActive(true);
+
         }
-        Goals[_goalScore].SetActive(true);
+
+        //if (_goalScore >= Goals.Length)
+        //{
+        //    _winFeedback.SetActive(true);
+        //    Debug.Log("YOU WIN");
+        //    return;
+        //}
     }
 
 }
