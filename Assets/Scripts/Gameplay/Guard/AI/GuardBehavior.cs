@@ -57,6 +57,8 @@ namespace Gameplay.AI
         private enum State { Patrolling, Chasing, Searching, Caught, Dead }
         [SerializeField] private State _state = State.Patrolling;
 
+        private PlayerController _playerController = null;
+
         private NavMeshAgent _agent;
         private int _waypointIndex;
         private bool _isWaiting;
@@ -91,7 +93,12 @@ namespace Gameplay.AI
             if (_player == null)
             {
                 var p = GameObject.FindGameObjectWithTag(_guardCfg.PlayerTag);
-                if (p) _player = p.transform;
+
+                if (p)
+                {
+                    _player = p.transform;
+                }
+
                 else Debug.LogWarning($"{name}: No object with tag '{_guardCfg.PlayerTag}' found. Guard will idle", this);
                 _inputRelay = p.GetComponent<PlayerInputRelay>();
             }
@@ -99,6 +106,11 @@ namespace Gameplay.AI
             _agent.speed = _guardCfg.Movement.WalkSpeed;
             if (_waypoints.Count > 0)
                 _agent.SetDestination(_waypoints[_waypointIndex].waypoint.position);
+
+            if (_player)
+            {
+                _playerController = _player.GetComponent<PlayerController>();
+            }
         }
 
         private void Update()
@@ -275,7 +287,7 @@ namespace Gameplay.AI
             if (_distanceToPlayer > sight) return;
 
             // Close-range vision check
-            if (_distanceToPlayer <= _guardCfg.Perception.CloseSightRadius)
+            if (_playerController.IsSprinting && _distanceToPlayer <= radius)
             {
                 bool okLoS = _guardCfg.Perception.CloseSightIgnoreLoS
                     || !Physics.Raycast(_eyes.position,
