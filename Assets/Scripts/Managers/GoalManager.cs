@@ -6,6 +6,7 @@ public class GoalManager : MonoBehaviour
     [SerializeField] public GameObject[] Goals;
     [SerializeField] GameObject _winFeedback;
     public int _goalScore = 0;
+    [SerializeField] private ObjectiveUIManager _objectiveUI;
 
     void Start()
     {
@@ -26,6 +27,9 @@ public class GoalManager : MonoBehaviour
     public void ShowNextGoal()
     {
         _goalScore++;
+
+        _objectiveUI.OnGoalCompleted();
+
         if (_goalScore >= Goals.Length)
         {
             _winFeedback.SetActive(true);
