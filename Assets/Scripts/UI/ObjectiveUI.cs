@@ -19,6 +19,13 @@ public class ObjectiveUI : MonoBehaviour
     [SerializeField]
     private AnimationCurve easeCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
+    [Header("Glow Settings")]
+    [SerializeField] private float glowInPower = 0.6f;
+    [SerializeField] private float glowOutPower = 0f;
+
+    private Material textMaterial;
+    private int GlowPowerID;
+
     private Vector2 targetPos;
     private Vector2 centerPos;
     private int currentObjectiveIndex = 0;
@@ -33,6 +40,13 @@ public class ObjectiveUI : MonoBehaviour
 
         canvasGroup.alpha = 0f;
         objectiveRect.anchoredPosition = centerPos;
+
+        GlowPowerID = TMPro.ShaderUtilities.ID_GlowPower;
+
+        textMaterial = Instantiate(objectiveText.fontMaterial);
+        objectiveText.fontMaterial = textMaterial;
+
+        textMaterial.SetFloat(GlowPowerID, glowOutPower);
     }
 
     private void Start()
@@ -81,6 +95,9 @@ public class ObjectiveUI : MonoBehaviour
         Vector2 startPos = objectiveRect.anchoredPosition;
         float startAlpha = canvasGroup.alpha;
 
+        float startGlow = textMaterial.GetFloat(GlowPowerID);
+        float endGlow = flyIn ? glowInPower : glowOutPower;
+
         while (time < transitionDuration)
         {
             time += Time.deltaTime;
@@ -93,10 +110,13 @@ public class ObjectiveUI : MonoBehaviour
             canvasGroup.alpha =
                 Mathf.Lerp(startAlpha, endAlpha, easedT);
 
+            textMaterial.SetFloat(GlowPowerID, Mathf.Lerp(startGlow, endGlow, easedT));
+
             yield return null;
         }
 
         objectiveRect.anchoredPosition = endPos;
         canvasGroup.alpha = endAlpha;
+        textMaterial.SetFloat(GlowPowerID, endGlow);
     }
 }
