@@ -35,6 +35,13 @@ namespace UI
         [SerializeField, Min(0f)] private float _cryRange = 12f;
         [SerializeField] private LayerMask _guardMask;
         [SerializeField, Min(0f)] private float _cryCooldown = 2f;
+
+
+        [Header("TwitchViewerBalance")]
+        [SerializeField] private float _balanceViewerScaling = 1f;
+        [SerializeField] private TwitchGameManager _twitchGameManager;
+
+
         #endregion
 
         #region Events
@@ -71,6 +78,9 @@ namespace UI
             _playerController = GameObject.FindGameObjectWithTag("Player")?.GetComponent<PlayerController>();
 
             Debug.Log(_playerController);
+
+
+            _twitchGameManager = GameObject.FindGameObjectWithTag("Twitch").GetComponent<TwitchGameManager>();
         }
 
         private void OnEnable()
@@ -127,6 +137,15 @@ namespace UI
                 OnBabyCrying?.Invoke(this);
                 AlertGuardsInRange();
             }
+
+            UpdateScriptableObject();
+
+        }
+
+        private void UpdateScriptableObject()
+        {
+            _scriptableObject.SetTwitchVieuwerCount(_twitchGameManager.GetViewerCount());
+            _scriptableObject.SetBalancePeePooHunger(_balanceViewerScaling);
         }
         #endregion
 

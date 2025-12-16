@@ -366,13 +366,13 @@ public class TwitchGameManager : TwitchMonoBehaviour
         {
             return null;
         }
-        Debug.Log(_stringBrabble);
+        //Debug.Log(_stringBrabble);
         return _stringBrabble;
 
     }
     public bool GetBabyBrabbleMsgOnScreen()
     {
-        Debug.Log(_msgOnScreen);
+        //Debug.Log(_msgOnScreen);
         return _msgOnScreen;
     }
     public TwitchUser GetBabyBrabbleUser()
