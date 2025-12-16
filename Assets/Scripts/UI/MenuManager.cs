@@ -1,3 +1,4 @@
+using System;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,7 +8,6 @@ using Audio;
 
 public class MenuManager : MonoBehaviour
 {
-
     [SerializeField] private GameObject _twitchScreen;
     [SerializeField] private GameObject _controlScreen;
     [SerializeField] private GameObject _settingsScreen;
@@ -17,7 +17,8 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private UIScriptableObject _ScriptableObject;
     private bool _singlePlayer = true;
 
-    [SerializeField] private string _levelOne;
+    private const string NameSceneLevelOne = "UnfuckLevelOne";
+    private AudioManager _audioManager;
 
     private void Start()
     {
@@ -37,7 +38,7 @@ public class MenuManager : MonoBehaviour
         // set it for singleplayer
         _ScriptableObject.SetSinglePlayer(true);
 
-        SceneManager.LoadScene(_levelOne);
+        SceneManager.LoadScene(NameSceneLevelOne);
 
         Debug.Log("Single");
     }
@@ -51,12 +52,11 @@ public class MenuManager : MonoBehaviour
 
         _twitchObject.SetActive(!_singlePlayer);
 
-
     }
 
     public void OnPlayWithTwitch()
     {
-        SceneManager.LoadScene(_levelOne);
+        SceneManager.LoadScene(NameSceneLevelOne);
 
         // check if it is autorized;
         // set it for multiplayer
@@ -66,11 +66,12 @@ public class MenuManager : MonoBehaviour
     public void OnControls()
     {
         _controlScreen.SetActive(true);
+        Debug.Log("Controls");
     }
 
     public void OnSettings()
     {
-        _settingsScreen.SetActive(true);
+        AudioManager.instance.EnableCanvas();
     }
 
 
@@ -79,7 +80,7 @@ public class MenuManager : MonoBehaviour
         // _PlayScreen.SetActive(true);
         if (_singlePlayer)
         {
-            SceneManager.LoadScene(_levelOne);
+            SceneManager.LoadScene(NameSceneLevelOne);
             print("LOAD GAME");
 
             MusicController.instance.SetGameplay();
@@ -101,18 +102,8 @@ public class MenuManager : MonoBehaviour
     {
         _controlScreen.SetActive(false);
         _twitchScreen.SetActive(false);
-        _settingsScreen.SetActive(false);
+        AudioManager.instance.DisableCanvas();
 
 
     }
-   
-
-
-
-
-
-
-
-
-
 }
