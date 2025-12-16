@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class GoalManager : MonoBehaviour
 {
-
+    [SerializeField] private ObjectiveUI _objectiveUIText;
     [SerializeField] public GameObject[] Goals;
   //  [SerializeField] GameObject _winFeedback;
     public int _goalScore = 0;
@@ -27,6 +27,8 @@ public class GoalManager : MonoBehaviour
     {
         Goals[_goalScore].SetActive(false);
         _goalScore++;
+
+        _objectiveUIText.OnGoalCompleted();
 
         if (_goalScore < Goals.Length)
         {
