@@ -2,6 +2,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UI;
+using UnityEngine.InputSystem;
 
 public sealed class MinigameScreen : MonoBehaviour
 {
@@ -27,6 +28,10 @@ public sealed class MinigameScreen : MonoBehaviour
     [SerializeField] private BarManager _barManager;
     [SerializeField] private UIScriptableObject _uiData;
 
+    [Header("Controls")]
+    [SerializeField] private InputActionAsset _input;
+    private InputAction _openOrCloseTablet;
+
     private MinigameManager _manager;
     // TODO add a way to read the win conditions of minigame
 
@@ -47,7 +52,16 @@ public sealed class MinigameScreen : MonoBehaviour
         _barManager = GameManager.instance.gameObject.GetComponent<BarManager>();
         if (_barManager == null) { Debug.LogError($"{nameof(MinigameScreen)}: BarManager not set.", this); return; }
 
-        _manager = GetComponent<MinigameManager>();
+        if (_input != null)
+        {
+            _openOrCloseTablet = _input.FindActionMap("MinigameScreen").FindAction("Toggle");
+        }
+        else
+        {
+            Debug.LogError($"{nameof(MinigameScreen)}: _Input is null");
+        }
+
+            _manager = GetComponent<MinigameManager>();
         _minigameArea.enabled = false;
 
         if(_visualsBars != null)
@@ -91,7 +105,8 @@ public sealed class MinigameScreen : MonoBehaviour
     // works fine
     private void SelectMiniGame()
     {
-        if (Input.GetKeyUp(KeyCode.Space))
+        //if (Input.GetKeyUp(KeyCode.Space))
+        if(_openOrCloseTablet.WasReleasedThisFrame()) // on releasing botton
         {
             if (!GotClipped() && !_slideOut)
             {
