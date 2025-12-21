@@ -9,7 +9,7 @@ public class KeyCardCollision : MonoBehaviour
     [SerializeField] private int _keyCardIndex;
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("COLLIDED WITH KEY CARD");
+      //  Debug.Log("COLLIDED WITH KEY CARD");
         if (other.CompareTag("Player"))
         {
             Debug.Log("KEYCARD COLLECTED");

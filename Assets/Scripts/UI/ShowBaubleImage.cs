@@ -19,8 +19,8 @@ public class ShowBaubleImage : MonoBehaviour
         else
         {
             bauble.SetActive(true);
-            Debug.Log(twitchGameManager.GetBabyBrabbleMessage());
-            Debug.Log(twitchGameManager.GetBabyBrabbleUser().displayname);
+            //Debug.Log(twitchGameManager.GetBabyBrabbleMessage());
+            //Debug.Log(twitchGameManager.GetBabyBrabbleUser().displayname);
         }
     }
 }
