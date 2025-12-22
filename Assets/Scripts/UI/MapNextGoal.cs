@@ -21,6 +21,10 @@ public class MapNextGoal : MonoBehaviour
         _currentGoalPos = _goalManager.Goals[_goalManager._goalScore].transform.position;
         Vector3 direction = _currentGoalPos - transform.position;
 
+        direction.y = 0; // Keep only the horizontal direction
+        direction.Normalize();
+
+
         // Create the rotation we want to have
         Quaternion targetRotation = Quaternion.LookRotation(direction, Vector3.up);
 

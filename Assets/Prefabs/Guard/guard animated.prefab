@@ -72,7 +72,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5281596457767458346}
   - component: {fileID: 5439180406218531081}
-  m_Layer: 7
+  m_Layer: 11
   m_Name: CircleForMap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -652,7 +652,8 @@ MonoBehaviour:
   _player: {fileID: 0}
   _eyes: {fileID: 2888493070964587625}
   _waypoints:
-  - {fileID: 0}
+  - waypoint: {fileID: 0}
+    waitSeconds: 0
   _seesPlayer: 0
   _distanceToPlayer: 0
   _alertTimeRemaining: 0
