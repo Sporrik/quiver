@@ -1,9 +1,14 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.DualShock;
+using UnityEngine.InputSystem.LowLevel;
 
 public class TakedownTriggerMessage : MonoBehaviour
 {
-    [Header("UI Object (must have a CanvasGroup)")]
-    [SerializeField] private GameObject messageUI;
+    [Header("UI Messages (each must have CanvasGroup)")]
+    [SerializeField] private GameObject keyboardMouseMessage;
+    [SerializeField] private GameObject xboxMessage;
+    [SerializeField] private GameObject playStationMessage;
 
     [Header("Timings")]
     [SerializeField] private float fadeInDuration = 1f;
@@ -13,22 +18,22 @@ public class TakedownTriggerMessage : MonoBehaviour
     [Header("Player Tag")]
     [SerializeField] private string playerTag = "Player";
 
+    private GameObject _activeMessage;
     private CanvasGroup _canvasGroup;
-    private bool _hasTriggered = false;
-    private bool _isAnimating = false;
+
+    private bool _hasTriggered;
+    private bool _isAnimating;
 
     private float _animStartTime;
+
     private enum AnimState { None, FadeIn, VisibleWait, FadeOut }
     private AnimState _state = AnimState.None;
 
+    private PlayerInput _playerInput;
+
     private void Awake()
     {
-        _canvasGroup = messageUI.GetComponent<CanvasGroup>();
-        if (_canvasGroup == null)
-            _canvasGroup = messageUI.AddComponent<CanvasGroup>();
-
-        messageUI.SetActive(false);
-        _canvasGroup.alpha = 0f;
+        DisableAllMessages();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -36,26 +41,27 @@ public class TakedownTriggerMessage : MonoBehaviour
         if (_hasTriggered) return;
         if (!other.CompareTag(playerTag)) return;
 
+        _playerInput = other.GetComponent<PlayerInput>();
+        if (_playerInput == null) return;
+
         _hasTriggered = true;
+
+        SelectCorrectMessage();
         StartFadeIn();
     }
 
     private void Update()
     {
-        if (!_isAnimating) return;
+        if (!_isAnimating || _canvasGroup == null) return;
 
         float t = Time.time - _animStartTime;
 
         switch (_state)
         {
             case AnimState.FadeIn:
-                float fadeInT = Mathf.Clamp01(t / fadeInDuration);
-                _canvasGroup.alpha = fadeInT;
-
-                if (fadeInT >= 1f)
-                {
+                _canvasGroup.alpha = Mathf.Clamp01(t / fadeInDuration);
+                if (_canvasGroup.alpha >= 1f)
                     StartVisibleWait();
-                }
                 break;
 
             case AnimState.VisibleWait:
@@ -64,20 +70,56 @@ public class TakedownTriggerMessage : MonoBehaviour
                 break;
 
             case AnimState.FadeOut:
-                float fadeOutT = Mathf.Clamp01(t / fadeOutDuration);
-                _canvasGroup.alpha = Mathf.Lerp(1f, 0f, fadeOutT);
-
-                if (fadeOutT >= 1f)
+                _canvasGroup.alpha = Mathf.Lerp(1f, 0f, t / fadeOutDuration);
+                if (_canvasGroup.alpha <= 0f)
                     Finish();
                 break;
         }
     }
 
+
+    private void SelectCorrectMessage()
+    {
+        DisableAllMessages();
+
+        string scheme = _playerInput.currentControlScheme;
+
+        if (scheme.Contains("Gamepad"))
+        {
+            var gamepad = Gamepad.current;
+
+            if (gamepad != null &&
+                gamepad.description.manufacturer.ToLower().Contains("sony"))
+            {
+                _activeMessage = playStationMessage;
+            }
+            else
+            {
+                _activeMessage = xboxMessage;
+            }
+        }
+        else
+        {
+            _activeMessage = keyboardMouseMessage;
+        }
+
+        _canvasGroup = _activeMessage.GetComponent<CanvasGroup>();
+        if (_canvasGroup == null)
+            _canvasGroup = _activeMessage.AddComponent<CanvasGroup>();
+
+        _activeMessage.SetActive(true);
+        _canvasGroup.alpha = 0f;
+    }
+
+    private void DisableAllMessages()
+    {
+        keyboardMouseMessage.SetActive(false);
+        xboxMessage.SetActive(false);
+        playStationMessage.SetActive(false);
+    }
+
     private void StartFadeIn()
     {
-        messageUI.SetActive(true);
-        _canvasGroup.alpha = 0f;
-
         _isAnimating = true;
         _animStartTime = Time.time;
         _state = AnimState.FadeIn;
@@ -99,7 +141,6 @@ public class TakedownTriggerMessage : MonoBehaviour
     {
         _isAnimating = false;
         _state = AnimState.None;
-
-        messageUI.SetActive(false);
+        _activeMessage.SetActive(false);
     }
 }
