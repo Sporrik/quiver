@@ -17,6 +17,10 @@ public sealed class PlayerInteraction : MonoBehaviour
     #region Components / State
     private readonly Collider[] _hits = new Collider[8];
     private Interactor _interactor;
+    private Animator _animator;
+
+    private static readonly int TakedownParam = Animator.StringToHash("StabAction");
+
     #endregion
 
     #region Unity Lifecycle
@@ -30,6 +34,8 @@ public sealed class PlayerInteraction : MonoBehaviour
             if (_input == null)
                 Debug.LogError($"{nameof(PlayerInteraction)}: PlayerInputRelay missing on GameObject.");
         }
+        _animator = GetComponent<Animator>();
+
     }
 
     private void Update()
@@ -45,6 +51,7 @@ public sealed class PlayerInteraction : MonoBehaviour
         }
     }
     #endregion
+
 
     #region Query + Execute
     private void TryInteract()
@@ -68,10 +75,12 @@ public sealed class PlayerInteraction : MonoBehaviour
             if (_hits[i].TryGetComponent<ITakedownTarget>(out var target) && target.CanTakedown(_interactor))
             {
                 target.Takedown(_interactor);
+                _animator.SetTrigger("StabAction");
                 break;  // interact with first valid target only
             }
         }
     }
+
     #endregion
 
     #region Helpers

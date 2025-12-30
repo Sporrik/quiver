@@ -33,6 +33,8 @@ public sealed class PlayerController : MonoBehaviour
     #region Animator Parameters
     private static readonly int SpeedParam = Animator.StringToHash("Speed");
     private static readonly int SprintParam = Animator.StringToHash("IsSprinting");
+
+    public static PlayerController InstanceForAnimation;
     #endregion
 
     #region Constants / Buffers
@@ -53,6 +55,7 @@ public sealed class PlayerController : MonoBehaviour
         _characterController = GetComponent<CharacterController>();
         _animator = GetComponent<Animator>();
         _camera = Camera.main;
+        InstanceForAnimation = this;
 
         if (_playerCfg.Movement == null) Debug.LogError("PlayerController: MovementConfig missing.");
         if (_playerCfg.Stamina == null) Debug.LogError("PlayerController: StaminaConfig missing.");
@@ -212,6 +215,11 @@ public sealed class PlayerController : MonoBehaviour
         _animator.SetBool(SprintParam, _isSprinting);
 
         //Debug.Log(_isSprinting+ ":" +_sprintHeld);
+    }
+
+    public void TriggerDeathAnimation()
+    {
+        _animator.SetTrigger("DeathAction");
     }
     #endregion
 }
