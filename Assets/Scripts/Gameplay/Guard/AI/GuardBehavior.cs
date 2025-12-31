@@ -253,6 +253,7 @@ namespace Gameplay.AI
                     _agent.ResetPath();
                     _agent.isStopped = true;
                     OnPlayerCaught?.Invoke(this);
+                    PlayerController.InstanceForAnimation.TriggerDeathAnimation();
 
                     if (_player != null)
                     {
