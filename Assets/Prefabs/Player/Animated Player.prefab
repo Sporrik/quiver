@@ -131,8 +131,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Take down
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: cbdf4c334302570418d990257a5105cf, type: 2}
-  m_sharedMaterial: {fileID: 3059197163734592903, guid: cbdf4c334302570418d990257a5105cf, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1430,7 +1430,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1903116838900789150}
   - component: {fileID: 425237497322874286}
-  m_Layer: 7
+  m_Layer: 11
   m_Name: CircleForMap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3903,12 +3903,36 @@ MonoBehaviour:
     m_ActionName: 'MapBuilder/SwitchInBound[/Keyboard/4]'
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: a2dc7dcb-61b5-46f8-a9e8-c09d695e55df
+    m_ActionId: 4a590b00-bc01-4181-b04b-93fc29b655c8
     m_ActionName: MinigameCursor/Move
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 75760545-e02f-452d-b90b-ebf7035d3ca3
+    m_ActionId: 697e4730-266d-4842-9f07-48db3d406f80
     m_ActionName: MinigameCursor/Click
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: bd149d8f-71eb-4f50-9601-80d5bfb725f1
+    m_ActionName: 'HungerMinigame/Discard1[/Keyboard/upArrow,/Keyboard/w]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 378022ec-72ff-41a3-a3c5-3be50380d91d
+    m_ActionName: 'HungerMinigame/Discard2[/Keyboard/leftArrow,/Keyboard/a]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a8d5b243-06b6-49dc-b2ae-c135ab99d9b5
+    m_ActionName: 'HungerMinigame/Discard3[/Keyboard/rightArrow,/Keyboard/d]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e82c2bbc-08b2-4c4d-981b-a8c5a87c01a6
+    m_ActionName: 'HungerMinigame/Discard4[/Keyboard/downArrow,/Keyboard/s]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 17e54dac-9aa6-42d2-bfe4-9a1c401a48c8
+    m_ActionName: 'PeeMinigame/Axis[/Keyboard/a,/Keyboard/d,/Keyboard/leftArrow,/Keyboard/rightArrow]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0579b12f-505e-474d-8d18-8aa4cab6bcc0
+    m_ActionName: 'MinigameScreen/Toggle[/Keyboard/space]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: 

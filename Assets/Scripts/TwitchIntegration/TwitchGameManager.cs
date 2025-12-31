@@ -132,6 +132,7 @@ public class TwitchGameManager : TwitchMonoBehaviour
 
         if (_accTimeUser >= MaxWaitTimeUser)
         {
+            _accTimeUser = 0;
             _userHunger = _userEmpty;
             _userPee = _userEmpty;
             _userPoop = _userEmpty;
@@ -334,7 +335,9 @@ public class TwitchGameManager : TwitchMonoBehaviour
     /// </summary>
     public string GetUserNamePoopCommand()
     {
+        Debug.Log(_userPoop.displayname);
         return _userPoop.displayname;
+
     }
 
     /// <summary>
