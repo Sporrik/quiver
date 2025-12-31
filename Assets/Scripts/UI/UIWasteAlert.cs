@@ -1,57 +1,32 @@
 using UnityEngine;
 using UI;
-using UnityEngine.UI;
-using System.Collections;
 
 public class UIWasteAlert : MonoBehaviour
 {
-    private MinigameManager _manager;
+    [Header("References")]
+    [SerializeField] private MinigameManager _manager;
 
-    [Header("Bars and Arrows")]
-    [SerializeField] private BarArrowPair _poop;
-    [SerializeField] private BarArrowPair _pee;
-    [SerializeField] private BarArrowPair _hunger;
-    [SerializeField] private BarArrowPair _unhappy;
+    [Header("Arrow Objects (children of bars)")]
+    [SerializeField] private GameObject poopArrow;
+    [SerializeField] private GameObject peeArrow;
 
-    [System.Serializable]
-    public class BarArrowPair
-    {
-        public string Root;
-        public string ArrowName;
-    }
+    [Header("UI Message")]
+    [SerializeField] private GameObject alertMessage;
 
-    [Header("Alert Screen Root")]
-    [SerializeField] private string _alertRootName;
-
-    private Transform _alertRoot;
-
-    [Header("UI Lookup names")]
-    [SerializeField] private string _firstAlertScreenName;
-    [SerializeField] private string _secondAlertScreenName;
-    [SerializeField] private string _continueButton1Name;
-    [SerializeField] private string _continueButton2Name;
-
-    private GameObject _firstAlertScreen;
-    private GameObject _secondAlertScreen;
-    private Button _continueButton1;
-    private Button _continueButton2;
+    [Header("Display Settings")]
+    [SerializeField] private float visibleDuration = 3f;
+    [SerializeField] private float fadeDuration = 1f;
 
     private UIScriptableObject _uiData;
 
+    private CanvasGroup _messageGroup;
+    private CanvasGroup _activeArrowGroup;
+
+    private bool _alertShown = false;  
+    private bool _isFading = false;
+
+    private float _fadeStartTime;
     private GameObject _activeArrow;
-
-    private enum AlertStage
-    {
-        None,
-        First,
-        Second
-    }
-
-    private AlertStage _currentStage = AlertStage.None;
-    private bool _alertShown;
-    private bool _gamePaused;
-
-    private static bool _alertAlreadyTriggeredGlobally = false;
 
     private void Awake()
     {
@@ -59,322 +34,265 @@ public class UIWasteAlert : MonoBehaviour
 
         if (_uiData == null)
         {
-            Debug.LogError("UIWasteAlert: No UIData found.");
+            Debug.LogError("UIWasteAlert: No UIData found. Make sure UIMeterDataProvider exists in the scene.");
             enabled = false;
             return;
         }
 
         if (_manager == null)
-            _manager = FindFirstObjectByType<MinigameManager>();
+            _manager = Object.FindFirstObjectByType<MinigameManager>();
 
-        //_firstAlertScreen.SetActive(false);
-        //_secondAlertScreen.SetActive(false);
-        Debug.Log($"Poop bar at Awake: {_poop.Root}");
-    }
+        _messageGroup = alertMessage.GetComponent<CanvasGroup>();
+        if (_messageGroup == null)
+            _messageGroup = alertMessage.AddComponent<CanvasGroup>();
 
-    private void Start()
-    {
-        ResolveUIRoot();
-        _manager = FindFirstObjectByType<MinigameManager>();
-
-        _firstAlertScreen = FindUIObject(_firstAlertScreenName);
-        _secondAlertScreen = FindUIObject(_secondAlertScreenName);
-        _continueButton1 = FindButton(_continueButton1Name);
-        _continueButton2 = FindButton(_continueButton2Name);
-
-        if (_firstAlertScreen != null) _firstAlertScreen.SetActive(false);
-        if (_secondAlertScreen != null) _secondAlertScreen.SetActive(false);
-
-        if (_continueButton1 != null)
-            _continueButton1.onClick.AddListener(Continue);
-
-        if (_continueButton2 != null)
-            _continueButton2.onClick.AddListener(Continue);
-
-        StartCoroutine(HideArrowsAfterUIBuild());
+        alertMessage.SetActive(false);
+        poopArrow.SetActive(false);
+        peeArrow.SetActive(false);
     }
 
     private void OnEnable()
     {
         _uiData.PoopChanged += OnValueChanged;
         _uiData.PeeChanged += OnValueChanged;
-        _uiData.HungryChanged += OnValueChanged;
-
-        //_continueButton1.onClick.AddListener(OnContinueFirst);
-        //_continueButton2.onClick.AddListener(OnContinueSecond);
     }
 
     private void OnDisable()
     {
         _uiData.PoopChanged -= OnValueChanged;
         _uiData.PeeChanged -= OnValueChanged;
-        _uiData.HungryChanged -= OnValueChanged;
-
-        //_continueButton1.onClick.RemoveListener(OnContinueFirst);
-        //_continueButton2.onClick.RemoveListener(OnContinueSecond);
     }
 
     private void Update()
     {
-        if (!_gamePaused) return;
+        if (!_isFading) return;
 
-        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.E))
-        {
-            //if (_currentStage == AlertStage.First)
-            //    OnContinueFirst();
-            //else if (_currentStage == AlertStage.Second)
-            //    OnContinueSecond();
-            Continue();
-        }
+        float t = (Time.time - _fadeStartTime) / fadeDuration;
+
+        _messageGroup.alpha = Mathf.Lerp(1f, 0f, t);
+        if (_activeArrowGroup != null)
+            _activeArrowGroup.alpha = Mathf.Lerp(1f, 0f, t);
+
+        if (t >= 1f)
+            FinishFadeOut();
     }
 
     private void OnValueChanged(float value)
     {
-        HideAllArrows();
+        // If ANY alert has ever shown, stop permanently
+        if (_alertShown) return;
 
-        if (_alertAlreadyTriggeredGlobally) return;
-        
-        if(IsGameBlocked()) return; 
-
+        // If minigame running: do not show alerts
         if (_manager != null && _manager.MinigameIsRunning()) return;
 
-        if (_uiData.GetPoop() >= 75f)
-            TriggerAlertFromPair(_poop);
-        else if (_uiData.GetPee() >= 75f)
-            TriggerAlertFromPair(_pee);
-        else if (_uiData.GetHungry() >= 75f)
-            TriggerAlertFromPair(_hunger);
+        bool poopFull = _uiData.GetPoop() >= 100f;
+        bool peeFull = _uiData.GetPee() >= 100f;
+
+        if (poopFull)
+        {
+            ShowAlert(poopArrow);
+            _alertShown = true; 
+        }
+        else if (peeFull)
+        {
+            ShowAlert(peeArrow);
+            _alertShown = true;
+        }
     }
 
-    private void TriggerAlertFromPair(BarArrowPair pair)
+    private void ShowAlert(GameObject arrow)
     {
-        HideAllArrows();
+        if (_isFading) return;
 
-        GameObject arrow = FindArrow(pair);
-        if (arrow == null) return;
-
-        _alertShown = true;
-        _alertAlreadyTriggeredGlobally = true;
         _activeArrow = arrow;
+        _activeArrow.SetActive(true);
 
-        ShowArrow(_activeArrow);
+        _activeArrowGroup = _activeArrow.GetComponent<CanvasGroup>();
+        if (_activeArrowGroup == null)
+            _activeArrowGroup = _activeArrow.AddComponent<CanvasGroup>();
 
-        _firstAlertScreen.SetActive(true);
-        _secondAlertScreen.SetActive(false);
+        _activeArrowGroup.alpha = 1f;
 
-        _currentStage = AlertStage.First;
-        StartCoroutine(PauseNextFrame());
+        alertMessage.SetActive(true);
+        _messageGroup.alpha = 1f;
+
+        // Trigger fade automatically
+        Invoke(nameof(StartFadeOut), visibleDuration);
     }
 
-    private Transform FindBar(string name)
+    private void StartFadeOut()
     {
-        GameObject go = GameObject.Find(name);
-        if (go == null)
-        {
-            Debug.LogError($"Bar root '{name}' not found in scene!");
-            return null;
-        }
-        return go.transform;
+        _isFading = true;
+        _fadeStartTime = Time.time;
     }
 
-    private GameObject FindUIObject(string name)
+    private void FinishFadeOut()
     {
-        if (_alertRoot == null)
-        {
-            Debug.LogError("UI Root not resolved!");
-            return null;
-        }
+        _isFading = false;
 
-        Transform t = FindChildRecursive(_alertRoot, name);
-        if (t == null)
-        {
-            Debug.LogError($"UI object '{name}' not found under UI Root (recursive)!");
-            return null;
-        }
+        alertMessage.SetActive(false);
 
-        return t.gameObject;
+        if (_activeArrow != null)
+            _activeArrow.SetActive(false);
+
+        _activeArrow = null;
+        _activeArrowGroup = null;
     }
-
-    private Transform FindChildRecursive(Transform parent, string targetName)
-    {
-        foreach (Transform child in parent)
-        {
-            if (child.name == targetName)
-                return child;
-
-            Transform found = FindChildRecursive(child, targetName);
-            if (found != null)
-                return found;
-        }
-        return null;
-    }
-
-    private Button FindButton(string name)
-    {
-        GameObject go = FindUIObject(name);
-        return go != null ? go.GetComponent<Button>() : null;
-    }
-
-    private GameObject FindArrow(BarArrowPair pair)
-    {
-        Transform barRoot = FindBar(pair.Root);
-        if (barRoot == null) return null;
-
-        Transform arrow = barRoot.Find(pair.ArrowName);
-        if (arrow == null)
-        {
-            Debug.LogError($"Arrow '{pair.ArrowName}' not found under {pair.Root}");
-            return null;
-        }
-
-        return arrow.gameObject;
-    }
-
-    private void ResolveUIRoot()
-    {
-        if (_alertRoot != null) return;
-
-        GameObject go = GameObject.Find(_alertRootName);
-        if (go == null)
-        {
-            Debug.LogError($"UI Root '{_alertRootName}' not found!");
-            return;
-        }
-
-        _alertRoot = go.transform;
-    }
-
-    private IEnumerator HideArrowsAfterUIBuild()
-    {
-        // wait until UI is fully created & enabled
-        yield return new WaitForEndOfFrame();
-
-        HideAllArrows();
-    }
-
-    private void HideAllArrows()
-    {
-        HideArrow(FindArrow(_poop));
-        HideArrow(FindArrow(_pee));
-        HideArrow(FindArrow(_hunger));
-        HideArrow(FindArrow(_unhappy));
-    }
-
-    private void ShowArrow(GameObject arrow)
-    {
-        if (arrow == null) return;
-        arrow.SetActive(true);
-    }
-
-    private void HideArrow(GameObject arrow)
-    {
-        if (arrow == null) return;
-        arrow.SetActive(false);
-    }
-
-    private void OnContinueFirst()
-    {
-        if (_currentStage != AlertStage.First) return;
-
-        HideArrow(_activeArrow);
-
-        // Show unhappy arrow on second screen
-        _activeArrow = FindArrow(_unhappy);
-        ShowArrow(_activeArrow);
-
-        _firstAlertScreen.SetActive(false);
-        _secondAlertScreen.SetActive(true);
-
-        _currentStage = AlertStage.Second;
-    }
-
-    private void OnContinueSecond()
-    {
-        if (_currentStage != AlertStage.Second) return;
-
-        HideArrow(_activeArrow);
-
-        _secondAlertScreen.SetActive(false);
-        ResumeGame();
-
-        _currentStage = AlertStage.None;
-    }
-
-    private IEnumerator PauseNextFrame()
-    {
-        yield return null;
-        PauseGame();
-    }
-
-    private void PauseGame()
-    {
-        if (_gamePaused) return;
-        Time.timeScale = 0f;
-        _gamePaused = true;
-    }
-
-    private void ResumeGame()
-    {
-        Time.timeScale = 1f;
-        _gamePaused = false;
-    }
-
-    private void Continue()
-    {
-        if (_currentStage == AlertStage.First)
-            OnContinueFirst();
-        else if (_currentStage == AlertStage.Second)
-            OnContinueSecond();
-    }
-
-    private bool IsGameBlocked()
-    {
-        if (_manager != null && _manager.MinigameIsRunning())
-            return true;
-
-        LevelManager lm = FindFirstObjectByType<LevelManager>();
-        if (lm != null && lm.IsGameOver())
-            return true;
-
-        return false;
-    }
-
-    //private void ShowAlert(GameObject arrow)
-    //{
-    //    if (_isFading) return;
-
-    //    _activeArrow = arrow;
-    //    _activeArrow.SetActive(true);
-
-    //    _activeArrowGroup = _activeArrow.GetComponent<CanvasGroup>();
-    //    if (_activeArrowGroup == null)
-    //        _activeArrowGroup = _activeArrow.AddComponent<CanvasGroup>();
-
-    //    _activeArrowGroup.alpha = 1f;
-
-    //    _firstAlertScreen.SetActive(true);
-    //    _messageGroup.alpha = 1f;
-
-    //    // Trigger fade automatically
-    //    Invoke(nameof(StartFadeOut), _visibleDuration);
-    //}
-
-    //private void StartFadeOut()
-    //{
-    //    _isFading = true;
-    //    _fadeStartTime = Time.time;
-    //}
-
-    //private void FinishFadeOut()
-    //{
-    //    _isFading = false;
-
-    //    _firstAlertScreen.SetActive(false);
-
-    //    if (_activeArrow != null)
-    //        _activeArrow.SetActive(false);
-
-    //    _activeArrow = null;
-    //    _activeArrowGroup = null;
-    //}
 }
+
+//using UnityEngine;
+//using UI;   // needed for UIScriptableObject
+
+//public class UIWasteAlert : MonoBehaviour
+//{
+//    [Header("UI Message To Show")]
+//    [SerializeField] private GameObject _alertUI;
+
+//    [Header("Optional: Minigame Manager Reference")]
+//    [SerializeField] private MinigameManager _manager;
+
+//    private UIScriptableObject _uiData;
+//    private bool _isAlertShown = false;
+
+//    [Header("UI Happiness Message")]
+//    [SerializeField] private GameObject _happinessUI;
+//    [SerializeField] private float _happinessMessageDuration = 5f;
+
+//    private bool _happinessShown = false;
+//    private float _happinessHideTime = 0f;
+
+//    private void Awake()
+//    {
+//        // Fetch the shared UI data reference
+//        _uiData = UIMeterDataProvider.Shared;
+
+//        if (_uiData == null)
+//        {
+//            Debug.LogError("UIWasteAlert: No UIData found. Make sure UIMeterDataProvider exists in the scene.");
+//            enabled = false;
+//            return;
+//        }
+
+//        // Try auto-find manager if not assigned
+//        if (_manager == null)
+//        {
+//            _manager = Object.FindFirstObjectByType<MinigameManager>();
+//        }
+//    }
+
+//    private void OnEnable()
+//    {
+//        if (_uiData == null) return;
+
+//        // Subscribe to changes
+//        _uiData.PoopChanged += OnValueChanged;
+//        _uiData.PeeChanged += OnValueChanged;
+
+//        _uiData.HappinessChanged += OnHappinessChanged;
+//    }
+
+//    private void OnDisable()
+//    {
+//        if (_uiData == null) return;
+
+//        // Unsubscribe
+//        _uiData.PoopChanged -= OnValueChanged;
+//        _uiData.PeeChanged -= OnValueChanged;
+
+//        _uiData.HappinessChanged -= OnHappinessChanged;
+//    }
+
+//    private void Update()
+//    {
+//        // Hide UI on SPACE
+//        if (_isAlertShown && Input.GetKeyDown(KeyCode.Space))
+//        {
+//            HideAlert();
+//        }
+
+//        // If minigame starts while alert is visible, hide it
+//        if (_isAlertShown && _manager != null && _manager.MinigameIsRunning())
+//        {
+//            HideAlert();
+//        }
+
+//        // Auto-hide the happiness alert after duration
+//        if (_happinessShown && Time.time >= _happinessHideTime)
+//        {
+//            HideHappinessAlert();
+//        }
+
+//        // If minigame starts while happiness alert is visible, hide it
+//        if (_happinessShown && _manager != null && _manager.MinigameIsRunning())
+//        {
+//            HideHappinessAlert();
+//        }
+//    }
+
+//    private void OnValueChanged(float value)
+//    {
+//        // If minigame is running, do NOT show alert
+//        if (_manager != null && _manager.MinigameIsRunning())
+//            return;
+
+//        // If either one is maxed out -> show alert
+//        if (_uiData.GetPoop() >= 100f || _uiData.GetPee() >= 100f)
+//        {
+//            ShowAlert();
+//        }
+//    }
+
+//    private void ShowAlert()
+//    {
+//        if (_alertUI == null || _isAlertShown) return;
+
+//        // If minigame is running, do NOT show
+//        if (_manager != null && _manager.MinigameIsRunning())
+//            return;
+
+//        _alertUI.SetActive(true);
+//        _isAlertShown = true;
+//    }
+
+//    private void HideAlert()
+//    {
+//        if (_alertUI == null) return;
+
+//        _alertUI.SetActive(false);
+//        _isAlertShown = false;
+//    }
+
+//    private void OnHappinessChanged(float value)
+//    {
+//        // If minigame is running, do NOT show alert
+//        if (_manager != null && _manager.MinigameIsRunning())
+//            return;
+
+//        if (value >= 100f)
+//        {
+//            ShowHappinessAlert();
+//        }
+//    }
+
+//    private void ShowHappinessAlert()
+//    {
+//        if (_happinessUI == null) return;
+
+//        // Do NOT show multiple times
+//        if (_happinessShown) return;
+
+//        _happinessUI.SetActive(true);
+//        _happinessShown = true;
+
+//        // Store the future time at which it should hide
+//        _happinessHideTime = Time.time + _happinessMessageDuration;
+//    }
+
+//    private void HideHappinessAlert()
+//    {
+//        if (_happinessUI == null) return;
+
+//        _happinessUI.SetActive(false);
+//        _happinessShown = false;
+//    }
+//}

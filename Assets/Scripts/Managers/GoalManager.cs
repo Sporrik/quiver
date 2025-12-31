@@ -4,7 +4,7 @@ public class GoalManager : MonoBehaviour
 {
     [SerializeField] private ObjectiveUI _objectiveUIText;
     [SerializeField] public GameObject[] Goals;
-    //  [SerializeField] GameObject _winFeedback;
+  //  [SerializeField] GameObject _winFeedback;
     public int _goalScore = 0;
 
     void Start()
