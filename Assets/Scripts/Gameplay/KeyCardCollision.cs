@@ -1,3 +1,4 @@
+using System.Data.Common;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -21,27 +22,50 @@ public class KeyCardCollision : MonoBehaviour
     }
 
 
-    private void OnTriggerEnter(Collider other)
-    {
-        //if (!other.CompareTag("Player")) return;
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    Debug.Log("TRIGGER ENTERED");
+    //    if (other.gameObject.CompareTag("KeyCard"))
+    //    {
+    //        Debug.Log("KEYCARD DETECTED IN TRIGGER");
+    //    }
 
-        //PlayerInput input = other.GetComponent<PlayerInput>();
-        //if (input == null) return;
+    //        //if (!other.CompareTag("Player")) return;
 
-        //_interactAction = input.actions["Interact"];
-    }
+    //        //PlayerInput input = other.GetComponent<PlayerInput>();
+    //        //if (input == null) return;
+
+    //        //_interactAction = input.actions["Interact"];
+    //    }
 
     private void OnTriggerStay(Collider other)
     {
-        if (_collected) return;
-        if (_interactAction == null) return;
-
-        if (_interactAction.WasPressedThisFrame())
+        if (other.gameObject.CompareTag("Player"))
         {
             if (Vector3.Distance(_player.transform.position, transform.position) < 20)
             {
-                CollectKeycard();
+
+                // Debug.Log("1");
+
+                if (_collected) return;
+
+                // Debug.Log("2");
+
+                if (_interactAction == null) return;
+
+                // Debug.Log("3");
+
+                if (_interactAction.WasPressedThisFrame())
+                {
+
+                    CollectKeycard();
+                }
             }
+            //else
+            //{
+            //    Debug.Log("NOT KEYCARD");
+            //}
+
         }
     }
     //private void OnTriggerExit(Collider other)
