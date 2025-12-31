@@ -10,10 +10,12 @@ public class KeyCardCollision : MonoBehaviour
     private InputAction _interactAction;
     private bool _collected;
 
+    private GameObject _player;
+
     private void Awake()
     {
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        PlayerInput input = player.GetComponent<PlayerInput>();
+        _player = GameObject.FindGameObjectWithTag("Player");
+        PlayerInput input = _player.GetComponent<PlayerInput>();
         _interactAction = input.actions["Interact"];
 
     }
@@ -36,7 +38,10 @@ public class KeyCardCollision : MonoBehaviour
 
         if (_interactAction.WasPressedThisFrame())
         {
-            CollectKeycard();
+            if (Vector3.Distance(_player.transform.position, transform.position) < 20)
+            {
+                CollectKeycard();
+            }
         }
     }
     //private void OnTriggerExit(Collider other)
