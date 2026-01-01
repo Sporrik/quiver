@@ -642,6 +642,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4056986950583558304, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5089145299955747618, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
       propertyPath: _gameManager
       value: 
@@ -658,11 +662,20 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 8190569078509545635, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
+--- !u!1 &152793984 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8190569078509545635, guid: c25aff1d4aa8ade43863cc41b715dfe6, type: 3}
+  m_PrefabInstance: {fileID: 152793983}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &166690247 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7847894918087726200, guid: 08fb33ceadfad864b9aec24a3bfeaaf5, type: 3}
@@ -107995,6 +108008,9 @@ MonoBehaviour:
   - {fileID: 1646055482637471756}
   - {fileID: 7716656889792854550}
   _goalScore: 0
+  _levelManager: {fileID: 0}
+  victoryScreen: {fileID: 152793984}
+  victorySceneName: LevelTwo
 --- !u!4 &2324782895717427132
 Transform:
   m_ObjectHideFlags: 0
