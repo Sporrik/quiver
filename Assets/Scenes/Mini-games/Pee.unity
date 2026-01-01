@@ -17670,6 +17670,10 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 17e54dac-9aa6-42d2-bfe4-9a1c401a48c8
     m_ActionName: 'PeeMinigame/New action[/DualSenseGamepadHID/leftStick/left,/DualSenseGamepadHID/leftStick/right,/Keyboard/a,/Keyboard/d,/Keyboard/leftArrow,/Keyboard/rightArrow]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0579b12f-505e-474d-8d18-8aa4cab6bcc0
+    m_ActionName: 'MinigameScreen/Toggle[/Keyboard/space]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: PeeMinigame
@@ -17717,7 +17721,7 @@ MonoBehaviour:
   Speed: 60
   TaskComplete: 0
   _winCondition: {fileID: 1529030673}
-  _winTriggerDelay: 1
+  _winTriggerDelay: 3
   _peeVisual: {fileID: 604225552}
   _confettiParticle: {fileID: 669984951}
   _confettiParticle1: {fileID: 1163282199}
