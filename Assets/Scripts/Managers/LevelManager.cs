@@ -26,7 +26,6 @@ public class LevelManager : MonoBehaviour
     private List<GameObject> guards = new List<GameObject>();
     private List<GuardBehavior> guardBehaviors = new List<GuardBehavior>();
 
-
     private void Awake()
     {
         if (!_loadFirstLevel)
@@ -138,14 +137,13 @@ public class LevelManager : MonoBehaviour
     }
 
     public void EnterNextLevelFromGoals()
-    {
-        Time.timeScale = 1f;
+{
+    Time.timeScale = 1f;
+    _currentLevel++;
 
-        _currentLevel++;
+    if (_currentLevel >= _levelNames.Length)
+        _currentLevel = 0;
 
-        if (_currentLevel >= _levelNames.Length)
-            _currentLevel = 0;
-
-        LoadLevel();
-    }
+    LoadLevel();
+}
 }
