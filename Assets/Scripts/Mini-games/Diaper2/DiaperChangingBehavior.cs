@@ -114,14 +114,13 @@ public class DiaperChangingBehavior : MonoBehaviour
         {
             _poopManager.ChangeMouseCursor(2); // Dragging cursor
         }
-        else if (_target == null || (_target.name != "UpperStrapLeft" && _target.name != "UpperStrapRight" && _target.name != "Front"))
-        {
-            _poopManager.ChangeMouseCursor(0); // Default cursor
-        }
-        
-        else
+        else if (_target == _leftStrap || _target == _rightStrap || _target == _frontStrap)
         {
             _poopManager.ChangeMouseCursor(1); // Hover cursor
+        }
+        else if (_target.name == "floor")
+        {
+            _poopManager.ChangeMouseCursor(0); // Default cursor
         }
     }
 
