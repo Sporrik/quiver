@@ -17,10 +17,13 @@ public class PoopManager : MonoBehaviour
     [SerializeField] private GameObject _baby;
     [SerializeField] private GameObject _confettiParticle;
     [SerializeField] private GameObject _confettiParticle1;
-    [SerializeField] private GameObject _confettiParticle2; 
+    [SerializeField] private GameObject _confettiParticle2;
     [SerializeField] private GameObject _taskComplete;
     [SerializeField] private GameObject _controls;
 
+    [SerializeField] private Texture2D _cursorDefault;
+    [SerializeField] private Texture2D _cursorGrab;
+    [SerializeField] private Texture2D _cursorGrabbable;
 
     [SerializeField] private bool DirtyDiaperCompleted = false;
     public bool CleanDiaperEquipped = false;
@@ -41,6 +44,8 @@ public class PoopManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        ChangeMouseCursor(0);
+
         _amountToSpawn = (int)(Poops.Count * SpawnMultiplier);
         for (int i = 0; i < _amountToSpawn; i++)
         {
@@ -51,11 +56,10 @@ public class PoopManager : MonoBehaviour
 
         CurrentPoops = _amountToSpawn;
 
-        _cleanDiaper.GetComponent<DiaperChangingBehavior>().enabled = false;
+        _cleanDiaper.GetComponent<DiaperChangingBehavior>().enabled = false;    
         _cleanDiaper.GetComponent<Animator>().SetBool("frontIsWorn", false);
         _cleanDiaper.GetComponent<Animator>().SetBool("leftIsWorn", false);
         _cleanDiaper.GetComponent<Animator>().SetBool("rightIsWorn", false);
-
     }
 
     // Update is called once per frame
@@ -129,6 +133,7 @@ public class PoopManager : MonoBehaviour
         {
             _baby.GetComponent<FlipBaby>().enabled = false;
             _baby.GetComponent<CapsuleCollider>().enabled = false;
+            _cleanDiaper.GetComponent<BoxCollider>().enabled = true;
             _cleanDiaper.GetComponent<DragDiaper>().enabled = true;
             BabyIsFlipped = true;
             SetActiveTip(_UITips[3]);
@@ -175,5 +180,29 @@ public class PoopManager : MonoBehaviour
         {
             tipToEnable.SetActive(true);
         }
+    }
+
+    public void ChangeMouseCursor(int cursorIndex)
+    {
+        Texture2D newCursor;
+
+        if (cursorIndex == 0)
+        {
+            newCursor = _cursorDefault;
+        }
+        else if(cursorIndex == 1)
+        {
+            newCursor = _cursorGrabbable;
+        }
+        else if(cursorIndex == 2)
+        {
+            newCursor = _cursorGrab;
+        }
+        else
+        {
+            newCursor = _cursorDefault;
+        }
+
+        Cursor.SetCursor(newCursor, Vector2.zero, CursorMode.Auto);
     }
 }

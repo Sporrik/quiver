@@ -24,6 +24,21 @@ public class DragDiaper : SimpleDrag
         ControllerInput();
         DragObject(meshOffset);
     }
+    private void OnMouseOver()
+    {
+        if (Input.GetMouseButton(0)) // Check if the mouse button is held down
+        {
+            _poopManager.ChangeMouseCursor(2); // Dragging cursor
+        }
+        else
+        {
+            _poopManager.ChangeMouseCursor(1); // Hover cursor
+        }
+    }
+    private void OnMouseExit()
+    {
+        _poopManager.ChangeMouseCursor(0); // Default cursor
+    }
 
     private void OnTriggerEnter(Collider collision)
     {
