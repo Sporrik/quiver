@@ -273,6 +273,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c57524e7e08f47458f35f373cf5954d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _winToggle: {fileID: 1933417061}
+  _winTriggerDelay: 3
   _initialSpeed: 0.35
   _speed: 0.35
   _speedMultiplier: 1.025
@@ -6260,9 +6262,13 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 17e54dac-9aa6-42d2-bfe4-9a1c401a48c8
     m_ActionName: 'PeeMinigame/Axis[/XInputControllerWindows1/leftStick/left,/XInputControllerWindows1/leftStick/right,/Keyboard/a,/Keyboard/d,/Keyboard/leftArrow,/Keyboard/rightArrow]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0579b12f-505e-474d-8d18-8aa4cab6bcc0
+    m_ActionName: 'MinigameScreen/Toggle[/Keyboard/space]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: 73e5ff9b-ce3a-4269-b1f4-682d5c0a67e8
+  m_DefaultActionMap: HungerMinigame
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!23 &947800160 stripped
