@@ -1,11 +1,18 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GoalManager : MonoBehaviour
 {
     [SerializeField] private ObjectiveUI _objectiveUIText;
     [SerializeField] public GameObject[] Goals;
-  //  [SerializeField] GameObject _winFeedback;
+    //  [SerializeField] GameObject _winFeedback;
     public int _goalScore = 0;
+
+    [SerializeField] private LevelManager _levelManager;
+
+    [Header("Victory Settings")]
+    [SerializeField] private GameObject victoryScreen; // UI Canvas / Panel
+    [SerializeField] private string victorySceneName = "LevelTwo"; // scene where this applies
 
     void Start()
     {
@@ -15,6 +22,10 @@ public class GoalManager : MonoBehaviour
         }
         Goals[0].SetActive(true);
 
+        if (victoryScreen != null)
+            victoryScreen.SetActive(false);
+
+        _levelManager = FindFirstObjectByType<LevelManager>();
     }
 
     // Update is called once per frame
@@ -33,7 +44,10 @@ public class GoalManager : MonoBehaviour
         if (_goalScore < Goals.Length)
         {
             Goals[_goalScore].SetActive(true);
-
+        }
+        else
+        {
+            TryShowVictoryScreen();
         }
 
         //if (_goalScore >= Goals.Length)
@@ -44,4 +58,52 @@ public class GoalManager : MonoBehaviour
         //}
     }
 
+
+    private void TryShowVictoryScreen()
+    {
+        // Final level -> show victory UI
+        if (SceneManager.GetActiveScene().name == victorySceneName)
+        {
+            if (victoryScreen == null)
+            {
+                Debug.LogWarning("Victory Screen not assigned.");
+                return;
+            }
+
+            Time.timeScale = 0f;
+            victoryScreen.SetActive(true);
+
+            Debug.Log("FINAL LEVEL COMPLETE!");
+            return;
+        }
+
+        // Any other level -> load next level
+        if (_levelManager != null)
+        {
+            Debug.Log("LEVEL COMPLETE -> LOADING NEXT LEVEL");
+            _levelManager.EnterNextLevelFromGoals();
+        }
+        else
+        {
+            Debug.LogWarning("LevelManager reference missing.");
+        }
+
+        //// Check if we are in the correct scene
+        //if (SceneManager.GetActiveScene().name != victorySceneName)
+        //    return;
+
+        //if (victoryScreen == null)
+        //{
+        //    Debug.LogWarning("Victory Screen not assigned.");
+        //    return;
+        //}
+
+        //// Pause the game
+        //Time.timeScale = 0f;
+
+        //// Show UI
+        //victoryScreen.SetActive(true);
+
+        //Debug.Log("YOU WIN!");
+    }
 }

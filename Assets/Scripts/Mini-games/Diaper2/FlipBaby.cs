@@ -17,6 +17,7 @@ public class FlipBaby : MonoBehaviour
     private Quaternion startRotation;   // Starting rotation
     private float lerpProgress = 0f;    // Progress of the lerp
     public bool isFlipped = false;      // Tracks the current rotation state
+    private PoopManager _poopManager;
 
     void Start()
     {
@@ -24,6 +25,7 @@ public class FlipBaby : MonoBehaviour
         startRotation = Quaternion.Euler(rotationA);
         targetRotation = startRotation;
         transform.rotation = startRotation;
+        _poopManager = FindFirstObjectByType<PoopManager>();
     }
 
     void Update()
@@ -35,7 +37,17 @@ public class FlipBaby : MonoBehaviour
             LerpRotation();
         }
     }
-
+    private void OnMouseOver()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            _poopManager.ChangeMouseCursor(2); // Change cursor to clicking state   
+        }
+    }
+    private void OnMouseExit()
+    {
+        _poopManager.ChangeMouseCursor(0); // Change cursor to default state
+    }
     void OnMouseDown()
     {
         OnClickBaby(Input.mousePosition);

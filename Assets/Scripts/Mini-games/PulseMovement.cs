@@ -22,7 +22,7 @@ public class PulseMovement : MonoBehaviour
 
     private void Update()
     {
-        float pulse = Mathf.PingPong(Time.time * speed, amount);
+        float pulse = Mathf.PingPong(Time.unscaledTime * speed, amount);
 
         pulse = startPositive ? pulse : amount - pulse;
 

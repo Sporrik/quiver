@@ -6,6 +6,9 @@ using TMPro;
 
 public class SandwhichSpawner : MonoBehaviour
 {
+    [SerializeField] private MinigameWinToggle _winToggle = null;
+    [SerializeField] private float _winTriggerDelay = 1f;
+
     [SerializeField] private float _initialSpeed = 5f;
     [SerializeField] private float _speed = 5f;
     [SerializeField] private float _speedMultiplier = 1.05f;
@@ -43,7 +46,15 @@ public class SandwhichSpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(IsCompleted)
+        {
+            _winTriggerDelay -= Time.deltaTime;
+
+            if( _winTriggerDelay <= 0 )
+            {
+                _winToggle.WinMinigame();
+            }
+        }
     }
 
     private void OnTriggerExit(Collider other)
