@@ -99,9 +99,6 @@ public class UIWasteAlert : MonoBehaviour
         _uiData.PoopChanged += OnValueChanged;
         _uiData.PeeChanged += OnValueChanged;
         _uiData.HungryChanged += OnValueChanged;
-
-        //_continueButton1.onClick.AddListener(OnContinueFirst);
-        //_continueButton2.onClick.AddListener(OnContinueSecond);
     }
 
     private void OnDisable()
@@ -109,9 +106,6 @@ public class UIWasteAlert : MonoBehaviour
         _uiData.PoopChanged -= OnValueChanged;
         _uiData.PeeChanged -= OnValueChanged;
         _uiData.HungryChanged -= OnValueChanged;
-
-        //_continueButton1.onClick.RemoveListener(OnContinueFirst);
-        //_continueButton2.onClick.RemoveListener(OnContinueSecond);
     }
 
     private void Update()
@@ -120,10 +114,6 @@ public class UIWasteAlert : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.E))
         {
-            //if (_currentStage == AlertStage.First)
-            //    OnContinueFirst();
-            //else if (_currentStage == AlertStage.Second)
-            //    OnContinueSecond();
             Continue();
         }
     }
@@ -338,43 +328,4 @@ public class UIWasteAlert : MonoBehaviour
 
         return false;
     }
-
-    //private void ShowAlert(GameObject arrow)
-    //{
-    //    if (_isFading) return;
-
-    //    _activeArrow = arrow;
-    //    _activeArrow.SetActive(true);
-
-    //    _activeArrowGroup = _activeArrow.GetComponent<CanvasGroup>();
-    //    if (_activeArrowGroup == null)
-    //        _activeArrowGroup = _activeArrow.AddComponent<CanvasGroup>();
-
-    //    _activeArrowGroup.alpha = 1f;
-
-    //    _firstAlertScreen.SetActive(true);
-    //    _messageGroup.alpha = 1f;
-
-    //    // Trigger fade automatically
-    //    Invoke(nameof(StartFadeOut), _visibleDuration);
-    //}
-
-    //private void StartFadeOut()
-    //{
-    //    _isFading = true;
-    //    _fadeStartTime = Time.time;
-    //}
-
-    //private void FinishFadeOut()
-    //{
-    //    _isFading = false;
-
-    //    _firstAlertScreen.SetActive(false);
-
-    //    if (_activeArrow != null)
-    //        _activeArrow.SetActive(false);
-
-    //    _activeArrow = null;
-    //    _activeArrowGroup = null;
-    //}
 }
