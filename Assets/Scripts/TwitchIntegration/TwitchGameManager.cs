@@ -335,7 +335,7 @@ public class TwitchGameManager : TwitchMonoBehaviour
     /// </summary>
     public string GetUserNamePoopCommand()
     {
-        Debug.Log(_userPoop.displayname);
+       // Debug.Log(_userPoop.displayname);
         return _userPoop.displayname;
 
     }
