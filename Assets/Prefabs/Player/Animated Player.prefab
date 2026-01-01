@@ -99,8 +99,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Take down
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: a7fa31a8beae705469bc798a7eeffff0, type: 2}
+  m_sharedMaterial: {fileID: 1656036989596716127, guid: a7fa31a8beae705469bc798a7eeffff0, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -124,8 +124,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 0.68
-  m_fontSizeBase: 0.68
+  m_fontSize: 0.51
+  m_fontSizeBase: 0.51
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -911,6 +911,7 @@ GameObject:
   - component: {fileID: 542575940196210053}
   - component: {fileID: 7258570604838903498}
   - component: {fileID: 6183652287492301948}
+  - component: {fileID: 4260805445662500336}
   m_Layer: 7
   m_Name: Billboard
   m_TagString: Untagged
@@ -1013,6 +1014,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7883405e374bb043bf5fd7f4a65dddb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!225 &4260805445662500336
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2656740205413309211}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &2926001087698652948
 GameObject:
   m_ObjectHideFlags: 0
@@ -2727,11 +2740,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3d3f353f3fafdf243bd75b8688c29d7b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3d3f353f3fafdf243bd75b8688c29d7b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -12.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3d3f353f3fafdf243bd75b8688c29d7b, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3496,5 +3509,5 @@ MonoBehaviour:
   takedownMask:
     serializedVersion: 2
     m_Bits: 1024
-  fadeInDuration: 0.15
-  fadeOutDuration: 0.15
+  fadeInDuration: 0.25
+  fadeOutDuration: 0.25
