@@ -272,7 +272,7 @@ namespace Gameplay.AI
                     _agent.isStopped = true;
                     _agent.enabled = false;
 
-                    gameObject.SetActive(false);
+                    //gameObject.SetActive(false);
                     break;
             }
 
