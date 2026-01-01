@@ -6262,6 +6262,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DirtyDiaper
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 52bd01088185fef4b84c43b2ac881687, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5651179895967115773, guid: 52bd01088185fef4b84c43b2ac881687, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -6612,7 +6616,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 0.00074880535, y: 0.0110362135, z: 0.01}
   m_Center: {x: -0.0012204949, y: -0.0047455654, z: 5.340512e-11}
@@ -12028,7 +12032,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 0.0007488051, y: 0.012759938, z: 0.009999999}
   m_Center: {x: -0.0012204943, y: -0.003883703, z: 1.3666421e-10}
@@ -13318,11 +13322,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _moveImage: {fileID: 1217617483}
-  _keyboardMoveSprite: {fileID: 21300000, guid: e888f0e1877f98d40a4a580da6331cfb, type: 3}
+  _keyboardMoveSprite: {fileID: 21300000, guid: 9121e46528bd88745987f970e5cf3adf, type: 3}
   _controllerMoveSprite: {fileID: 21300000, guid: 8302a77709aea6c4996ed76809878c0a, type: 3}
   _PSMoveSprite: {fileID: 21300000, guid: 8302a77709aea6c4996ed76809878c0a, type: 3}
   _grabImage: {fileID: 1151568384}
-  _keyboardGrabSprite: {fileID: 21300000, guid: e06f5ccfe4074f54b949656296a76364, type: 3}
+  _keyboardGrabSprite: {fileID: 21300000, guid: 4ee190d754559344883260f6d23ce855, type: 3}
   _controllerGrabSprite: {fileID: 21300000, guid: ebdae8f26ad35b1469d684b8f41792c3, type: 3}
   _PSGrabSprite: {fileID: 21300000, guid: b631657c725ff234b8639e6034beabc7, type: 3}
 --- !u!1 &952308529 stripped
@@ -13425,7 +13429,7 @@ MonoBehaviour:
   m_ActionEvents: []
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: 2e95603d-efe0-4384-bdff-89982f83476b
+  m_DefaultActionMap: MinigameCursor
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!1 &978127062
@@ -14393,6 +14397,9 @@ MonoBehaviour:
   _confettiParticle2: {fileID: 16446495}
   _taskComplete: {fileID: 1419703899}
   _controls: {fileID: 978127062}
+  _cursorDefault: {fileID: 2800000, guid: 707141a9e7fc64546984d3f91196a7d5, type: 3}
+  _cursorGrab: {fileID: 2800000, guid: 23b500e7b656b3e4c8ecbca391785c71, type: 3}
+  _cursorGrabbable: {fileID: 2800000, guid: c1df25a8fdf20324ab4863bcdb5301f2, type: 3}
   DirtyDiaperCompleted: 0
   CleanDiaperEquipped: 0
   CleanDiaperCompleted: 0
@@ -21367,7 +21374,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 0.82, y: 0.48, z: 0.06}
   m_Center: {x: 0, y: 0.3, z: -0.18}
@@ -21723,7 +21730,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 0.00074880593, y: 0.010250431, z: 0.029504346}
   m_Center: {x: -0.0012204939, y: -0.005138464, z: -0.0010109575}
