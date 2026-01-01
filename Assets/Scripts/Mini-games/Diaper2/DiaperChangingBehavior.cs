@@ -110,14 +110,15 @@ public class DiaperChangingBehavior : MonoBehaviour
 
     private void MouseCursorUpdates()
     {
-        if (_target == null || (_target.name != "UpperStrapLeft" && _target.name != "UpperStrapRight" && _target.name != "Front"))
-        {
-            _poopManager.ChangeMouseCursor(0); // Default cursor
-        }
-        else if (_isMouseDown)
+        if (_isMouseDown)
         {
             _poopManager.ChangeMouseCursor(2); // Dragging cursor
         }
+        else if (_target == null || (_target.name != "UpperStrapLeft" && _target.name != "UpperStrapRight" && _target.name != "Front"))
+        {
+            _poopManager.ChangeMouseCursor(0); // Default cursor
+        }
+        
         else
         {
             _poopManager.ChangeMouseCursor(1); // Hover cursor
