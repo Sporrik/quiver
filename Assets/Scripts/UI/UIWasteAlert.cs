@@ -161,7 +161,7 @@ public class UIWasteAlert : MonoBehaviour
         GameObject go = GameObject.Find(name);
         if (go == null)
         {
-            Debug.LogError($"Bar root '{name}' not found in scene!");
+            //Debug.LogError($"Bar root '{name}' not found in scene!");
             return null;
         }
         return go.transform;
