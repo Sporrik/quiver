@@ -75,14 +75,13 @@ namespace Gameplay.AI
 
         // Stuff for animations
         private Animator _animator;
-        private static readonly int ChaseState = Animator.StringToHash("IsChasing");
-        private static readonly int SearchingState = Animator.StringToHash("IsSearching");
-        private static readonly int DeathState = Animator.StringToHash("IsDead");
 
         private int _runTriggerID;
         private int _walkTriggerID;
         private int _dieTriggerID;
         private int _lookAroundTriggerID;
+
+        private Collider _Collider;
 
         #endregion
 
@@ -91,8 +90,13 @@ namespace Gameplay.AI
         {
             _agent = GetComponent<NavMeshAgent>();
             _animator = GetComponent<Animator>();
-
+            _Collider = GetComponent<Collider>();
             // Check references
+
+            if(_Collider == null)
+            {
+                Debug.LogWarning($"{name}: Colloider not found!");
+            }
 
             // prefab
             if (_guardCfg == null) { Debug.LogError($"{name}: GuardConfig missing.", this); enabled = false; return; }
@@ -271,8 +275,7 @@ namespace Gameplay.AI
                 case State.Dead:
                     _agent.isStopped = true;
                     _agent.enabled = false;
-
-                    //gameObject.SetActive(false);
+                    _Collider.enabled = false;
                     break;
             }
 
