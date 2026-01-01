@@ -25,23 +25,45 @@ public class DiaperChangingBehavior : MonoBehaviour
 
     private Vector3 _lastMousePosition;
     private bool _isDragging = false;
+    private bool _isMouseDown;
+    private Collider _target;
+    private PoopManager _poopManager;
+    private bool _collidersEnabled = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
     {
         _animator.speed = _animationSpeed;
+
+        
     }
 
     // Update is called once per frame
     private void Update()
     {
         PlayerFeedback();
+        MouseCursorUpdates();
+
+        if(_poopManager.CleanDiaperEquipped && _collidersEnabled == false)
+        {
+            _leftStrap.enabled = true;
+            _rightStrap.enabled = true;
+            _frontStrap.enabled = true;
+
+            _collidersEnabled = true;
+        }
+    }
+
+    private void Start()
+    {
+        _poopManager = FindFirstObjectByType<PoopManager>();
     }
 
     private Vector2 GetDragDirection()
     {
         if (Input.GetMouseButtonDown(0))
         {
+            _isMouseDown = true;
             _lastMousePosition = Input.mousePosition;
             _isDragging = true;
         }
@@ -53,6 +75,7 @@ public class DiaperChangingBehavior : MonoBehaviour
 
         if (Input.GetMouseButtonUp(0) || _cursor.OnUpEvent())
         {
+            _isMouseDown = false;
             _isDragging = false;
             _rightArrow.SetActive(false);
             _leftArrow.SetActive(false);
@@ -85,6 +108,26 @@ public class DiaperChangingBehavior : MonoBehaviour
         }
     }
 
+    private void MouseCursorUpdates()
+    {
+        if (_isMouseDown)
+        {
+            _poopManager.ChangeMouseCursor(2); // Dragging cursor
+        }
+        else if (_target == _leftStrap || _target == _rightStrap || _target == _frontStrap)
+        {
+            _poopManager.ChangeMouseCursor(1); // Hover cursor
+        }
+        else if (_target.name == "floor")
+        {
+            _poopManager.ChangeMouseCursor(0); // Default cursor
+        }
+    }
+
+    private void OnDisable()
+    {
+        _poopManager.ChangeMouseCursor(0); // Default cursor
+    }
     private void PlayerFeedback()
     {
         Vector2 dragDirection = GetDragDirection();
@@ -97,14 +140,14 @@ public class DiaperChangingBehavior : MonoBehaviour
 
         Ray ray = _camera.ScreenPointToRay(clickPosition);
 
-        Collider target = null;
+        _target = null;
 
         if (Physics.Raycast(ray, out hit))
         {
-            target = hit.collider;
+            _target = hit.collider;
         }
 
-        if (target == _frontStrap)
+        if (_target == _frontStrap)
         {
             if (dragDirection.y > 0)
             {
@@ -120,7 +163,7 @@ public class DiaperChangingBehavior : MonoBehaviour
             if (_isDragging) _frontArrow.SetActive(true);
         }
 
-        if (target == _leftStrap)
+        if (_target == _leftStrap)
         {
             if (dragDirection.x > 0)
             {
@@ -136,7 +179,7 @@ public class DiaperChangingBehavior : MonoBehaviour
             if (_isDragging) _leftArrow.SetActive(true);
         }
 
-        if (target == _rightStrap)
+        if (_target == _rightStrap)
         {
             if (dragDirection.x > 0)
             {
