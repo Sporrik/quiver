@@ -3,7 +3,7 @@ using UnityEngine;
 public class GoalScript : MonoBehaviour
 {
 
-    [SerializeField] private GoalManager _manager;
+    [SerializeField] GoalManager _manager;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -19,22 +19,15 @@ public class GoalScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Player")) return;
-
-        Debug.Log("GOAL COMPLETED");
-
+        
+        Debug.Log("NEXT");
         _manager.ShowNextGoal();
-        gameObject.SetActive(false);
+
+
+        if (!other.CompareTag("Goal"))
+            Destroy(gameObject);
+
+        
     }
-
-    //private void OnTriggerEnter(Collider other)
-    //{ 
-    //    Debug.Log("NEXT");
-    //    _manager.ShowNextGoal();
-
-
-    //    if (!other.CompareTag("Goal"))
-    //        Destroy(gameObject);
-    //}
 
 }

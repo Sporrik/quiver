@@ -8,7 +8,7 @@ public class KeyCardCollision : MonoBehaviour
     [SerializeField] private GoalManager _goalManager;
     [SerializeField] private int _keyCardIndex;
 
-    //private InputAction _interactAction;
+    private InputAction _interactAction;
     private bool _collected;
 
     private GameObject _player;
@@ -17,7 +17,7 @@ public class KeyCardCollision : MonoBehaviour
     {
         _player = GameObject.FindGameObjectWithTag("Player");
         PlayerInput input = _player.GetComponent<PlayerInput>();
-        //_interactAction = input.actions["Interact"];
+        _interactAction = input.actions["Interact"];
 
     }
 
@@ -38,44 +38,36 @@ public class KeyCardCollision : MonoBehaviour
     //        //_interactAction = input.actions["Interact"];
     //    }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
-        if (_collected) return;
-        if (!other.CompareTag("Player")) return;
+        if (other.gameObject.CompareTag("Player"))
+        {
+            if (Vector3.Distance(_player.transform.position, transform.position) < 20)
+            {
 
-        CollectKeycard();
+                // Debug.Log("1");
+
+                if (_collected) return;
+
+                // Debug.Log("2");
+
+                if (_interactAction == null) return;
+
+                // Debug.Log("3");
+
+                if (_interactAction.WasPressedThisFrame())
+                {
+
+                    CollectKeycard();
+                }
+            }
+            //else
+            //{
+            //    Debug.Log("NOT KEYCARD");
+            //}
+
+        }
     }
-
-    //private void OnTriggerStay(Collider other)
-    //{
-    //    if (other.gameObject.CompareTag("Player"))
-    //    {
-    //        if (Vector3.Distance(_player.transform.position, transform.position) < 20)
-    //        {
-
-    //            // Debug.Log("1");
-
-    //            if (_collected) return;
-
-    //            // Debug.Log("2");
-
-    //            if (_interactAction == null) return;
-
-    //            // Debug.Log("3");
-
-    //            if (_interactAction.WasPressedThisFrame())
-    //            {
-
-    //                CollectKeycard();
-    //            }
-    //        }
-    //        //else
-    //        //{
-    //        //    Debug.Log("NOT KEYCARD");
-    //        //}
-
-    //    }
-    //}
     //private void OnTriggerExit(Collider other)
     //{
     //    if (!other.CompareTag("Player")) return;
@@ -91,9 +83,8 @@ public class KeyCardCollision : MonoBehaviour
         if (_animationKeyCard != null)
         {
             _animationKeyCard.SetKeyCardActive(_keyCardIndex);
+            _goalManager.ShowNextGoal();
         }
-
-        _goalManager.ShowNextGoal();
         gameObject.SetActive(false);
         //MeshRenderer renderer = GetComponent<MeshRenderer>();
         //renderer.enabled = false;
