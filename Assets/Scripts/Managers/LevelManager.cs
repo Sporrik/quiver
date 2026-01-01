@@ -26,6 +26,7 @@ public class LevelManager : MonoBehaviour
     private List<GameObject> guards = new List<GameObject>();
     private List<GuardBehavior> guardBehaviors = new List<GuardBehavior>();
 
+
     private void Awake()
     {
         if (!_loadFirstLevel)
@@ -134,5 +135,17 @@ public class LevelManager : MonoBehaviour
     public bool IsGameOver()
     {
         return _gameOver;
+    }
+
+    public void EnterNextLevelFromGoals()
+    {
+        Time.timeScale = 1f;
+
+        _currentLevel++;
+
+        if (_currentLevel >= _levelNames.Length)
+            _currentLevel = 0;
+
+        LoadLevel();
     }
 }

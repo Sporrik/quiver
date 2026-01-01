@@ -8,6 +8,11 @@ public class GoalManager : MonoBehaviour
     //  [SerializeField] GameObject _winFeedback;
     public int _goalScore = 0;
 
+<<<<<<< HEAD
+=======
+    [SerializeField] private LevelManager _levelManager;
+
+>>>>>>> FinishGameScreen
     [Header("Victory Settings")]
     [SerializeField] private GameObject victoryScreen; // UI Canvas / Panel
     [SerializeField] private string victorySceneName = "LevelTwo"; // scene where this applies
@@ -22,6 +27,11 @@ public class GoalManager : MonoBehaviour
 
         if (victoryScreen != null)
             victoryScreen.SetActive(false);
+<<<<<<< HEAD
+=======
+
+        _levelManager = FindFirstObjectByType<LevelManager>();
+>>>>>>> FinishGameScreen
     }
 
     // Update is called once per frame
@@ -57,6 +67,7 @@ public class GoalManager : MonoBehaviour
 
     private void TryShowVictoryScreen()
     {
+<<<<<<< HEAD
         // Check if we are in the correct scene
         if (SceneManager.GetActiveScene().name != victorySceneName)
             return;
@@ -74,5 +85,32 @@ public class GoalManager : MonoBehaviour
         victoryScreen.SetActive(true);
 
         Debug.Log("YOU WIN!");
+=======
+        if (SceneManager.GetActiveScene().name == victorySceneName)
+        {
+            if (victoryScreen == null)
+            {
+                Debug.LogWarning("Victory Screen not assigned.");
+                return;
+            }
+
+            Time.timeScale = 0f;
+            victoryScreen.SetActive(true);
+
+            Debug.Log("FINAL LEVEL COMPLETE!");
+            return;
+        }
+
+        // Any other level -> load next level
+        if (_levelManager != null)
+        {
+            Debug.Log("LEVEL COMPLETE, LOADING NEXT LEVEL");
+            _levelManager.EnterNextLevelFromGoals();
+        }
+        else
+        {
+            Debug.LogWarning("LevelManager reference missing.");
+        }
+>>>>>>> FinishGameScreen
     }
 }
