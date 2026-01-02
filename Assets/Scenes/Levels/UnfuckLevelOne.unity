@@ -8598,6 +8598,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _minigameManager: {fileID: 0}
+  _minigameScreen: {fileID: 0}
   fade: 1
   fadeDuration: 0.25
 --- !u!1001 &233569346
@@ -25284,6 +25285,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _minigameManager: {fileID: 0}
+  _minigameScreen: {fileID: 0}
   fade: 1
   fadeDuration: 0.25
 --- !u!1 &1300501769
@@ -25998,6 +26000,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _minigameManager: {fileID: 0}
+  _minigameScreen: {fileID: 0}
   fade: 1
   fadeDuration: 0.25
 --- !u!1 &1351800514
@@ -36541,6 +36544,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _minigameManager: {fileID: 0}
+  _minigameScreen: {fileID: 0}
   fade: 1
   fadeDuration: 0.25
 --- !u!1001 &1990778227
@@ -41511,6 +41515,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3949508179338775089, guid: 5caf5bb964e6f904c8d4350217215474, type: 3}
   m_PrefabInstance: {fileID: 8737432920639592459}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8737432920639592465 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5226253694834983525, guid: 5caf5bb964e6f904c8d4350217215474, type: 3}
+  m_PrefabInstance: {fileID: 8737432920639592459}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 557317119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &9200112281035927748
 PrefabInstance:
   m_ObjectHideFlags: 0
