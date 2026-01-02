@@ -108,6 +108,9 @@ public sealed class MinigameScreen : MonoBehaviour
 
     private void DetectInput()
     {
+        if (UsingController)
+            return;
+
         string currentScheme = _playerInput.currentControlScheme;
 
         if (currentScheme == "Keyboard&Mouse" && currentScheme != _previousScheme)
