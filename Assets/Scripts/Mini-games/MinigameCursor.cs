@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class MinigameCursor : MonoBehaviour
 {
     [SerializeField] private RawImage _cursor;
+    private PoopManager _poopManager;
 
     [Header("Controls:")]
     [SerializeField] private InputActionAsset _input;
@@ -36,6 +37,8 @@ public class MinigameCursor : MonoBehaviour
         _offset = new Vector2(_bounds.rect.width / 2, _bounds.rect.height / 2);
 
         _position = _offset;
+
+        _poopManager = FindFirstObjectByType<PoopManager>();
     }
 
     // Update is called once per frame
@@ -107,11 +110,9 @@ public class MinigameCursor : MonoBehaviour
     {
         if (_click.IsPressed())
         {
-            _cursor.color = Color.green;
             return true;
         }
 
-        _cursor.color = Color.red;
 
         return false;        
     }
