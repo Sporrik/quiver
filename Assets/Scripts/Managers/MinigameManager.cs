@@ -138,7 +138,7 @@ public sealed class MinigameManager : MonoBehaviour
             if(player != null)
             {
                 Debug.Log(enable);
-                player.enabled = enable;
+                player.DeactivateInput();
             }
 
         }
