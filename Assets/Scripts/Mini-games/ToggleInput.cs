@@ -9,29 +9,29 @@ public class ToggleInput : MonoBehaviour
 
     void Start()
     {
-        _minigameManager = FindFirstObjectByType<MinigameManager>();
+        //_minigameManager = FindFirstObjectByType<MinigameManager>();
 
-        if (_minigameManager == null)
-        {
-            Debug.LogError("MinigameManager not found in the scene!");
-        }
-        _playerInput.enabled = false; // Start with PlayerInput disabled
+        //if (_minigameManager == null)
+        //{
+        //    Debug.LogError("MinigameManager not found in the scene!");
+        //}
+        //_playerInput.enabled = false; // Start with PlayerInput disabled
     }
 
     void Update()
     {
-        if (_minigameManager == null) return;
+        //if (_minigameManager == null) return;
 
-        // Use IsMiniGameInputEnabled to determine whether to enable or disable PlayerInput
-        if (_minigameManager.IsMiniGameInputEnabled && !_isEnabled)
-        {
-            _playerInput.enabled = true;
-            _isEnabled = true;
-        }
-        else if (!_minigameManager.IsMiniGameInputEnabled && _isEnabled)
-        {
-            _playerInput.enabled = false;
-            _isEnabled = false;
-        }
+        //// Use IsMiniGameInputEnabled to determine whether to enable or disable PlayerInput
+        //if (_minigameManager.IsMiniGameInputEnabled && !_isEnabled)
+        //{
+        //    _playerInput.enabled = true;
+        //    _isEnabled = true;
+        //}
+        //else if (!_minigameManager.IsMiniGameInputEnabled && _isEnabled)
+        //{
+        //    _playerInput.enabled = false;
+        //    _isEnabled = false;
+        //}
     }
 }

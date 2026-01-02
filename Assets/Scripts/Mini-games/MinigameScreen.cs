@@ -32,6 +32,9 @@ public sealed class MinigameScreen : MonoBehaviour
     [SerializeField] private InputActionAsset _input;
     private InputAction _openOrCloseTablet;
 
+    [Header("Player Input:")]
+    [SerializeField] private PlayerInput _playerInput;
+
     private MinigameManager _manager;
     // TODO add a way to read the win conditions of minigame
 
@@ -49,6 +52,11 @@ public sealed class MinigameScreen : MonoBehaviour
 
     void Start()
     {
+        if(_playerInput == null)
+        {
+            Debug.LogWarning($"{name}, does not have a player input to disable!");
+        }
+
         _barManager = GameManager.instance.gameObject.GetComponent<BarManager>();
         if (_barManager == null) { Debug.LogError($"{nameof(MinigameScreen)}: BarManager not set.", this); return; }
 
@@ -111,8 +119,13 @@ public sealed class MinigameScreen : MonoBehaviour
             if (!GotClipped() && !_slideOut)
             {
                 TryOpenBySpace();
+                _playerInput.enabled = false;
             }
-            else if(!_slideIn) _slideOut = true;
+            else if (!_slideIn)
+            {
+                
+                _slideOut = true;
+            }
         }
 
         // ensuring the screen doesn't get pushed in two directions at once
@@ -208,6 +221,7 @@ public sealed class MinigameScreen : MonoBehaviour
                 _manager.LoadMinigame(sceneName);
             }
 
+            _playerInput.enabled = false;
             _slideIn = false;
         }
 
@@ -230,6 +244,8 @@ public sealed class MinigameScreen : MonoBehaviour
             _panel.transform.position = new Vector3(_clipPosition.x - _halfWidth, _panelStartPos.y, _panelStartPos.z);
 
             _slideOut = false;
+
+            _playerInput.enabled = true;
 
             return;
         }
