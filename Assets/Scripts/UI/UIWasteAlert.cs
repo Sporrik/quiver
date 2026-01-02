@@ -2,7 +2,6 @@ using UnityEngine;
 using UI;
 using UnityEngine.UI;
 using System.Collections;
-using UnityEngine.InputSystem;
 
 public class UIWasteAlert : MonoBehaviour
 {
@@ -37,10 +36,6 @@ public class UIWasteAlert : MonoBehaviour
     private Button _continueButton1;
     private Button _continueButton2;
 
-    private bool _inputReady;
-
-    private bool _consumeNextInput;
-
     private UIScriptableObject _uiData;
 
     private GameObject _activeArrow;
@@ -53,7 +48,6 @@ public class UIWasteAlert : MonoBehaviour
     }
 
     private AlertStage _currentStage = AlertStage.None;
-
     private bool _alertShown;
     private bool _gamePaused;
 
@@ -116,22 +110,9 @@ public class UIWasteAlert : MonoBehaviour
 
     private void Update()
     {
-        if (!_alertShown)
-            return;
+        if (!_gamePaused) return;
 
-        // Keyboard
-        if (Keyboard.current != null &&
-            (Keyboard.current.spaceKey.wasReleasedThisFrame ||
-             Keyboard.current.eKey.wasReleasedThisFrame))
-        {
-            Continue();
-            return;
-        }
-
-        // Gamepad
-        if (Gamepad.current != null &&
-            (Gamepad.current.buttonSouth.wasReleasedThisFrame ||
-             Gamepad.current.buttonEast.wasReleasedThisFrame))
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.E))
         {
             Continue();
         }
@@ -139,8 +120,6 @@ public class UIWasteAlert : MonoBehaviour
 
     private void OnValueChanged(float value)
     {
-        if (_alertShown) return;
-
         HideAllArrows();
 
         if (_alertAlreadyTriggeredGlobally) return;
@@ -161,8 +140,6 @@ public class UIWasteAlert : MonoBehaviour
     {
         HideAllArrows();
 
-        UIGlobalBlocker.IsModalUIOpen = true;
-
         GameObject arrow = FindArrow(pair);
         if (arrow == null) return;
 
@@ -176,15 +153,7 @@ public class UIWasteAlert : MonoBehaviour
         _secondAlertScreen.SetActive(false);
 
         _currentStage = AlertStage.First;
-
-        StartCoroutine(EnableInputNextFrame());
         StartCoroutine(PauseNextFrame());
-    }
-
-    private IEnumerator EnableInputNextFrame()
-    {
-        yield return null; // wait one frame
-        _inputReady = true;
     }
 
     private Transform FindBar(string name)
@@ -192,7 +161,7 @@ public class UIWasteAlert : MonoBehaviour
         GameObject go = GameObject.Find(name);
         if (go == null)
         {
-            //Debug.LogError($"Bar root '{name}' not found in scene!");
+            Debug.LogError($"Bar root '{name}' not found in scene!");
             return null;
         }
         return go.transform;
@@ -318,31 +287,13 @@ public class UIWasteAlert : MonoBehaviour
         _secondAlertScreen.SetActive(false);
         ResumeGame();
 
-        UIGlobalBlocker.IsModalUIOpen = false;
-
-        _alertShown = false;
         _currentStage = AlertStage.None;
-
-        UIInputBlocker.BlockGameplayInput = true;
-        StartCoroutine(UnblockNextFrame());
-    }
-
-    private IEnumerator UnblockNextFrame()
-    {
-        yield return null;
-        UIInputBlocker.BlockGameplayInput = false;
     }
 
     private IEnumerator PauseNextFrame()
     {
         yield return null;
         PauseGame();
-    }
-
-    private IEnumerator ReleaseInputNextFrame()
-    {
-        yield return null;
-        _consumeNextInput = false;
     }
 
     private void PauseGame()

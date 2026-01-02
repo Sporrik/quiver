@@ -31,8 +31,6 @@ public class ObjectiveUI : MonoBehaviour
     private int currentObjectiveIndex = 0;
     private Coroutine currentRoutine;
 
-    //[SerializeField] private MinigameManager _minigameManager;
-
     private void Awake()
     {
         targetPos = objectiveRect.anchoredPosition;
@@ -121,38 +119,4 @@ public class ObjectiveUI : MonoBehaviour
         canvasGroup.alpha = endAlpha;
         textMaterial.SetFloat(GlowPowerID, endGlow);
     }
-
-    //private void OnEnable()
-    //{
-    //    if (_minigameManager == null)
-    //    {
-    //        Debug.LogError("ObjectiveUI: MinigameManager reference not set.", this);
-    //        return;
-    //    }
-
-    //    _minigameManager.Opened += OnMinigameOpened;
-    //    _minigameManager.Closed += OnMinigameClosed;
-    //}
-
-    //private void OnDisable()
-    //{
-    //    if (_minigameManager == null) return;
-
-    //    _minigameManager.Opened -= OnMinigameOpened;
-    //    _minigameManager.Closed -= OnMinigameClosed;
-    //}
-
-    //private void OnMinigameOpened(string sceneName)
-    //{
-    //    canvasGroup.alpha = 0f;
-    //    canvasGroup.interactable = false;
-    //    canvasGroup.blocksRaycasts = false;
-    //}
-
-    //private void OnMinigameClosed(string sceneName)
-    //{
-    //    canvasGroup.alpha = 1f;
-    //    canvasGroup.interactable = true;
-    //    canvasGroup.blocksRaycasts = true;
-    //}
 }

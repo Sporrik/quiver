@@ -47,10 +47,6 @@ public sealed class MinigameScreen : MonoBehaviour
 
     private float _halfWidth;
 
-    //To hide UI
-    public event System.Action ScreenShown;
-    public event System.Action ScreenHidden;
-
     void Start()
     {
         _barManager = GameManager.instance.gameObject.GetComponent<BarManager>();
@@ -109,15 +105,8 @@ public sealed class MinigameScreen : MonoBehaviour
     // works fine
     private void SelectMiniGame()
     {
-        if (UIGlobalBlocker.IsModalUIOpen)
-            return;
-
-        if (UIInputBlocker.BlockGameplayInput)
-            return;
-
         //if (Input.GetKeyUp(KeyCode.Space))
-        //Fin: I changed wasreleasedthisframe() to waspressedthisframe(), I'm sorry
-        if (_openOrCloseTablet.WasPressedThisFrame()) // on releasing botton
+        if(_openOrCloseTablet.WasReleasedThisFrame()) // on releasing botton
         {
             if (!GotClipped() && !_slideOut)
             {
@@ -217,8 +206,6 @@ public sealed class MinigameScreen : MonoBehaviour
             if (!_manager.MinigameIsRunning())
             {
                 _manager.LoadMinigame(sceneName);
-
-                ScreenShown?.Invoke(); //This was Fin
             }
 
             _slideIn = false;
@@ -241,8 +228,6 @@ public sealed class MinigameScreen : MonoBehaviour
             if (unloadScene) ResetMinigame();
 
             _panel.transform.position = new Vector3(_clipPosition.x - _halfWidth, _panelStartPos.y, _panelStartPos.z);
-
-            ScreenHidden?.Invoke();
 
             _slideOut = false;
 

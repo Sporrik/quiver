@@ -58,7 +58,7 @@ public class ControlDetector : MonoBehaviour
             }
             else
             {
-                //Debug.Log($"User is using an unknown control scheme: {currentScheme}");
+                Debug.Log($"User is using an unknown control scheme: {currentScheme}");
             }
         }
     }
