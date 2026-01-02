@@ -56,7 +56,7 @@ public class PoopManager : MonoBehaviour
 
         CurrentPoops = _amountToSpawn;
 
-        _cleanDiaper.GetComponent<DiaperChangingBehavior>().enabled = false;    
+        _cleanDiaper.GetComponent<DiaperChangingBehavior>().enabled = false;
         _cleanDiaper.GetComponent<Animator>().SetBool("frontIsWorn", false);
         _cleanDiaper.GetComponent<Animator>().SetBool("leftIsWorn", false);
         _cleanDiaper.GetComponent<Animator>().SetBool("rightIsWorn", false);

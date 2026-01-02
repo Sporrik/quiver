@@ -23,6 +23,7 @@ public class DragDiaper : SimpleDrag
     {
         ControllerInput();
         DragObject(meshOffset);
+        
     }
     private void OnMouseOver()
     {
