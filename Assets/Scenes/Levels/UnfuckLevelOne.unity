@@ -27141,7 +27141,7 @@ MonoBehaviour:
   _feedingMinigame: Hunger
   _clipPosition: {x: 0, y: 0}
   _slideSpeed: 2500
-  _maxProgress: 60
+  _maxProgress: 76
   _visualsBars: {fileID: 1329524589}
   _barManager: {fileID: 501072586}
   _uiData: {fileID: 11400000, guid: 377fbeaf0c2d98543837ee90c8854047, type: 2}
@@ -39449,6 +39449,30 @@ PrefabInstance:
     - target: {fileID: 4432853128341917835, guid: 5caf5bb964e6f904c8d4350217215474, type: 3}
       propertyPath: m_Name
       value: Animated Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 5226253694834983525, guid: 5caf5bb964e6f904c8d4350217215474, type: 3}
+      propertyPath: m_DefaultActionMap
+      value: df70fa95-8a34-4494-b137-73ab6b9c7d37
+      objectReference: {fileID: 0}
+    - target: {fileID: 5226253694834983525, guid: 5caf5bb964e6f904c8d4350217215474, type: 3}
+      propertyPath: m_ActionEvents.Array.data[25].m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5226253694834983525, guid: 5caf5bb964e6f904c8d4350217215474, type: 3}
+      propertyPath: m_ActionEvents.Array.data[25].m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5226253694834983525, guid: 5caf5bb964e6f904c8d4350217215474, type: 3}
+      propertyPath: m_ActionEvents.Array.data[25].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnMove
+      objectReference: {fileID: 0}
+    - target: {fileID: 5226253694834983525, guid: 5caf5bb964e6f904c8d4350217215474, type: 3}
+      propertyPath: m_ActionEvents.Array.data[25].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: DragBaby, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5226253694834983525, guid: 5caf5bb964e6f904c8d4350217215474, type: 3}
+      propertyPath: m_ActionEvents.Array.data[25].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

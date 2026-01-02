@@ -28,10 +28,11 @@ public sealed class MinigameManager : MonoBehaviour
     public event System.Action<string> LoadFailed; // sceneName
     public event System.Action Paused;
     public event System.Action Resumed;
+    public bool IsMiniGameInputEnabled = false;
     #endregion
 
     #region State
-    private enum MiniState { Idle, Loading, Running, Paused, Unloading }
+    [SerializeField] private enum MiniState { Idle, Loading, Running, Paused, Unloading }
     [SerializeField] private MiniState _state = MiniState.Idle;
 
     private int _currentMinigameIndex = -1;
@@ -236,12 +237,14 @@ public sealed class MinigameManager : MonoBehaviour
 
     private void Update()
     {
-       if( _state == MiniState.Running)
+        if (_state == MiniState.Running)
         {
             _player.GetComponent<PlayerInput>().enabled = false;
+            IsMiniGameInputEnabled = true;
         }
-        else
+        else if (_state == MiniState.Idle || _state == MiniState.Paused)
         {
+            IsMiniGameInputEnabled = false;
             _player.GetComponent<PlayerInput>().enabled = true;
         }
     }
