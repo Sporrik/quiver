@@ -284,9 +284,9 @@ public sealed class MinigameScreen : MonoBehaviour
 
                 ScreenShown?.Invoke(); //This was Fin
             }
+            _playerInput.enabled = true;
+            _playerInput.ActivateInput();
 
-            _playerInput.DeactivateInput();
-            _playerInput.enabled = false;
             _slideIn = false;
         }
 
@@ -312,9 +312,8 @@ public sealed class MinigameScreen : MonoBehaviour
 
             _slideOut = false;
 
-            _playerInput.enabled = true;
-            _playerInput.ActivateInput();
-
+            _playerInput.DeactivateInput();
+            _playerInput.enabled = false;
 
             return;
         }
