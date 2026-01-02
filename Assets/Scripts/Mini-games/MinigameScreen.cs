@@ -109,8 +109,15 @@ public sealed class MinigameScreen : MonoBehaviour
     // works fine
     private void SelectMiniGame()
     {
+        if (UIGlobalBlocker.IsModalUIOpen)
+            return;
+
+        if (UIInputBlocker.BlockGameplayInput)
+            return;
+
         //if (Input.GetKeyUp(KeyCode.Space))
-        if(_openOrCloseTablet.WasReleasedThisFrame()) // on releasing botton
+        //Fin: I changed wasreleasedthisframe() to waspressedthisframe(), I'm sorry
+        if (_openOrCloseTablet.WasPressedThisFrame()) // on releasing botton
         {
             if (!GotClipped() && !_slideOut)
             {
