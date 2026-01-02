@@ -2,6 +2,7 @@ using UnityEngine;
 using UI;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.InputSystem;
 
 public class UIWasteAlert : MonoBehaviour
 {
@@ -112,9 +113,23 @@ public class UIWasteAlert : MonoBehaviour
     {
         if (!_gamePaused) return;
 
-        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.E))
+        // Keyboard support (existing)
+        if (Keyboard.current != null &&
+            (Keyboard.current.spaceKey.wasPressedThisFrame ||
+             Keyboard.current.eKey.wasPressedThisFrame))
         {
             Continue();
+            return;
+        }
+
+        // Gamepad support
+        if (Gamepad.current != null)
+        {
+            if (Gamepad.current.buttonSouth.wasPressedThisFrame || // X (PS) / A (Xbox)
+                Gamepad.current.buttonEast.wasPressedThisFrame)     // O (PS) / B (Xbox)
+            {
+                Continue();
+            }
         }
     }
 
