@@ -181,7 +181,7 @@ public sealed class MinigameScreen : MonoBehaviour
             if (!GotClipped() && !_slideOut)
             {
                 TryOpenBySpace();
-                _playerInput.enabled = false;
+                //_playerInput.enabled = false;
             }
             else if (!_slideIn)
             {
@@ -286,6 +286,7 @@ public sealed class MinigameScreen : MonoBehaviour
             }
 
             _playerInput.DeactivateInput();
+            _playerInput.enabled = false;
             _slideIn = false;
         }
 
@@ -311,7 +312,9 @@ public sealed class MinigameScreen : MonoBehaviour
 
             _slideOut = false;
 
+            _playerInput.enabled = true;
             _playerInput.ActivateInput();
+
 
             return;
         }
