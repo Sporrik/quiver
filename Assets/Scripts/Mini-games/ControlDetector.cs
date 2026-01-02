@@ -6,7 +6,7 @@ public class ControlDetector : MonoBehaviour
 {
     private bool _usingController = false;
     private string _controllerType = "Unknown";
-    private PlayerInput _playerInput;
+    [SerializeField] private PlayerInput _playerInput;
     private string _previousScheme = "Irrelevant";
 
     [SerializeField] private Image _moveImage;
@@ -19,6 +19,15 @@ public class ControlDetector : MonoBehaviour
     [SerializeField] private Sprite _controllerGrabSprite;
     [SerializeField] private Sprite _PSGrabSprite;
 
+    private void Start()
+    {
+        MinigameScreen minigameScreen = FindFirstObjectByType<MinigameScreen>();
+        if (minigameScreen != null)
+        {
+            _usingController = minigameScreen.UsingController;
+            _controllerType = minigameScreen.ControllerType;
+        }
+    }
 
     void Update()
     {
