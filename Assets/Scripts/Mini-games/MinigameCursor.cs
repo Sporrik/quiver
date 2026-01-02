@@ -4,24 +4,32 @@ using UnityEngine.UI;
 
 public class MinigameCursor : MonoBehaviour
 {
-    [SerializeField] private RawImage _cursor;
+    [Header("Visuals:")]
+    [SerializeField] private RawImage _point;
+    [SerializeField] private RawImage _hover;
+    [SerializeField] private RawImage _grab;
 
     [Header("Controls:")]
     [SerializeField] private InputActionAsset _input;
     [SerializeField] private RectTransform _bounds;
     [SerializeField] private float _speed = 25f;
 
+    [Header("raycast:")]
+    [SerializeField] private Camera _camera;
+    [SerializeField] private LayerMask _layerMask;
+
     private InputAction _move;
     private InputAction _click;
 
     private Vector2 _position;
-    private Vector2 _offset;
+    private Vector2 _offset = Vector2.zero;
 
     private bool _isUsed = false;
     private float _countDown;
 
-    private bool _isDown;
-    private bool _wasDown;
+    private bool _isDown = false;
+    private bool _hovering = false;
+    private bool _wasDown = false;
 
     private bool _didMove;
 
@@ -33,9 +41,13 @@ public class MinigameCursor : MonoBehaviour
         _move = _input.FindActionMap("MinigameCursor").FindAction("Move");
         _click = _input.FindActionMap("MinigameCursor").FindAction("Click");
 
-        _offset = new Vector2(_bounds.rect.width / 2, _bounds.rect.height / 2);
+        _offset = new Vector2(0, _bounds.rect.height );
 
-        _position = _offset;
+        _position = new Vector2(_bounds.rect.width / 2, _bounds.rect.height / 2);
+
+        _point.enabled = true;
+        _hover.enabled = false;
+        _grab.enabled = false;
     }
 
     // Update is called once per frame
@@ -67,12 +79,43 @@ public class MinigameCursor : MonoBehaviour
         // hide cursor when disabled
         if(_isUsed)
         {
-            _cursor.enabled = true;
+            CheckHover();
+            ShowCursor();
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
         }
         else
         {
-            _cursor.enabled = false;
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            _point.enabled = false;
+            _hover.enabled = false;
+            _grab.enabled = false;
         }
+    }
+
+    private void ShowCursor()
+    {
+        if(_hovering && !_isDown)
+        {
+            _point.enabled = false;
+            _hover.enabled = true;
+            _grab.enabled = false;
+        }
+        else if( _isDown )
+        {
+            _point.enabled = false;
+            _hover.enabled = false;
+            _grab.enabled = true;
+        }
+        else
+        {
+            _point.enabled = true;
+            _hover.enabled = false;
+            _grab.enabled = false;
+        }
+
+        
     }
 
     private bool MoveCursor()
@@ -98,7 +141,10 @@ public class MinigameCursor : MonoBehaviour
         if (_position.y > _bounds.rect.height) _position.y = _bounds.rect.height;
         else if (_position.y < 0) _position.y = 0;
 
-        _cursor.rectTransform.anchoredPosition = _position - _offset;
+
+        _point.rectTransform.anchoredPosition = _position - _offset;
+        _hover.rectTransform.anchoredPosition = _position - _offset;
+        _grab.rectTransform.anchoredPosition = _position - _offset;
 
         return true;
     }
@@ -107,11 +153,11 @@ public class MinigameCursor : MonoBehaviour
     {
         if (_click.IsPressed())
         {
-            _cursor.color = Color.green;
+            //_point.color = Color.green;
             return true;
         }
 
-        _cursor.color = Color.red;
+        //_point.color = Color.red;
 
         return false;        
     }
@@ -148,7 +194,7 @@ public class MinigameCursor : MonoBehaviour
             RectTransformUtility.WorldToScreenPoint
             (
             null,   // canvas is in screen space so no camera is needed
-            _cursor.rectTransform.position
+            _point.rectTransform.position
             );
     }
 
@@ -160,5 +206,25 @@ public class MinigameCursor : MonoBehaviour
     public bool OnUpEvent()
     {
         return !_isDown && _wasDown;
+    }
+
+    public void Hover(bool enable)
+    {
+        _hovering = enable;
+    }
+
+    private void CheckHover()
+    {
+        _hovering = false;
+
+        RaycastHit hit;
+        Ray ray = _camera.ScreenPointToRay(new Vector3(_position.x, _position.y, 0f));
+
+        // check if the controller cursor is on the objects
+        if (Physics.Raycast(ray, out hit, float.MaxValue, _layerMask))
+        {
+            _hovering = true;
+        }
+
     }
 }
