@@ -5034,7 +5034,8 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 8485582675809529846, guid: 7acc1ae57912c8d44a8542f37a715ea2, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7acc1ae57912c8d44a8542f37a715ea2, type: 3}
@@ -27591,6 +27592,9 @@ MonoBehaviour:
   _barManager: {fileID: 501072586}
   _uiData: {fileID: 11400000, guid: 377fbeaf0c2d98543837ee90c8854047, type: 2}
   _input: {fileID: 0}
+  _playerInput: {fileID: 0}
+  UsingController: 0
+  ControllerType: Unknown
 --- !u!114 &1540274823
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27624,6 +27628,7 @@ MonoBehaviour:
   - Hunger
   _allowSwapWhileRunning: 1
   _player: {fileID: 557317119}
+  IsMiniGameInputEnabled: 0
   _state: 0
 --- !u!4 &1543249520 stripped
 Transform:
