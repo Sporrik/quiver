@@ -127,6 +127,7 @@ public class DiaperChangingBehavior : MonoBehaviour
     private void OnDisable()
     {
         _poopManager.ChangeMouseCursor(0); // Default cursor
+        _cursor.Hover(false);
     }
     private void PlayerFeedback()
     {
@@ -146,6 +147,9 @@ public class DiaperChangingBehavior : MonoBehaviour
         {
             _target = hit.collider;
         }
+
+        // enables hovering cursor when on one of the colliders
+        //_cursor.Hover(_target == _frontStrap || _target == _leftStrap || _target == _rightStrap);
 
         if (_target == _frontStrap)
         {

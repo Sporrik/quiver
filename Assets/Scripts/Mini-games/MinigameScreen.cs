@@ -32,6 +32,9 @@ public sealed class MinigameScreen : MonoBehaviour
     [SerializeField] private InputActionAsset _input;
     private InputAction _openOrCloseTablet;
 
+    [Header("Player Input:")]
+    [SerializeField] private PlayerInput _playerInput;
+
     private MinigameManager _manager;
     // TODO add a way to read the win conditions of minigame
 
@@ -47,8 +50,21 @@ public sealed class MinigameScreen : MonoBehaviour
 
     private float _halfWidth;
 
+    //To hide UI
+    public event System.Action ScreenShown;
+    public event System.Action ScreenHidden;
+
+    public bool UsingController = false;
+    public string ControllerType = "Unknown";
+    private string _previousScheme = "Irrelevant";
+
     void Start()
     {
+        if(_playerInput == null)
+        {
+            Debug.LogWarning($"{name}, does not have a player input to disable!");
+        }
+
         _barManager = GameManager.instance.gameObject.GetComponent<BarManager>();
         if (_barManager == null) { Debug.LogError($"{nameof(MinigameScreen)}: BarManager not set.", this); return; }
 
@@ -87,6 +103,53 @@ public sealed class MinigameScreen : MonoBehaviour
         //DragPanel();
 
         ToggleScreen();
+        DetectInput();
+    }
+
+    private void DetectInput()
+    {
+        if (UsingController)
+            return;
+
+        string currentScheme = _playerInput.currentControlScheme;
+
+        if (currentScheme == "Keyboard&Mouse" && currentScheme != _previousScheme)
+        {
+            UsingController = false;
+            _previousScheme = currentScheme;
+        }
+        else if (currentScheme == "Gamepad" && currentScheme != _previousScheme)
+        {
+            UsingController = true;
+            DetectControllerType();
+            _previousScheme = currentScheme;
+        }
+    }
+    private void DetectControllerType()
+    {
+        if (Gamepad.current != null)
+        {
+            string controllerName = Gamepad.current.displayName.ToLower();
+
+            // Check for PlayStation controllers
+            if (controllerName.Contains("playstation") ||
+                controllerName.Contains("dualshock") ||
+                controllerName.Contains("dualsense") ||
+                controllerName.Contains("dual sense"))
+            {
+                ControllerType = "PlayStationController";
+            }
+            else
+            {
+                ControllerType = "Unknown Gamepad";
+            }
+
+            Debug.Log($"Detected Controller: {ControllerType}");
+        }
+        else
+        {
+            ControllerType = "No Gamepad Connected";
+        }
     }
 
     private void HandleNeedFilled(BarManager.NeedType need)
@@ -105,14 +168,26 @@ public sealed class MinigameScreen : MonoBehaviour
     // works fine
     private void SelectMiniGame()
     {
+        if (UIGlobalBlocker.IsModalUIOpen)
+            return;
+
+        if (UIInputBlocker.BlockGameplayInput)
+            return;
+
         //if (Input.GetKeyUp(KeyCode.Space))
-        if(_openOrCloseTablet.WasReleasedThisFrame()) // on releasing botton
+        //Fin: I changed wasreleasedthisframe() to waspressedthisframe(), I'm sorry
+        if (_openOrCloseTablet.WasPressedThisFrame()) // on releasing botton
         {
             if (!GotClipped() && !_slideOut)
             {
                 TryOpenBySpace();
+                //_playerInput.enabled = false;
             }
-            else if(!_slideIn) _slideOut = true;
+            else if (!_slideIn)
+            {
+                
+                _slideOut = true;
+            }
         }
 
         // ensuring the screen doesn't get pushed in two directions at once
@@ -206,7 +281,11 @@ public sealed class MinigameScreen : MonoBehaviour
             if (!_manager.MinigameIsRunning())
             {
                 _manager.LoadMinigame(sceneName);
+
+                ScreenShown?.Invoke(); //This was Fin
             }
+            _playerInput.enabled = true;
+            _playerInput.ActivateInput();
 
             _slideIn = false;
         }
@@ -229,7 +308,12 @@ public sealed class MinigameScreen : MonoBehaviour
 
             _panel.transform.position = new Vector3(_clipPosition.x - _halfWidth, _panelStartPos.y, _panelStartPos.z);
 
+            ScreenHidden?.Invoke();
+
             _slideOut = false;
+
+            _playerInput.DeactivateInput();
+            _playerInput.enabled = false;
 
             return;
         }

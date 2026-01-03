@@ -6,7 +6,7 @@ public class ControlDetector : MonoBehaviour
 {
     private bool _usingController = false;
     private string _controllerType = "Unknown";
-    private PlayerInput _playerInput;
+    [SerializeField] private PlayerInput _playerInput;
     private string _previousScheme = "Irrelevant";
 
     [SerializeField] private Image _moveImage;
@@ -19,31 +19,29 @@ public class ControlDetector : MonoBehaviour
     [SerializeField] private Sprite _controllerGrabSprite;
     [SerializeField] private Sprite _PSGrabSprite;
 
+    private void Start()
+    {
+        MinigameScreen minigameScreen = FindFirstObjectByType<MinigameScreen>();
+        if (minigameScreen != null)
+        {
+            _usingController = minigameScreen.UsingController;
+            _controllerType = minigameScreen.ControllerType;
+        }
+    }
 
     void Update()
     {
-        if (_playerInput == null)
-        {
-            _playerInput = FindFirstObjectByType<PlayerInput>();
-        }
 
         if (_playerInput != null)
         {
-            string currentScheme = _playerInput.currentControlScheme;
-
-            if (currentScheme == "Keyboard&Mouse" && currentScheme != _previousScheme)
+            if (_usingController == false)
             {
-                _usingController = false;
-                _previousScheme = currentScheme;
-
                 _moveImage.sprite = _keyboardMoveSprite;
                 _grabImage.sprite = _keyboardGrabSprite;
             }
-            else if (currentScheme == "Gamepad" && currentScheme != _previousScheme)
+            else if (_usingController == true)
             {
                 _usingController = true;
-                DetectControllerType();
-                _previousScheme = currentScheme;
 
                 if (_controllerType == "PlayStationController")
                 {
@@ -60,33 +58,6 @@ public class ControlDetector : MonoBehaviour
             {
                 //Debug.Log($"User is using an unknown control scheme: {currentScheme}");
             }
-        }
-    }
-
-    private void DetectControllerType()
-    {
-        if (Gamepad.current != null)
-        {
-            string controllerName = Gamepad.current.displayName.ToLower();
-
-            // Check for PlayStation controllers
-            if (controllerName.Contains("playstation") ||
-                controllerName.Contains("dualshock") ||
-                controllerName.Contains("dualsense") ||
-                controllerName.Contains("dual sense"))
-            {
-                _controllerType = "PlayStationController";
-            }
-            else
-            {
-                _controllerType = "Unknown Gamepad";
-            }
-
-            Debug.Log($"Detected Controller: {_controllerType}");
-        }
-        else
-        {
-            _controllerType = "No Gamepad Connected";
         }
     }
 }

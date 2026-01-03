@@ -51,6 +51,16 @@ public class SimpleDrag : MonoBehaviour
         DragObject();
     }
 
+    private void FixedUpdate()
+    {
+        //_cursor.Hover(ControllerHover());
+    }
+
+    private void OnDisable()
+    {
+        _cursor.Hover(false);
+    }
+
     protected void ControllerInput()
     {
         if (_cursor == null) return;
@@ -108,5 +118,18 @@ public class SimpleDrag : MonoBehaviour
         // move the gameobject to the hitpoint on the plane
         Vector3 targetPosition = new Vector3(hitPoint.x, DragPlaneYTransform.position.y, hitPoint.z) + offset;
         rb.MovePosition(Vector3.Lerp(transform.position, targetPosition, moveDistance));
+    }
+
+    protected bool ControllerHover()
+    {
+        RaycastHit hit;
+        Ray ray = mainCamera.ScreenPointToRay(new Vector3(_cursor.GetPosition().x, _cursor.GetPosition().y, 0f));
+
+        // check if the controller cursor is on the objects
+        if (!Physics.Raycast(ray, out hit)) return false;
+
+        if (hit.rigidbody != rb) return false;
+
+        return true;
     }
 }

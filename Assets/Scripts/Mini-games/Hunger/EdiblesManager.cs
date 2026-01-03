@@ -10,7 +10,7 @@ public class EdiblesManager : MonoBehaviour
     [SerializeField] GameObject _baby;
     [SerializeField] private List<EdibleItem> _closestItems = new List<EdibleItem>(4);
     public List<InputAction> PlayerActions = new List<InputAction>(4);
-    private PlayerInput _playerInput;
+    [SerializeField] private PlayerInput _playerInput;
     private bool _usingController = false;
 
     private string _controllerType = "Unknown";
@@ -38,7 +38,7 @@ public class EdiblesManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        _playerInput = FindFirstObjectByType<PlayerInput>();
+        //_playerInput = FindFirstObjectByType<PlayerInput>();
 
         PlayerActions.Add(_playerInput.actions["Discard1"]);
         PlayerActions.Add(_playerInput.actions["Discard2"]);
