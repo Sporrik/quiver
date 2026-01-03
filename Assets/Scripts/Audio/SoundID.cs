@@ -9,7 +9,12 @@ namespace Audio
         Music_Level,
         Music_Chase,
         Music_Death,
-        Music_Retro
+        Music_Retro,
+        Music_Ambience,
         //SFX
+        Sfx_UIOpen,
+        Sfx_UIClose,
+        Sfx_UIHover,
+        Sfx_UIClick
     }
 }

@@ -17,6 +17,7 @@ namespace Audio
         [SerializeField] private AudioMixer _mixer;
         [SerializeField] private AudioMixerGroup _mixerMusic;
         [SerializeField] private AudioMixerGroup _mixerSfx;
+        [SerializeField] private AudioMixerGroup _mixerAmbience;
 
         [Header("SFX Pool")]
         [SerializeField, Min(1f)] private int _prewarmSfxSources = 8;
@@ -211,6 +212,7 @@ namespace Audio
             GameObject canvas = gameObject.transform.GetChild(0).gameObject;
             canvas.SetActive(false);
         }
+        
         public void EnableCanvas()
         {
             GameObject canvas = gameObject.transform.GetChild(0).gameObject;

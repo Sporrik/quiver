@@ -10,10 +10,11 @@ namespace Audio
     {
         public static event Action Changed;
 
-        public const string KeyMaster = "vol_master";
-        public const string KeyMusic  = "vol_music";
-        public const string KeySfx    = "vol_sfx";
-        public const string KeyMute   = "vol_mute";
+        public const string KeyMaster   = "vol_master";
+        public const string KeyMusic    = "vol_music";
+        public const string KeySfx      = "vol_sfx";
+        public const string KeyMute     = "vol_mute";
+        public const string KeyAmbience = "vol_ambience";
 
         public static float Master01
         {
@@ -33,6 +34,12 @@ namespace Audio
             set { PlayerPrefs.SetFloat(KeySfx, Mathf.Clamp01(value)); Changed?.Invoke(); }
         }
 
+        public static float Ambience01
+        {
+            get => PlayerPrefs.GetFloat(KeyAmbience, 1f);
+            set { PlayerPrefs.SetFloat(KeyAmbience, Mathf.Clamp01(value)); Changed?.Invoke(); }
+        }
+        
         public static bool Mute
         {
             get => PlayerPrefs.GetInt(KeyMute, 0) == 1;
@@ -51,6 +58,7 @@ namespace Audio
             mgr.SetMasterVolumeDb(LinearToDb(Mute ? 0f : Master01));
             mgr.SetMusicVolumeDb(LinearToDb(Music01));
             mgr.SetSfxVolumeDb(LinearToDb(Sfx01));
+            mgr.SetAmbienceVolumeDb(LinearToDb(Ambience01));
         }
     }
 }
