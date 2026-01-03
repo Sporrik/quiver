@@ -2726,7 +2726,7 @@ GameObject:
   - component: {fileID: 276244151}
   - component: {fileID: 276244150}
   - component: {fileID: 276244149}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15283,6 +15283,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2154819899748357363}
     m_Modifications:
+    - target: {fileID: 1162013253967974803, guid: 0922becbffb8a1640b80e80808b182b5, type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 2177
+      objectReference: {fileID: 0}
     - target: {fileID: 2005855034361492529, guid: 0922becbffb8a1640b80e80808b182b5, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.58929443
@@ -15335,6 +15339,10 @@ PrefabInstance:
       propertyPath: _goalManager
       value: 
       objectReference: {fileID: 2323965638234837678}
+    - target: {fileID: 8618268138571296360, guid: 0922becbffb8a1640b80e80808b182b5, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -31718,7 +31726,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1954075023}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: Radar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
