@@ -5,17 +5,16 @@ public sealed class MusicHooks_Menu : MonoBehaviour
 {
     private void OnEnable()
     {
-        if (MusicController.instance != null)
-            MusicController.instance.SetMenu();
+        MusicController.instance?.SetMenu();
     }
 }
 
 public sealed class MusicHooks_Level : MonoBehaviour
 {
     private void OnEnable()
-    {
-        if (MusicController.instance != null)
-            MusicController.instance.SetMenu();
+    { 
+        MusicController.instance?.SetGameplay();
+        AudioBus.Ambience(SoundID.Ambience_Main);
     }
 
     public void OnChaseStarted() => MusicController.instance?.SetChase(true);

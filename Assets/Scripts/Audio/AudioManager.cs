@@ -24,12 +24,13 @@ namespace Audio
         [SerializeField, Min(1f)] private int _maxSfxSources = 24;
 
         [Header("Music")]
-        [SerializeField] private float defaultMusicFade = 0.5f;
+        [SerializeField] private float _defaultMusicFade = 0.5f;
 
         private readonly Queue<AudioSource> _available = new Queue<AudioSource>();
         private readonly HashSet<AudioSource> _inUse = new HashSet<AudioSource>();
         private AudioSource _musicA;
         private AudioSource _musicB;
+        private AudioSource _ambience;
         private readonly HashSet<SoundID> _missingLogged = new HashSet<SoundID>();
 
         private void Awake()
@@ -50,6 +51,8 @@ namespace Audio
             // Music sources (dedicated, never pooled)
             _musicA = CreateDedicatedSource("MusicA", _mixerMusic, spatialBlend: 0f);
             _musicB = CreateDedicatedSource("MusicB", _mixerMusic, spatialBlend: 0f);
+
+            _ambience = CreateDedicatedSource("Ambience", _mixerAmbience, spatialBlend: 0f);
         }
 
         private AudioSource CreatePooledSource()
@@ -127,7 +130,7 @@ namespace Audio
             {
                 if (!_missingLogged.Contains(id))
                 {
-                    Debug.LogWarning($"[AudioManager] Missing clip for {id}");
+                    Debug.LogWarning($"[AudioManager] Missing sfx clip for {id}");
                     _missingLogged.Add(id);
                 }
                 return;
@@ -169,7 +172,7 @@ namespace Audio
                 return;
             }
 
-            fadeSeconds = fadeSeconds < 0 ? defaultMusicFade : fadeSeconds;
+            fadeSeconds = fadeSeconds < 0 ? _defaultMusicFade : fadeSeconds;
 
             // If same track already active, optionally skip
             if (!restartIfSame && (_musicA.clip == entry.clip && _musicA.isPlaying ||
@@ -198,9 +201,49 @@ namespace Audio
 
         }
 
+        public void PlayAmbience(SoundID id, float fadeSeconds = 0.5f, bool restartIfSame = false)
+        {
+            if (_library == null)
+            {
+                Debug.LogWarning($"[AudioManager] No SoundLibrary assigned.");
+                return;
+            }
+
+            if (!_library.TryGet(id, out var entry) || entry.clip == null)
+            {
+                if (!_missingLogged.Contains(id))
+                {
+                    Debug.LogWarning($"[AudioManager] Missing ambience clip for {id}");
+                    _missingLogged.Add(id);
+                }
+                return;
+            }
+
+            if (!restartIfSame && _ambience.clip == entry.clip && _ambience.isPlaying)
+                return;
+            
+            _ambience.clip = entry.clip;
+            _ambience.outputAudioMixerGroup = entry.mixerGroup != null ? entry.mixerGroup : _mixerAmbience;
+            _ambience.loop = true;
+            _ambience.volume = 0f;
+            
+            _ambience.Play();
+            StopCoroutine(nameof(CoFadeAmbience));
+            StartCoroutine(CoFadeAmbience(Mathf.Clamp01(entry.volume), fadeSeconds));
+        }
+
+        public void StopAmbience(float fadeSeconds = 0.25f)
+        {
+            if (_ambience.isPlaying) return;
+
+            StopCoroutine(nameof(CoFadeAmbience));
+            StartCoroutine(CoFadeAmbience(0f, fadeSeconds, stopOnZero: true));
+        }
+
         public void SetMasterVolumeDb(float db) => SetDb("MasterVolume", db);
         public void SetMusicVolumeDb(float db)  => SetDb("MusicVolume", db);
         public void SetSfxVolumeDb(float db)    => SetDb("SFXVolume", db);
+        public void SetAmbienceVolumeDb(float db) => SetDb("AmbienceVolume", db);
 
         public void Mute(bool muted)
         {
@@ -288,6 +331,23 @@ namespace Audio
 
             src.volume = target;
             if (Mathf.Approximately(target, 0f) && src.isPlaying) src.Stop();
+        }
+
+        private IEnumerator CoFadeAmbience(float target, float seconds, bool stopOnZero = false)
+        {
+            float t = 0f;
+            float start = _ambience.volume;
+
+            while (t < seconds)
+            {
+                t += Time.unscaledDeltaTime;
+                float k = seconds <= 0f ? 1f : Mathf.Clamp01(t / seconds);
+                _ambience.volume = Mathf.Lerp(start, target, k);
+                yield return null;
+            }
+            
+            _ambience.volume = target;
+            if (stopOnZero && Mathf.Approximately(target, 0f) && _ambience.isPlaying) _ambience.Stop();
         }
 
         private void SetDb(string param, float db)

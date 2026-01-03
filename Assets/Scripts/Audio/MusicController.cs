@@ -78,7 +78,7 @@ namespace Audio
 
         public void SetDeath()
         {
-            UpsertBase(MusicPriority.Minigame, _musicCfg.death);
+            UpsertBase(MusicPriority.Death, _musicCfg.death);
             Evaluate();
         }
         #endregion

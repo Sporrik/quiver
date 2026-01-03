@@ -10,7 +10,9 @@ namespace Audio
         Music_Chase,
         Music_Death,
         Music_Retro,
-        Music_Ambience,
+        
+        Ambience_Main,
+        
         //SFX
         Sfx_UIOpen,
         Sfx_UIClose,
