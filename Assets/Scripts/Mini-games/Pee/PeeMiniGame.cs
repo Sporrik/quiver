@@ -120,7 +120,7 @@ public class PeeMiniGame : MonoBehaviour
             _winTriggerDelay -= Time.deltaTime;
         }
 
-        if(_lastPercentageComplete != _percentageComplete)
+        if(!TaskComplete && _lastPercentageComplete != _percentageComplete)
         {
             PeeCountText.GetComponent<UIShake>().ShakeUI();
             _lastPercentageComplete = _percentageComplete;

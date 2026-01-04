@@ -27,9 +27,7 @@ public sealed class MinigameScreen : MonoBehaviour
     [SerializeField] private GameObject _visualsBars;
     [SerializeField] private BarManager _barManager;
     [SerializeField] private UIScriptableObject _uiData;
-
-    [Header("Controls")]
-    [SerializeField] private InputActionAsset _input;
+    
     private InputAction _openOrCloseTablet;
 
     [Header("Player Input:")]
@@ -62,19 +60,20 @@ public sealed class MinigameScreen : MonoBehaviour
     {
         if(_playerInput == null)
         {
-            Debug.LogWarning($"{name}, does not have a player input to disable!");
+            Debug.LogWarning($"{name}, does not have a player input to read from!");
         }
 
         _barManager = GameManager.instance.gameObject.GetComponent<BarManager>();
         if (_barManager == null) { Debug.LogError($"{nameof(MinigameScreen)}: BarManager not set.", this); return; }
 
-        if (_input != null)
+        if (_playerInput != null)
         {
-            _openOrCloseTablet = _input.FindActionMap("MinigameScreen").FindAction("Toggle");
+            _openOrCloseTablet = _playerInput.actions.FindActionMap("MinigameScreen").FindAction("Toggle");
+            _openOrCloseTablet.Enable();
         }
         else
         {
-            Debug.LogError($"{nameof(MinigameScreen)}: _Input is null");
+            Debug.LogError($"{nameof(MinigameScreen)}: PlayerInput is null");
         }
 
             _manager = GetComponent<MinigameManager>();
@@ -284,8 +283,6 @@ public sealed class MinigameScreen : MonoBehaviour
 
                 ScreenShown?.Invoke(); //This was Fin
             }
-            _playerInput.enabled = true;
-            _playerInput.ActivateInput();
 
             _slideIn = false;
         }
@@ -311,9 +308,6 @@ public sealed class MinigameScreen : MonoBehaviour
             ScreenHidden?.Invoke();
 
             _slideOut = false;
-
-            _playerInput.DeactivateInput();
-            _playerInput.enabled = false;
 
             return;
         }

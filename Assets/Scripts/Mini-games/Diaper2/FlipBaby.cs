@@ -2,22 +2,24 @@ using UnityEngine;
 
 public class FlipBaby : MonoBehaviour
 {
-    [Header("Rotation Settings")]
-    [SerializeField] private Vector3 rotationA = new Vector3(0, 0, 0);      // Starting rotation (Euler angles)
-    [SerializeField] private Vector3 rotationB = new Vector3(0, 180, 0);    // Target rotation (Euler angles)
-    [SerializeField] private float rotationSpeed = 2f;                      // Speed of rotation lerp
+    [Header("Rotation Settings")] [SerializeField]
+    private Vector3 rotationA = new Vector3(0, 0, 0); // Starting rotation (Euler angles)
 
-    [Header("Click Settings:")]
-    [SerializeField] private Camera _camera;            // Reference to the _camera
-    [SerializeField] private Collider triggerCollider;  // Collider to detect clicks
-    [SerializeField] private MinigameCursor _cursor;    // the cursor with controller support
+    [SerializeField] private Vector3 rotationB = new Vector3(0, 180, 0); // Target rotation (Euler angles)
+    [SerializeField] private float rotationSpeed = 2f; // Speed of rotation lerp
 
-    private bool isRotating = false;    // Flag to determine if rotation is in progress
-    private Quaternion targetRotation;  // Target rotation
-    private Quaternion startRotation;   // Starting rotation
-    private float lerpProgress = 0f;    // Progress of the lerp
-    public bool isFlipped = false;      // Tracks the current rotation state
-    private PoopManager _poopManager;
+    [Header("Click Settings:")] [SerializeField]
+    private Camera _camera; // Reference to the _camera
+
+    [SerializeField] private Collider triggerCollider; // Collider to detect clicks
+    [SerializeField] private MinigameCursor _cursor; // the cursor with controller support
+
+    private bool isRotating = false; // Flag to determine if rotation is in progress
+    private Quaternion targetRotation; // Target rotation
+    private Quaternion startRotation; // Starting rotation
+    private float lerpProgress = 0f; // Progress of the lerp
+    public bool isFlipped = false; // Tracks the current rotation state
+    [SerializeField] private PoopManager _poopManager;
 
     void Start()
     {
