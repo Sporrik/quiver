@@ -1,10 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
-using UnityEngine.Experimental.GlobalIllumination;
 
 [DisallowMultipleComponent]
 public sealed class MinigameManager : MonoBehaviour
@@ -16,11 +14,18 @@ public sealed class MinigameManager : MonoBehaviour
     [Header("Minigame Scenes (names)")]
     [SerializeField] private List<string> _sceneNames = new();
 
+    [Header("Minigame IDs")]
+    [SerializeField] private string _hungerSceneName;
+    [SerializeField] private string _peeSceneName;
+
+    [SerializeField] private string _hungerMapName = "HungerMinigame";
+    [SerializeField] private string _peeMapName    = "PeeMinigame";
+    [SerializeField] private string _playerMapName = "Player";
+
     [Header("Options")]
     [Tooltip("If true, unloading then loading another minigame happens as a single operation")]
     [SerializeField] private bool _allowSwapWhileRunning = true;
     [SerializeField] private GameObject _player;
-
     #endregion
 
     #region Events
@@ -96,11 +101,12 @@ public sealed class MinigameManager : MonoBehaviour
         if (!MinigameIsRunning()) return;
 
         var binder = FindFirstObjectByType<PlayerInputBinder>();
+
         if (paused && _state == MiniState.Running)
         {
             EnableRootObjs(!paused);
             if (binder != null)
-                binder.PlayerInput.SwitchCurrentActionMap("Player");
+                binder.PlayerInput.SwitchCurrentActionMap(_playerMapName);
 
             _state = MiniState.Paused;
             Paused?.Invoke();
@@ -108,13 +114,20 @@ public sealed class MinigameManager : MonoBehaviour
         else if (!paused && _state == MiniState.Paused)
         {
             EnableRootObjs(!paused);
+
             if (binder != null)
-                binder.PlayerInput.SwitchCurrentActionMap("HungerMinigame");
+            {
+                if (CurrentSceneName == _hungerSceneName)
+                    binder.PlayerInput.SwitchCurrentActionMap(_hungerMapName);
+                else if (CurrentSceneName == _peeSceneName)
+                    binder.PlayerInput.SwitchCurrentActionMap(_peeMapName);
+            }
 
             _state = MiniState.Running;
             Resumed?.Invoke();
         }
     }
+    #endregion
 
     private void EnableRootObjs(bool enable)
     {
@@ -123,34 +136,24 @@ public sealed class MinigameManager : MonoBehaviour
         foreach (GameObject obj in objs)
         {
             Canvas canvas = obj.GetComponentInChildren<Canvas>();
-
             if (canvas != null)
-            {
                 canvas.enabled = enable;
-                //continue; // assuming nobody puts a camera in a canvas
-            }
 
             Camera cam = obj.GetComponentInChildren<Camera>();
-
             if (cam != null)
-            {
                 cam.enabled = enable;
-            }
         }
     }
 
     public bool MinigameIsRunning() => _currentMinigameScene.IsValid();
-
     public bool IsMinigamePaused() => _state == MiniState.Paused;
 
     public bool WonCurrentMinigame()
     {
         if (!_currentMinigameScene.IsValid()) return false;
         if (_currentMinigameWinToggle == null) return false;
-
         return _currentMinigameWinToggle.WonMinigame();
     }
-    #endregion
 
     #region Coroutines
     private IEnumerator CoLoad(string sceneName)
@@ -177,8 +180,6 @@ public sealed class MinigameManager : MonoBehaviour
             yield break;
         }
 
-        // Offset minigame roots to spawn position
-        // and find the win toggle of minigame
         if (_minigameSpawnPoint != null)
         {
             Vector3 offset = _minigameSpawnPoint.position;
@@ -188,24 +189,32 @@ public sealed class MinigameManager : MonoBehaviour
                 obj.transform.position += offset;
 
                 MinigameWinToggle winCond = obj.GetComponent<MinigameWinToggle>();
-
                 if (winCond != null)
-                {
                     _currentMinigameWinToggle = winCond;
-                }
             }
         }
 
-        var binder  = FindFirstObjectByType<PlayerInputBinder>();
-        var edibles = FindFirstObjectByType<EdiblesManager>();
+        var binder   = FindFirstObjectByType<PlayerInputBinder>();
+        var edibles  = FindFirstObjectByType<EdiblesManager>();
+        var dragBaby = FindFirstObjectByType<DragBaby>();
 
-        if (binder != null && edibles != null)
+        if (binder != null)
         {
-            binder.Edibles = edibles;
-            binder.PlayerInput.SwitchCurrentActionMap("HungerMinigame");
+            binder.Edibles  = null;
+            binder.DragBaby = null;
+
+            if (sceneName == _hungerSceneName && edibles != null)
+            {
+                binder.Edibles = edibles;
+                binder.PlayerInput.SwitchCurrentActionMap(_hungerMapName);
+            }
+            else if (sceneName == _peeSceneName && dragBaby != null)
+            {
+                binder.DragBaby = dragBaby;
+                binder.PlayerInput.SwitchCurrentActionMap(_peeMapName);
+            }
         }
 
-        // Finish
         _state = MiniState.Running;
         _currentMinigameIndex = _sceneNames.FindIndex(n => n == sceneName);
         Opened?.Invoke(sceneName);
@@ -231,11 +240,13 @@ public sealed class MinigameManager : MonoBehaviour
         }
 
         yield return new WaitUntil(() => unload.isDone);
-        
-        var binder  = FindFirstObjectByType<PlayerInputBinder>();
+
+        var binder = FindFirstObjectByType<PlayerInputBinder>();
         if (binder != null)
         {
-            binder.PlayerInput.SwitchCurrentActionMap("Player");
+            binder.Edibles  = null;
+            binder.DragBaby = null;
+            binder.PlayerInput.SwitchCurrentActionMap(_playerMapName);
         }
 
         _currentMinigameScene = default;

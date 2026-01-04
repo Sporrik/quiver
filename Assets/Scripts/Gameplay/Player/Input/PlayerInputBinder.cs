@@ -6,7 +6,8 @@ public class PlayerInputBinder : MonoBehaviour
     public PlayerInput PlayerInput { get; private set; }
     
     [SerializeField] private PlayerInputRelay _relay;
-    public EdiblesManager Edibles { get; set; }             
+    public EdiblesManager Edibles { get; set; }      
+    public DragBaby DragBaby { get; set; }
 
     void Awake()
     {
@@ -51,6 +52,15 @@ public class PlayerInputBinder : MonoBehaviour
                 case "Discard2": Edibles.Discard2(ctx); break;
                 case "Discard3": Edibles.Discard3(ctx); break;
                 case "Discard4": Edibles.Discard4(ctx); break;
+            }
+        }
+        
+        // Pee
+        if (DragBaby != null)
+        {
+            switch (name)
+            {
+                case "DragBaby": DragBaby.OnMove(ctx); break;
             }
         }
     }
