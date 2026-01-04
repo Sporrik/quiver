@@ -26,14 +26,7 @@ public class ControlDetector : MonoBehaviour
         {
             _usingController = minigameScreen.UsingController;
             _controllerType = minigameScreen.ControllerType;
-        }
-    }
 
-    void Update()
-    {
-
-        if (_playerInput != null)
-        {
             if (_usingController == false)
             {
                 _moveImage.sprite = _keyboardMoveSprite;
@@ -59,5 +52,7 @@ public class ControlDetector : MonoBehaviour
                 //Debug.Log($"User is using an unknown control scheme: {currentScheme}");
             }
         }
+
+            
+        }
     }
-}
