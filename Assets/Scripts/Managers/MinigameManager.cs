@@ -95,9 +95,12 @@ public sealed class MinigameManager : MonoBehaviour
     {
         if (!MinigameIsRunning()) return;
 
+        var binder = FindFirstObjectByType<PlayerInputBinder>();
         if (paused && _state == MiniState.Running)
         {
             EnableRootObjs(!paused);
+            if (binder != null)
+                binder.PlayerInput.SwitchCurrentActionMap("Player");
 
             _state = MiniState.Paused;
             Paused?.Invoke();
@@ -105,11 +108,12 @@ public sealed class MinigameManager : MonoBehaviour
         else if (!paused && _state == MiniState.Paused)
         {
             EnableRootObjs(!paused);
+            if (binder != null)
+                binder.PlayerInput.SwitchCurrentActionMap("HungerMinigame");
 
             _state = MiniState.Running;
             Resumed?.Invoke();
         }
-        
     }
 
     private void EnableRootObjs(bool enable)
@@ -132,24 +136,6 @@ public sealed class MinigameManager : MonoBehaviour
             {
                 cam.enabled = enable;
             }
-
-            PlayerInput player = obj.GetComponent<PlayerInput>();
-
-            if(player != null)
-            {
-                if (enable)
-                {
-                    player.enabled = true;
-                    player.ActivateInput();
-                }
-                else
-                {
-                    player.DeactivateInput();
-                    player.enabled = false;
-                }
-                
-            }
-
         }
     }
 
@@ -210,6 +196,15 @@ public sealed class MinigameManager : MonoBehaviour
             }
         }
 
+        var binder  = FindFirstObjectByType<PlayerInputBinder>();
+        var edibles = FindFirstObjectByType<EdiblesManager>();
+
+        if (binder != null && edibles != null)
+        {
+            binder.Edibles = edibles;
+            binder.PlayerInput.SwitchCurrentActionMap("HungerMinigame");
+        }
+
         // Finish
         _state = MiniState.Running;
         _currentMinigameIndex = _sceneNames.FindIndex(n => n == sceneName);
@@ -236,6 +231,12 @@ public sealed class MinigameManager : MonoBehaviour
         }
 
         yield return new WaitUntil(() => unload.isDone);
+        
+        var binder  = FindFirstObjectByType<PlayerInputBinder>();
+        if (binder != null)
+        {
+            binder.PlayerInput.SwitchCurrentActionMap("Player");
+        }
 
         _currentMinigameScene = default;
         _currentMinigameIndex = -1;
@@ -250,18 +251,4 @@ public sealed class MinigameManager : MonoBehaviour
         yield return CoLoad(nextScene);
     }
     #endregion
-
-    private void Update()
-    {
-        if (_state == MiniState.Running)
-        {
-            _player.GetComponent<PlayerInput>().enabled = false;
-            //IsMiniGameInputEnabled = true;
-        }
-        else if (_state == MiniState.Idle || _state == MiniState.Paused)
-        {
-            //IsMiniGameInputEnabled = false;
-            _player.GetComponent<PlayerInput>().enabled = true;
-        }
-    }
 }

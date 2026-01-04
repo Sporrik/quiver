@@ -10,7 +10,7 @@ public class EdiblesManager : MonoBehaviour
     [SerializeField] GameObject _baby;
     [SerializeField] private List<EdibleItem> _closestItems = new List<EdibleItem>(4);
     public List<InputAction> PlayerActions = new List<InputAction>(4);
-    [SerializeField] private PlayerInput _playerInput;
+    private PlayerInput _playerInput;
     private bool _usingController = false;
 
     private string _controllerType = "Unknown";
@@ -35,17 +35,18 @@ public class EdiblesManager : MonoBehaviour
     [SerializeField] Sprite _b;
     [SerializeField] Sprite _x;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Start()
     {
-        //_playerInput = FindFirstObjectByType<PlayerInput>();
+        if (_playerInput == null)
+            _playerInput = FindFirstObjectByType<PlayerInput>();
 
-        PlayerActions.Add(_playerInput.actions["Discard1"]);
-        PlayerActions.Add(_playerInput.actions["Discard2"]);
-        PlayerActions.Add(_playerInput.actions["Discard3"]);
-        PlayerActions.Add(_playerInput.actions["Discard4"]);
+        if (_playerInput == null)
+        {
+            Debug.LogError($"{nameof(EdiblesManager)}: No PlayerInput found in scene.");
+            return;
+        }
     }
-
+    
     // Update is called once per frame
     void Update()
     {
@@ -203,37 +204,29 @@ public class EdiblesManager : MonoBehaviour
             _index4 = null;
         }
     }
+    
     public void Discard1(InputAction.CallbackContext ctx)
     {
-        if(_index1 != null)
-        {
-            if (ctx.canceled)
-                _index1.DropEdible();
-        }
+        if (_index1 != null && ctx.performed)
+            _index1.DropEdible();
     }
+    
     public void Discard2(InputAction.CallbackContext ctx)
     {
-        if(_index2 != null)
-        {
-            if (ctx.canceled)
-                _index2.DropEdible();
-        }
+        if (_index2 != null && ctx.performed)
+            _index2.DropEdible();
     }
+    
     public void Discard3(InputAction.CallbackContext ctx)
     {
-        if(_index3 != null)
-        {
-            if (ctx.canceled)
-                _index3.DropEdible();
-        }
+        if (_index3 != null && ctx.performed)
+            _index3.DropEdible();
     }
+    
     public void Discard4(InputAction.CallbackContext ctx)
     {
-        if(_index4 != null)
-        {
-            if (ctx.canceled)
-                _index4.DropEdible();
-        }
+        if (_index4 != null && ctx.performed)
+            _index4.DropEdible();
     }
     private void DetectControllerType()
     {
