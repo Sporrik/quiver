@@ -27,15 +27,19 @@ public class DiaperChangingBehavior : MonoBehaviour
     private bool _isDragging = false;
     private bool _isMouseDown;
     private Collider _target;
-    private PoopManager _poopManager;
+    [SerializeField] private PoopManager _poopManager;
     private bool _collidersEnabled = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
     {
         _animator.speed = _animationSpeed;
+        if (_poopManager == null) _poopManager = FindFirstObjectByType<PoopManager>();
+        if (_poopManager == null)
+        {
+            Debug.LogError($"{name}: PoopManager missing");
+        }
 
-        
     }
 
     // Update is called once per frame
@@ -52,11 +56,6 @@ public class DiaperChangingBehavior : MonoBehaviour
 
             _collidersEnabled = true;
         }
-    }
-
-    private void Start()
-    {
-        _poopManager = FindFirstObjectByType<PoopManager>();
     }
 
     private Vector2 GetDragDirection()
