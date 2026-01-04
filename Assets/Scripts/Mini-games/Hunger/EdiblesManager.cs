@@ -9,10 +9,9 @@ public class EdiblesManager : MonoBehaviour
 {
     [SerializeField] GameObject _baby;
     [SerializeField] private List<EdibleItem> _closestItems = new List<EdibleItem>(4);
-    public List<InputAction> PlayerActions = new List<InputAction>(4);
-    private PlayerInput _playerInput;
+    
     private bool _usingController = false;
-
+    private ControlScheme _lastScheme;
     private string _controllerType = "Unknown";
 
     private EdibleItem _index1;
@@ -44,8 +43,54 @@ public class EdiblesManager : MonoBehaviour
             _controllerType = minigameScreen.ControllerType;
         }
     }
+
+    void Update()
+    {
+        var scheme = PlayerInputBinder.CurrentScheme;
+        if (scheme != _lastScheme)
+        {
+            _usingController = scheme == ControlScheme.Gamepad;
+            if (_usingController)
+                DetectControllerType();
+            RefreshItemIcons();
+            _lastScheme = scheme;
+        }
+    }
+
+    private void RefreshItemIcons()
+    {
+        if (_index1 != null) ChooseInputKey(_index1);
+        if (_index2 != null) ChooseInputKey(_index2);
+        if (_index3 != null) ChooseInputKey(_index3);
+        if (_index4 != null) ChooseInputKey(_index4);
+    }
     
-    // Update is called once per frame
+    private void DetectControllerType()
+    {
+        if (Gamepad.current != null)
+        {
+            string controllerName = Gamepad.current.displayName.ToLower();
+
+            if (controllerName.Contains("playstation") ||
+                controllerName.Contains("dualshock")   ||
+                controllerName.Contains("dualsense")   ||
+                controllerName.Contains("dual sense"))
+            {
+                _controllerType = "PlayStationController";
+            }
+            else
+            {
+                _controllerType = "Unknown Gamepad";
+            }
+
+            Debug.Log($"Detected Controller: {_controllerType}");
+        }
+        else
+        {
+            _controllerType = "No Gamepad Connected";
+        }
+    }
+    
     public void EatItem(EdibleItem item)
     {
         Destroy(item.gameObject);
@@ -108,6 +153,7 @@ public class EdiblesManager : MonoBehaviour
             if (!_usingController)
                 item.ControlSprite.sprite = _up;
         }
+        
         else if (_index2 == null)
         {
             item.InputIndex = 2;
@@ -124,6 +170,7 @@ public class EdiblesManager : MonoBehaviour
             if (!_usingController)
                 item.ControlSprite.sprite = _right;
         }
+        
         else if (_index3 == null)
         {
             item.InputIndex = 3;
@@ -140,6 +187,7 @@ public class EdiblesManager : MonoBehaviour
             if (!_usingController)
                 item.ControlSprite.sprite = _down;
         }
+        
         else if (_index4 == null)
         {
             item.InputIndex = 4;
@@ -155,12 +203,14 @@ public class EdiblesManager : MonoBehaviour
             if (!_usingController)
                 item.ControlSprite.sprite = _left;
         }
+        
         else
             return;
 
         item.ControlSprite.gameObject.SetActive(true);
 
     }
+    
     public void ClearInputIndex(int index)
     {
         if(index == 1)

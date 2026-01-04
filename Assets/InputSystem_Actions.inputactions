@@ -1207,7 +1207,7 @@
             "id": "528af36e-c99f-4a90-8f99-ac64b576518e",
             "actions": [
                 {
-                    "name": "Axis",
+                    "name": "DragBaby",
                     "type": "Value",
                     "id": "17e54dac-9aa6-42d2-bfe4-9a1c401a48c8",
                     "expectedControlType": "Axis",
@@ -1224,7 +1224,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Axis",
+                    "action": "DragBaby",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -1234,8 +1234,8 @@
                     "path": "<Gamepad>/leftStick/left",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Gamepad",
-                    "action": "Axis",
+                    "groups": ";Gamepad;Keyboard&Mouse",
+                    "action": "DragBaby",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1245,8 +1245,8 @@
                     "path": "<Gamepad>/leftStick/right",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Gamepad",
-                    "action": "Axis",
+                    "groups": ";Gamepad;Keyboard&Mouse",
+                    "action": "DragBaby",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1257,7 +1257,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Axis",
+                    "action": "DragBaby",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -1267,8 +1267,8 @@
                     "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "Axis",
+                    "groups": ";Keyboard&Mouse;Gamepad",
+                    "action": "DragBaby",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1278,8 +1278,8 @@
                     "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "Axis",
+                    "groups": ";Keyboard&Mouse;Gamepad",
+                    "action": "DragBaby",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1290,7 +1290,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Axis",
+                    "action": "DragBaby",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -1300,8 +1300,8 @@
                     "path": "<Keyboard>/leftArrow",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "Axis",
+                    "groups": ";Keyboard&Mouse;Gamepad",
+                    "action": "DragBaby",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1311,8 +1311,8 @@
                     "path": "<Keyboard>/rightArrow",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "Axis",
+                    "groups": ";Keyboard&Mouse;Gamepad",
+                    "action": "DragBaby",
                     "isComposite": false,
                     "isPartOfComposite": true
                 }
