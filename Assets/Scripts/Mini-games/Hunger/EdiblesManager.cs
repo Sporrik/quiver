@@ -37,39 +37,15 @@ public class EdiblesManager : MonoBehaviour
 
     private void Start()
     {
-        if (_playerInput == null)
-            _playerInput = FindFirstObjectByType<PlayerInput>();
-
-        if (_playerInput == null)
+        MinigameScreen minigameScreen = FindFirstObjectByType<MinigameScreen>();
+        if (minigameScreen != null)
         {
-            Debug.LogError($"{nameof(EdiblesManager)}: No PlayerInput found in scene.");
-            return;
+            _usingController = minigameScreen.UsingController;
+            _controllerType = minigameScreen.ControllerType;
         }
     }
     
     // Update is called once per frame
-    void Update()
-    {
-        if (_playerInput != null)
-        {
-            string currentScheme = _playerInput.currentControlScheme;
-
-            if (currentScheme == "Keyboard&Mouse")
-            {
-                _usingController = false;
-            }
-            else if (currentScheme == "Gamepad")
-            {
-                _usingController = true;
-                DetectControllerType();
-            }
-            else
-            {
-                Debug.Log($"User is using an unknown control scheme: {currentScheme}");
-            }
-        }
-    }
-
     public void EatItem(EdibleItem item)
     {
         Destroy(item.gameObject);
@@ -228,31 +204,4 @@ public class EdiblesManager : MonoBehaviour
         if (_index4 != null && ctx.performed)
             _index4.DropEdible();
     }
-    private void DetectControllerType()
-    {
-        if (Gamepad.current != null)
-        {
-            string controllerName = Gamepad.current.displayName.ToLower();
-
-            // Check for PlayStation controllers
-            if (controllerName.Contains("playstation") || 
-                controllerName.Contains("dualshock") || 
-                controllerName.Contains("dualsense") || 
-                controllerName.Contains("dual sense")) 
-            {
-                _controllerType = "PlayStationController";
-            }
-            else
-            {
-                _controllerType = "Unknown Gamepad";
-            }
-
-            Debug.Log($"Detected Controller: {_controllerType}");
-        }
-        else
-        {
-            _controllerType = "No Gamepad Connected";
-        }
-    }
-
 }
